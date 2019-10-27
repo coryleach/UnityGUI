@@ -8,5 +8,8 @@
     "name": "Cory Leach",
     "email": "cory.leach@gmail.com",
     "url": "https://github.com/coryleach"
+  },
+  "dependencies": {
+    "com.unity.textmeshpro": "2.0.1"
   }
 }

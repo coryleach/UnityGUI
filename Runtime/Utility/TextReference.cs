@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Scripts.UI.Utility
+namespace Gameframe.GUI.Utility
 {
     [Serializable]
     public class TextReference
