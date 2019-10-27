@@ -1,0 +1,1 @@
+{ "name": "com.gameframe.gui.Tests", "references": [ "com.gameframe.gui" ], "optionalUnityReferences": ["TestAssemblies"], "includePlatforms": [], "excludePlatforms": [] }
