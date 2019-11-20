@@ -25,8 +25,7 @@ namespace Gameframe.GUI
         }
 
         [SerializeField]
-        CameraType cameraType;
-
+        private CameraType cameraType = null;
         
         public CameraType CameraType
         {

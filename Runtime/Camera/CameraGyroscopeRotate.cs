@@ -4,30 +4,30 @@
 
   public class CameraGyroscopeRotate : MonoBehaviour
   {
-    [SerializeField]
-    Vector3 minDelta;
+    [SerializeField] 
+    private Vector3 minDelta = Vector3.zero;
 
-    [SerializeField]
-    Vector3 maxDelta;
+    [SerializeField] 
+    private Vector3 maxDelta = Vector3.zero;
 
-    [SerializeField]
-    Vector3 sensitivity = new Vector3(1f, 1f, 0f);
+    [SerializeField] 
+    private Vector3 sensitivity = new Vector3(1f, 1f, 0f);
 
-    [SerializeField]
-    float deadZone = 0.15f;
+    [SerializeField] 
+    private float deadZone = 0.15f;
 
-    [SerializeField]
-    float smoothTime = 1f;
+    [SerializeField] 
+    private float smoothTime = 1f;
 
-    float velocityX = 0;
-    float velocityY = 0;
-    float velocityZ = 0;
+    private float velocityX = 0;
+    private float velocityY = 0;
+    private float velocityZ = 0;
 
-    float delay = 0.5f;
+    private float delay = 0.5f;
 
-    Vector3 startRotation;
+    private Vector3 startRotation;
 
-    void Start()
+    private void Start()
     {
       startRotation = transform.eulerAngles;
       if (!SystemInfo.supportsGyroscope)
@@ -54,7 +54,7 @@
       }
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
       //The gyro always has some junk data on enable so let everything initialize for a moment
       if (delay > 0)

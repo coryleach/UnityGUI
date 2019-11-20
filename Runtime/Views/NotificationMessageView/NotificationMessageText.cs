@@ -9,7 +9,7 @@ namespace Gameframe.GUI
   public class NotificationMessageText : PoolableGameObject
   {
     [SerializeField]
-    private TextMeshProUGUI text;
+    private TextMeshProUGUI text = null;
   
     [SerializeField]
     private float moveDuration = 0.5f;
