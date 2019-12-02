@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class PanelViewController : MonoBehaviour
     {
         private enum PanelViewControllerState
@@ -17,6 +20,8 @@ namespace Gameframe.GUI.PanelSystem
         
         [SerializeField]
         private PanelType panelType = null;
+
+        public PanelType PanelType => panelType;
         
         [SerializeField]
         private PanelViewBase panelView = null;
@@ -42,6 +47,11 @@ namespace Gameframe.GUI.PanelSystem
 
         [ContextMenu("Show")]
         public async void Show()
+        {
+            await ShowAsync();
+        }
+        
+        public async Task ShowAsync()
         {
             //If we're currently appeared or appearing we're already doing the thing we wanna be doing so just return
             if (state == PanelViewControllerState.Appeared || state == PanelViewControllerState.Appearing)
@@ -92,6 +102,11 @@ namespace Gameframe.GUI.PanelSystem
 
         [ContextMenu("Hide")]
         public async void Hide()
+        {
+            await HideAsync();
+        }
+        
+        public async Task HideAsync()
         {
             //If we're already disappeared or disappearing we're already doing the right thing so just return
             if (state == PanelViewControllerState.Disappeared || state == PanelViewControllerState.Disappearing)

@@ -6,12 +6,18 @@ using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
 {
+    public interface IPanelStackSystem : IEnumerable<PushPanelOptions>
+    {
+        int Count { get; }
+        PushPanelOptions this[int index] { get; }
+    }
+    
     /// <summary>
     /// PanelStackSystem maintains a stack of panel options
     /// Use together with a PanelStackController to create UI system with a history and a back button
     /// </summary>
     [CreateAssetMenu(menuName = "Gameframe/PanelSystem/PanelStackSystem")]
-    public class PanelStackSystem : ScriptableObject
+    public class PanelStackSystem : ScriptableObject, IPanelStackSystem
     {
         private readonly List<PushPanelOptions> stack = new List<PushPanelOptions>();
         private readonly List<IPanelStackController> stackControllers = new List<IPanelStackController>();
@@ -162,6 +168,20 @@ namespace Gameframe.GUI.PanelSystem
                 await Task.WhenAll(tasks);
             }
         }
+
+        #region IEnumerable<PushPanelOptions>
+
+        public IEnumerator<PushPanelOptions> GetEnumerator()
+        {
+            return stack.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
         
     }
 }
