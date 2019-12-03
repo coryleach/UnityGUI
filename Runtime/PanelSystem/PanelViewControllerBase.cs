@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Gameframe.GUI.PanelSystem
@@ -75,8 +76,10 @@ namespace Gameframe.GUI.PanelSystem
             }
             
             var prefab = await panelType.GetPrefabAsync();
+            bool cachedState = prefab.gameObject.activeSelf;
             prefab.gameObject.SetActive(false);
             panelView = Object.Instantiate(prefab,ParentViewContainer?.ParentTransform);
+            prefab.gameObject.SetActive(cachedState);
             didLoad?.Invoke();
         }
         

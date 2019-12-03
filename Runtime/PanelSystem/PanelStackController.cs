@@ -23,12 +23,6 @@ namespace Gameframe.GUI.PanelSystem
         private List<IPanelViewController> activeControllers = null;
 
         public RectTransform ParentTransform => (RectTransform)transform;
-
-        [ContextMenu("GC Collect")]
-        public void GCCollect()
-        {
-            GC.Collect(0, GCCollectionMode.Forced);
-        }
         
         private void OnEnable()
         {
@@ -52,12 +46,6 @@ namespace Gameframe.GUI.PanelSystem
             
             var hideControllers = activeControllers.Where(x => !showControllers.Contains(x));
             
-            //Simultaneous Show/Hide
-            //TODO: Support Instant, ShowThenHide, HideThenShow, etc
-            var transitionTask = TransitionDefault(hideControllers, showControllers);
-            
-            ListPool<IPanelViewController>.Release(activeControllers);
-            activeControllers = showControllers;
 
             try
             {
@@ -65,6 +53,19 @@ namespace Gameframe.GUI.PanelSystem
                 {
                     eventManager.Lock();
                 }
+
+                //Load Views
+                await LoadViews(showControllers);
+                
+                //Sort Views so things overlay property
+                SortViews();
+                
+                //Simultaneous Show/Hide
+                //TODO: Support Instant, ShowThenHide, HideThenShow, etc
+                var transitionTask = TransitionDefault(hideControllers, showControllers);
+            
+                ListPool<IPanelViewController>.Release(activeControllers);
+                activeControllers = showControllers;
                 
                 await transitionTask;
             }
@@ -81,18 +82,60 @@ namespace Gameframe.GUI.PanelSystem
             }
         }
 
+        private void SortViews()
+        {
+            for (int i = 0; i < panelStackSystem.Count; i++)
+            {
+                if (panelStackSystem[i].IsViewLoaded)
+                {
+                    panelStackSystem[i].View.transform.SetSiblingIndex(i);
+                }
+            }
+        }
+
+        private async Task LoadViews(IEnumerable<IPanelViewController> controllers)
+        {
+            var tasks = ListPool<Task>.Get();
+            
+            foreach (var controller in controllers)
+            {
+                if (controller.IsViewLoaded)
+                {
+                    continue;
+                }
+                
+                controller.SetParentViewContainer(this);
+                tasks.Add(controller.LoadViewAsync());
+            }
+
+            if (tasks.Count > 0)
+            {
+                await Task.WhenAll(tasks);
+            }
+            
+            ListPool<Task>.Release(tasks);
+        }
+        
         private async Task TransitionDefault(IEnumerable<IPanelViewController> hideControllers, IEnumerable<IPanelViewController> showControllers)
         {
-            var hideTasks = hideControllers.Select(x => x.HideAsync());
-            
-            var showTasks = showControllers.Select(x =>
+            var hideTasks = ListPool<Task>.Get();
+            foreach (var controller in hideControllers)
             {
-                x.SetParentViewContainer(this);
-                return x.ShowAsync();
-            });
-            
+                hideTasks.Add(controller.HideAsync());
+            }
+
+            var showTasks = ListPool<Task>.Get();
+            foreach (var controller in showControllers)
+            {
+                controller.SetParentViewContainer(this);
+                showTasks.Add(controller.ShowAsync());
+            }
+
             await Task.WhenAll(hideTasks);
             await Task.WhenAll(showTasks);
+            
+            ListPool<Task>.Release(hideTasks);
+            ListPool<Task>.Release(showTasks);
         }
 
     }

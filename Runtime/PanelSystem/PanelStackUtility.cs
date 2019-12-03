@@ -22,17 +22,5 @@ namespace Gameframe.GUI.PanelSystem
                 }
             }
         }
-
-        public static void GetControllersForOptions(IEnumerable<IPanelViewController> controllers, IEnumerable<IPanelViewController> optionsList, List<IPanelViewController> output)
-        {
-            output.Clear();
-            
-            var selectedControllers = optionsList.Select(x =>
-            {
-                return controllers.First(y => y.PanelType == x.PanelType);
-            });
-            
-            output.AddRange(selectedControllers);
-        }
     }
 }
