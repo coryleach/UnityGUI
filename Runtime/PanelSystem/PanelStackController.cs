@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gameframe.GUI.Utility;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Gameframe.GUI.PanelSystem
 {
     /// <summary>
-    /// PanelStackContainerController
+    /// PanelStackController
     /// </summary>
     public class PanelStackController : MonoBehaviour, IPanelStackController
     {
         [SerializeField] 
         private PanelStackSystem panelStackSystem = null;
         
-        [SerializeField]
-        private List<PanelViewController> panelControllers = new List<PanelViewController>();
-
-        private List<PanelViewController> activeControllers = null;
+        private List<IPanelViewController> activeControllers = null;
         
         private void OnEnable()
         {
@@ -36,14 +30,11 @@ namespace Gameframe.GUI.PanelSystem
         {
             if (activeControllers == null)
             {
-                activeControllers = ListPool<PanelViewController>.Get();
+                activeControllers = ListPool<IPanelViewController>.Get();
             }
             
-            var visiblePushPanelOptions = ListPool<PushPanelOptions>.Get();
-            var showControllers = ListPool<PanelViewController>.Get();
-            
-            PanelStackUtility.GetVisiblePanels(panelStackSystem,visiblePushPanelOptions);
-            PanelStackUtility.GetControllersForOptions(panelControllers,visiblePushPanelOptions,showControllers);
+            var showControllers = ListPool<IPanelViewController>.Get();
+            PanelStackUtility.GetVisiblePanelViewControllers(panelStackSystem,showControllers);
             
             var hideControllers = activeControllers.Where(x => !showControllers.Contains(x));
             
@@ -51,15 +42,13 @@ namespace Gameframe.GUI.PanelSystem
             //TODO: Support Instant, ShowThenHide, HideThenShow, etc
             var transitionTask = TransitionDefault(hideControllers, showControllers);
             
-            ListPool<PanelViewController>.Release(activeControllers);
+            ListPool<IPanelViewController>.Release(activeControllers);
             activeControllers = showControllers;
-            
-            ListPool<PushPanelOptions>.Release(visiblePushPanelOptions);
 
             await transitionTask;
         }
 
-        private static async Task TransitionDefault(IEnumerable<PanelViewController> hideControllers, IEnumerable<PanelViewController> showControllers)
+        private static async Task TransitionDefault(IEnumerable<IPanelViewController> hideControllers, IEnumerable<IPanelViewController> showControllers)
         {
             var hideTasks = hideControllers.Select(x => x.HideAsync());
             var showTasks = showControllers.Select(x => x.ShowAsync());
@@ -67,16 +56,7 @@ namespace Gameframe.GUI.PanelSystem
             await Task.WhenAll(showTasks);
         }
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        { 
-           panelControllers = GetComponentsInChildren<PanelViewController>().ToList();
-        }
-#endif
-        
     }
-
-    
     
 }
 

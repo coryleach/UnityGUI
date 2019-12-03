@@ -1,178 +1,58 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using UnityEditor;
-using UnityEngine;
+﻿using System.Threading.Tasks;
 
 namespace Gameframe.GUI.PanelSystem
 {
     /// <summary>
-    /// 
+    /// PanelViewController
+    /// Can be subclassed to provide custom controller functionality via the methods:
+    /// ViewDidLoad,
+    /// ViewWillAppear,
+    /// ViewDidAppear,
+    /// ViewWillDisappear,
+    /// ViewDidDisappear
     /// </summary>
-    public class PanelViewController : MonoBehaviour
+    public class PanelViewController : IPanelViewController
     {
-        private enum PanelViewControllerState
+        private readonly PanelViewControllerBase baseController;
+        
+        public PanelViewController(PanelType type)
         {
-            Disappeared,
-            Appearing,
-            Appeared,
-            Disappearing
-        }
-        
-        [SerializeField]
-        private PanelType panelType = null;
-
-        public PanelType PanelType => panelType;
-        
-        [SerializeField]
-        private PanelViewBase panelView = null;
-        
-        private PanelViewControllerState state = PanelViewControllerState.Disappeared;
-        
-        private CancellationTokenSource cancellationTokenSource = null;
-
-        public async Task LoadViewAsync()
-        {
-            if (IsViewLoaded)
-            {
-                return;
-            }
-            
-            var prefab = await panelType.GetPrefabAsync();
-            prefab.gameObject.SetActive(false);
-            panelView = Instantiate(prefab, transform);
-            ViewDidLoad();
+            baseController = new PanelViewControllerBase(type,ViewDidLoad,ViewWillAppear,ViewDidAppear,ViewWillDisappear,ViewDidDisappear);
         }
 
-        public bool IsViewLoaded => panelView != null;
+        public PanelType PanelType => baseController.PanelType;
 
-        [ContextMenu("Show")]
-        public async void Show()
-        {
-            await ShowAsync();
-        }
-        
-        public async Task ShowAsync()
-        {
-            //If we're currently appeared or appearing we're already doing the thing we wanna be doing so just return
-            if (state == PanelViewControllerState.Appeared || state == PanelViewControllerState.Appearing)
-            {
-                return;
-            }
-            
-            //If we're in the middle of disappearing we need to cancel the disappearing action
-            if (state == PanelViewControllerState.Disappearing)
-            {
-                //Cancel Current Transition
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource = null;
-            }
-            
-            state = PanelViewControllerState.Appearing;
+        public bool IsViewLoaded => baseController.IsViewLoaded;
 
-            if (cancellationTokenSource == null)
-            {
-                cancellationTokenSource = new CancellationTokenSource();
-            }
+        public Task LoadViewAsync() => baseController.LoadViewAsync();
 
-            var currentToken = cancellationTokenSource.Token;
+        public Task HideAsync() => baseController.HideAsync();
 
-            if (!IsViewLoaded)
-            {
-                await LoadViewAsync();
-
-                if (currentToken.IsCancellationRequested)
-                {
-                    return;
-                }
-            }
-
-            ViewWillAppear();
-            
-            await panelView.ShowAsync(currentToken);
-
-            if (cancellationTokenSource.IsCancellationRequested)
-            {
-                return;
-            }
-            
-            state = PanelViewControllerState.Appeared;
-            
-            ViewDidAppear();
-        }
-
-        [ContextMenu("Hide")]
-        public async void Hide()
-        {
-            await HideAsync();
-        }
-        
-        public async Task HideAsync()
-        {
-            //If we're already disappeared or disappearing we're already doing the right thing so just return
-            if (state == PanelViewControllerState.Disappeared || state == PanelViewControllerState.Disappearing)
-            {
-                return;
-            }
-            
-            //If we're currently appearing we should cancel the appear using our cancellation token
-            if (state == PanelViewControllerState.Appearing && cancellationTokenSource != null)
-            {
-                //Cancel Current Transition
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource = null;
-            }
-
-            state = PanelViewControllerState.Disappearing;
-
-            if (cancellationTokenSource == null)
-            {
-                cancellationTokenSource = new CancellationTokenSource();
-            }
-
-            var currentToken = cancellationTokenSource.Token;
-            
-            ViewWillDisappear();
-
-            await panelView.HideAsync(currentToken);
-
-            if (currentToken.IsCancellationRequested)
-            {
-                return;
-            }
-            
-            ViewDidDisappear();
-            
-            state = PanelViewControllerState.Disappeared;
-        }
+        public Task ShowAsync() => baseController.ShowAsync();
         
         protected virtual void ViewDidLoad()
         {
-        }
-        
-        protected virtual void ViewWillAppear()
-        {
+            
         }
 
+        protected virtual void ViewWillAppear()
+        {
+            
+        }
+        
         protected virtual void ViewDidAppear()
         {
+            
         }
 
         protected virtual void ViewWillDisappear()
         {
+            
         }
 
         protected virtual void ViewDidDisappear()
         {
+            
         }
-
-        #if UNITY_EDITOR
-        protected virtual void OnValidate()
-        {
-            name = $"PanelController - {panelType?.name}";
-        }
-        #endif
-        
     }
 }
-
-

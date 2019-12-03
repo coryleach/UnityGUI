@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
 {
-    public interface IPanelStackSystem : IEnumerable<PushPanelOptions>
-    {
-        int Count { get; }
-        PushPanelOptions this[int index] { get; }
-    }
-    
     /// <summary>
     /// PanelStackSystem maintains a stack of panel options
     /// Use together with a PanelStackController to create UI system with a history and a back button
@@ -19,7 +12,7 @@ namespace Gameframe.GUI.PanelSystem
     [CreateAssetMenu(menuName = "Gameframe/PanelSystem/PanelStackSystem")]
     public class PanelStackSystem : ScriptableObject, IPanelStackSystem
     {
-        private readonly List<PushPanelOptions> stack = new List<PushPanelOptions>();
+        private readonly List<IPanelViewController> stack = new List<IPanelViewController>();
         private readonly List<IPanelStackController> stackControllers = new List<IPanelStackController>();
 
         /// <summary>
@@ -38,15 +31,15 @@ namespace Gameframe.GUI.PanelSystem
         public int Count => stack.Count;
 
         /// <summary>
-        /// PushPanelOptions indexer
+        /// PanelViewController indexer
         /// </summary>
-        /// <param name="index">index position in the stack of the options to be returned</param>
-        public PushPanelOptions this[int index] => stack[index];
+        /// <param name="index">index position in the stack of the controller to be returned</param>
+        public IPanelViewController this[int index] => stack[index];
 
         /// <summary>
-        /// Panel options on top of the stack
+        /// PanelViewController on top of the stack
         /// </summary>
-        public PushPanelOptions CurrentTopPanel => stack.Count == 0 ? null : stack[stack.Count - 1];
+        public IPanelViewController CurrentTopPanel => stack.Count == 0 ? null : stack[stack.Count - 1];
         
         /// <summary>
         /// Add a panel stack controller to internal list of event subscribers
@@ -69,10 +62,10 @@ namespace Gameframe.GUI.PanelSystem
         /// <summary>
         /// Push panel options onto top of panel stack
         /// </summary>
-        /// <param name="options"></param>
-        public async void Push(PushPanelOptions options)
+        /// <param name="controller"></param>
+        public async void Push(IPanelViewController controller)
         {
-            await PushAsync(options);
+            await PushAsync(controller);
         }
 
         /// <summary>
@@ -80,9 +73,9 @@ namespace Gameframe.GUI.PanelSystem
         /// </summary>
         /// <param name="options"></param>
         /// <returns>Task that completes when panel is done being pushed</returns>
-        public async Task PushAsync(PushPanelOptions options)
+        public async Task PushAsync(IPanelViewController controller)
         {
-            stack.Add(options);
+            stack.Add(controller);
             await TransitionAsync();
         }
 
@@ -132,11 +125,11 @@ namespace Gameframe.GUI.PanelSystem
         /// <summary>
         /// Push a set of panels async
         /// </summary>
-        /// <param name="options">array of panel options</param>
+        /// <param name="controllers">array of panel view controllers</param>
         /// <returns>Awaitable task that completes when the transition is complete</returns>
-        public async Task PushAsync(params PushPanelOptions[] options)
+        public async Task PushAsync(params IPanelViewController[] controllers)
         {
-            stack.AddRange(options);
+            stack.AddRange(controllers);
             await TransitionAsync();
         }
         
@@ -171,7 +164,7 @@ namespace Gameframe.GUI.PanelSystem
 
         #region IEnumerable<PushPanelOptions>
 
-        public IEnumerator<PushPanelOptions> GetEnumerator()
+        public IEnumerator<IPanelViewController> GetEnumerator()
         {
             return stack.GetEnumerator();
         }
