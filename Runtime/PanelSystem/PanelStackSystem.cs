@@ -93,6 +93,11 @@ namespace Gameframe.GUI.PanelSystem
         /// <returns>an awaitable task that completes when the transition between panels is complete</returns>
         public async Task PopAsync()
         {
+            if (stack.Count == 0)
+            {
+                return;
+            }
+            
             stack.RemoveAt(stack.Count - 1);
             await TransitionAsync();
         }

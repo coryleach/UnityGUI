@@ -1,5 +1,5 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Gameframe.GUI.Extensions;
 using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
@@ -8,7 +8,7 @@ namespace Gameframe.GUI.PanelSystem
     /// MonoBehaviour implementing IPanelViewController interface
     /// internally this is just a humble object wrapper for PanelViewControllerBase which does the heavy lifting
     /// </summary>
-    public class PanelViewControllerBehaviour : MonoBehaviour, IPanelViewController
+    public class PanelViewControllerBehaviour : MonoBehaviour, IPanelViewController, IPanelViewContainer
     {
         [SerializeField]
         private PanelType panelType = null;
@@ -18,8 +18,7 @@ namespace Gameframe.GUI.PanelSystem
         
         private PanelViewControllerBase baseController = null;
 
-        private PanelViewControllerBase BaseController =>
-            baseController ?? (baseController = CreateController());
+        private PanelViewControllerBase BaseController => baseController ?? (baseController = CreateController());
 
         protected virtual void Awake()
         {
@@ -33,20 +32,52 @@ namespace Gameframe.GUI.PanelSystem
 
         private PanelViewControllerBase CreateController()
         {
-            return new PanelViewControllerBase(panelType,panelView, 
+            //Panel View always starts in the 'disappeared' state
+            //If we are supplying a serialized view then we need to enforce that rule here
+            if (panelView != null)
+            {
+                panelView.gameObject.SetActive(false);
+            }
+            
+            var controller = new PanelViewControllerBase(panelType,panelView, 
                 ViewDidLoad,
                 ViewWillAppear, 
                 ViewDidAppear, 
                 ViewWillDisappear, 
                 ViewDidDisappear);
+            
+            controller.SetParentViewContainer(this);
+
+            return controller;
         }
         
         public PanelType PanelType => BaseController.PanelType;
+
+        public PanelViewBase View => BaseController.View;
         
         public Task LoadViewAsync() => BaseController.LoadViewAsync();
 
         public bool IsViewLoaded => BaseController.IsViewLoaded;
 
+        public IPanelViewContainer ParentViewContainer => BaseController.ParentViewContainer;
+
+        private RectTransform rectTransform = null;
+
+        public RectTransform ParentTransform
+        {
+            get
+            {
+                if (rectTransform == null)
+                {
+                    rectTransform = gameObject.GetOrAddComponent<RectTransform>();
+                }
+                return rectTransform;
+            }
+        }
+
+        public void SetParentViewContainer(IPanelViewContainer parent) => BaseController.SetParentViewContainer(parent);
+
+        [ContextMenu("Show")]
         public async void Show()
         {
             await ShowAsync();
@@ -54,6 +85,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public Task ShowAsync() => BaseController.ShowAsync();
 
+        [ContextMenu("Hide")]
         public async void Hide()
         {
             await HideAsync();
@@ -90,7 +122,7 @@ namespace Gameframe.GUI.PanelSystem
             }
         }
         #endif
-        
+
     }
 }
 

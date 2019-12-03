@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Gameframe.GUI.Camera.UI;
 using Gameframe.GUI.Utility;
 using UnityEngine;
 
@@ -9,12 +11,24 @@ namespace Gameframe.GUI.PanelSystem
     /// <summary>
     /// PanelStackController
     /// </summary>
-    public class PanelStackController : MonoBehaviour, IPanelStackController
+    [RequireComponent(typeof(RectTransform))]
+    public class PanelStackController : MonoBehaviour, IPanelStackController, IPanelViewContainer
     {
+        [SerializeField] 
+        private UIEventManager eventManager;
+        
         [SerializeField] 
         private PanelStackSystem panelStackSystem = null;
         
         private List<IPanelViewController> activeControllers = null;
+
+        public RectTransform ParentTransform => (RectTransform)transform;
+
+        [ContextMenu("GC Collect")]
+        public void GCCollect()
+        {
+            GC.Collect(0, GCCollectionMode.Forced);
+        }
         
         private void OnEnable()
         {
@@ -45,13 +59,38 @@ namespace Gameframe.GUI.PanelSystem
             ListPool<IPanelViewController>.Release(activeControllers);
             activeControllers = showControllers;
 
-            await transitionTask;
+            try
+            {
+                if (eventManager != null)
+                {
+                    eventManager.Lock();
+                }
+                
+                await transitionTask;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+            finally
+            {
+                if (eventManager != null)
+                {
+                    eventManager.Unlock();
+                }    
+            }
         }
 
-        private static async Task TransitionDefault(IEnumerable<IPanelViewController> hideControllers, IEnumerable<IPanelViewController> showControllers)
+        private async Task TransitionDefault(IEnumerable<IPanelViewController> hideControllers, IEnumerable<IPanelViewController> showControllers)
         {
             var hideTasks = hideControllers.Select(x => x.HideAsync());
-            var showTasks = showControllers.Select(x => x.ShowAsync());
+            
+            var showTasks = showControllers.Select(x =>
+            {
+                x.SetParentViewContainer(this);
+                return x.ShowAsync();
+            });
+            
             await Task.WhenAll(hideTasks);
             await Task.WhenAll(showTasks);
         }

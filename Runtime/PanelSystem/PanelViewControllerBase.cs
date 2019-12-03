@@ -22,10 +22,15 @@ namespace Gameframe.GUI.PanelSystem
         private PanelViewControllerState state = PanelViewControllerState.Disappeared;
         
         private CancellationTokenSource cancellationTokenSource = null;
+
+        private IPanelViewContainer parentPanelViewContainer = null;
         
         public PanelType PanelType => panelType;
+        public PanelViewBase View => panelView;
         public bool IsViewLoaded => panelView != null;
 
+        public IPanelViewContainer ParentViewContainer => parentPanelViewContainer;
+        
         private readonly Action didLoad = null;
         private readonly Action willAppear = null;
         private readonly Action didAppear = null;
@@ -51,8 +56,17 @@ namespace Gameframe.GUI.PanelSystem
             this.didAppear = didAppear;
             this.willDisappear = willDisappear;
             this.didDisappear = didDisappear;
-        }        
-        
+        }
+
+        public void SetParentViewContainer(IPanelViewContainer parent)
+        {
+            parentPanelViewContainer = parent;
+            if (panelView != null)
+            {
+                panelView.transform.SetParent(parentPanelViewContainer.ParentTransform);
+            }
+        }
+
         public async Task LoadViewAsync()
         {
             if (IsViewLoaded)
@@ -62,7 +76,7 @@ namespace Gameframe.GUI.PanelSystem
             
             var prefab = await panelType.GetPrefabAsync();
             prefab.gameObject.SetActive(false);
-            panelView = Object.Instantiate(prefab);
+            panelView = Object.Instantiate(prefab,ParentViewContainer?.ParentTransform);
             didLoad?.Invoke();
         }
         

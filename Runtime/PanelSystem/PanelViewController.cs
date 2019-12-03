@@ -1,4 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
+using UnityEngine;
+using Application = UnityEngine.WSA.Application;
 
 namespace Gameframe.GUI.PanelSystem
 {
@@ -22,6 +27,8 @@ namespace Gameframe.GUI.PanelSystem
 
         public PanelType PanelType => baseController.PanelType;
 
+        public PanelViewBase View => baseController.View;
+        
         public bool IsViewLoaded => baseController.IsViewLoaded;
 
         public Task LoadViewAsync() => baseController.LoadViewAsync();
@@ -29,7 +36,11 @@ namespace Gameframe.GUI.PanelSystem
         public Task HideAsync() => baseController.HideAsync();
 
         public Task ShowAsync() => baseController.ShowAsync();
+
+        public IPanelViewContainer ParentViewContainer => baseController.ParentViewContainer;
         
+        public void SetParentViewContainer(IPanelViewContainer parent) => baseController.SetParentViewContainer(parent);
+
         protected virtual void ViewDidLoad()
         {
             
@@ -54,5 +65,29 @@ namespace Gameframe.GUI.PanelSystem
         {
             
         }
+
+        private static SynchronizationContext mainSyncContext = null;
+        [RuntimeInitializeOnLoadMethod]
+        private static void Initialize()
+        {
+            mainSyncContext = SynchronizationContext.Current;
+        }
+        
+        ~PanelViewController()
+        {
+            mainSyncContext?.Post((state) =>
+            {
+                if (!UnityEngine.Application.isPlaying)
+                {
+                    return;
+                }
+                var view = state as PanelViewBase;
+                if (view != null)
+                {
+                    UnityEngine.Object.Destroy(view.gameObject);
+                }
+            },baseController.View);
+        }
+        
     }
 }
