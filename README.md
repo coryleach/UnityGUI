@@ -13,7 +13,7 @@
 
 ## Quick Package Install
 
-#### Using UnityPackageManager (for Unity 2018.3 or later)
+#### Using UnityPackageManager (for Unity 2019.1 or later)
 
 Find the manifest.json file in the Packages folder of your project and edit it to look like this:
 ```js
