@@ -8,6 +8,7 @@
 
 > This is a library of GUI helpers for UGUI </br>
 > Includes a panel system that implements a navigation stack. </br>
+> Includes a scene transition system. </br>
 > Includes a shader for blurring the background of UI panels. </br>
 
 ## Quick Package Install
