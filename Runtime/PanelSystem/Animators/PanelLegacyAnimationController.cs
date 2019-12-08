@@ -4,18 +4,11 @@ using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
 {
-
   public enum PanelNavigationDirection : int
   {
     Forward = 1,
     Reverse = -1
   };
-
-  public interface IPanelAnimator
-  { 
-    Task TransitionShowAsync();
-    Task TransitionHideAsync();
-  }
   
   /// <summary>
   /// Uses legacy animations to animate panels forwards and reverse
