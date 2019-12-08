@@ -25,7 +25,7 @@ namespace Gameframe.GUI.PanelSystem
         private CancellationTokenSource cancellationTokenSource = null;
 
         private IPanelViewContainer parentPanelViewContainer = null;
-        
+
         public PanelType PanelType => panelType;
         public PanelViewBase View => panelView;
         public bool IsViewLoaded => panelView != null;
@@ -76,6 +76,12 @@ namespace Gameframe.GUI.PanelSystem
             }
             
             var prefab = await panelType.GetPrefabAsync();
+
+            if (prefab == null)
+            {
+                throw new Exception($"PanelType {panelType.name} returned null panel prefab.");
+            }
+            
             bool cachedState = prefab.gameObject.activeSelf;
             prefab.gameObject.SetActive(false);
             panelView = Object.Instantiate(prefab,ParentViewContainer?.ParentTransform);

@@ -22,7 +22,7 @@ namespace Gameframe.GUI.PanelSystem
         
         public PanelViewController(PanelType type)
         {
-            baseController = new PanelViewControllerBase(type,ViewDidLoad,ViewWillAppear,ViewDidAppear,ViewWillDisappear,ViewDidDisappear);
+            baseController = new PanelViewControllerBase(type, ViewDidLoad,ViewWillAppear,ViewDidAppear,ViewWillDisappear,ViewDidDisappear);
         }
 
         public PanelType PanelType => baseController.PanelType;

@@ -19,6 +19,8 @@ namespace Gameframe.GUI.PanelSystem
         
         [SerializeField] 
         private PanelStackSystem panelStackSystem = null;
+
+        public PanelStackSystem System => panelStackSystem;
         
         private List<IPanelViewController> activeControllers = null;
 
