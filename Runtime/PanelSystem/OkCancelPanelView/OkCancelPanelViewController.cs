@@ -12,10 +12,16 @@ namespace Gameframe.GUI.PanelSystem
             this.callback = callback;
         }
 
-        protected override void ViewDidLoad()
+        protected override void ViewWillAppear()
         {
-            base.ViewDidLoad();
+            base.ViewWillAppear();
             SubscribeToView();   
+        }
+
+        protected override void ViewWillDisappear()
+        {
+            base.ViewWillDisappear();
+            UnsubscribeToView();
         }
 
         private void SubscribeToView()
