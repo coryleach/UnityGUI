@@ -26,7 +26,7 @@ namespace Gameframe.GUI.TransitionSystem
     
             public void RemoveTransitionTask(ITransitionTask transitionTask)
             {
-                transitionTasks.Add(transitionTask);
+                transitionTasks.Remove(transitionTask);
             }
     
             /// <summary>

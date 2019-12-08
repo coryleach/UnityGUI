@@ -11,26 +11,77 @@ namespace Gameframe.GUI.TransitionSystem
     public class SceneTransitionSystem : ScriptableObject
     {
         private Transition transition = new Transition();
-        public Transition Transition => transition;
         
-        private SceneTransitionTask sceneTransitionTask = new SceneTransitionTask();
+        private SingleSceneTransitionTask singleSceneTransitionTask = new SingleSceneTransitionTask();
+        private MultiSceneTransitionTask multiSceneTransitionTask = new MultiSceneTransitionTask();
         
         private bool isTransitioning = false;
         public bool IsTransitioning => isTransitioning;
+
+        public void AddPresenter(ITransitionPresenter presenter)
+        {
+            transition.AddPresenter(presenter);
+        }
+
+        public void RemovePresenter(ITransitionPresenter presenter)
+        {
+            transition.RemovePresenter(presenter);
+        }
         
         private void OnEnable()
         {
+            isTransitioning = false;
             transition = new Transition();
-            sceneTransitionTask = new SceneTransitionTask();
-            transition.AddTransitionTask(sceneTransitionTask);
+            multiSceneTransitionTask = new MultiSceneTransitionTask();
+            singleSceneTransitionTask = new SingleSceneTransitionTask();
         }
 
-        public async void LoadSceneAsync(string[] unloadScenes, string[] loadScenes)
+        public async void LoadSceneAsync(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
         {
+            if (isTransitioning)
+            {
+                throw new InvalidOperationException("Cannot load scenes while scene transition is in progress");
+            }
+            
+            singleSceneTransitionTask.mode = mode;
+            singleSceneTransitionTask.sceneName = sceneName;
+            
             isTransitioning = true;
-            sceneTransitionTask.loadScenes = loadScenes;
-            sceneTransitionTask.unloadScenes = unloadScenes;
+            transition.AddTransitionTask(singleSceneTransitionTask);
             await transition.ExecuteAsync();
+            transition.RemoveTransitionTask(singleSceneTransitionTask);
+            isTransitioning = false;
+        }
+        
+        public async void LoadSceneAsync(string[] loadScenes, string[] unloadScenes)
+        {
+            if (isTransitioning)
+            {
+                throw new InvalidOperationException("Cannot load scenes while scene transition is in progress");
+            }
+            
+            isTransitioning = true;
+            multiSceneTransitionTask.loadScenes = loadScenes;
+            multiSceneTransitionTask.unloadScenes = unloadScenes;
+            transition.AddTransitionTask(multiSceneTransitionTask);
+            await transition.ExecuteAsync();
+            transition.RemoveTransitionTask(multiSceneTransitionTask);
+            isTransitioning = false;
+        }
+
+        public async void LoadSceneAsync(string[] loadScenes)
+        {
+            if (isTransitioning)
+            {
+                throw new InvalidOperationException("Cannot load scenes while scene transition is in progress");
+            }
+            
+            isTransitioning = true;
+            multiSceneTransitionTask.loadScenes = loadScenes;
+            multiSceneTransitionTask.unloadScenes = new string[0];
+            transition.AddTransitionTask(multiSceneTransitionTask);
+            await transition.ExecuteAsync();
+            transition.RemoveTransitionTask(multiSceneTransitionTask);
             isTransitioning = false;
         }
         
