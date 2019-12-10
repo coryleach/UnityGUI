@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Gameframe.GUI.Utility;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -36,7 +34,12 @@ namespace Gameframe.GUI.TransitionSystem
             singleSceneTransitionTask = new SingleSceneTransitionTask();
         }
 
-        public async void LoadSceneAsync(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
+        public async void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
+        {
+            await LoadSceneAsync(sceneName, mode);
+        }
+        
+        public async Task LoadSceneAsync(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
         {
             if (isTransitioning)
             {
@@ -52,8 +55,13 @@ namespace Gameframe.GUI.TransitionSystem
             transition.RemoveTransitionTask(singleSceneTransitionTask);
             isTransitioning = false;
         }
+
+        public async void LoadScene(string[] loadScenes, string[] unloadScenes)
+        {
+            await LoadSceneAsync(loadScenes, unloadScenes);
+        }
         
-        public async void LoadSceneAsync(string[] loadScenes, string[] unloadScenes)
+        public async Task LoadSceneAsync(string[] loadScenes, string[] unloadScenes)
         {
             if (isTransitioning)
             {
@@ -69,7 +77,12 @@ namespace Gameframe.GUI.TransitionSystem
             isTransitioning = false;
         }
 
-        public async void LoadSceneAsync(string[] loadScenes)
+        public async void LoadScenes(string[] loadScenes)
+        {
+            await LoadScenesAsync(loadScenes);
+        }
+        
+        public async Task LoadScenesAsync(string[] loadScenes)
         {
             if (isTransitioning)
             {
