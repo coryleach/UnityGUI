@@ -64,7 +64,7 @@ namespace Gameframe.GUI.PanelSystem
 
         protected virtual void PopStack()
         {
-            if (ParentViewContainer is PanelStackController stackController)
+            if (ParentViewContainer is PanelStackControllerBehaviour stackController)
             {
                 stackController.System.Pop();
             }

@@ -5,7 +5,13 @@ using UnityEngine.EventSystems;
 namespace Gameframe.GUI.Camera.UI
 {
 
-  public class UIEventManager : MonoBehaviour
+  public interface IUIEventManager
+  {
+    void Lock();
+    void Unlock();
+  }
+  
+  public class UIEventManager : MonoBehaviour, IUIEventManager
   {
 
     static UIEventManager _current;

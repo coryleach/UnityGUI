@@ -1,41 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Gameframe.GUI.Camera.UI;
 using Gameframe.GUI.Utility;
 using UnityEngine;
+using System.Threading.Tasks;
 
 namespace Gameframe.GUI.PanelSystem
 {
-    /// <summary>
-    /// PanelStackController
-    /// </summary>
-    [RequireComponent(typeof(RectTransform))]
-    public class PanelStackController : MonoBehaviour, IPanelStackController, IPanelViewContainer
+    public class PanelStackController : IPanelStackController
     {
-        [SerializeField] 
-        private UIEventManager eventManager = null;
+        private List<IPanelViewController> activeControllers = new List<IPanelViewController>();
+        private readonly IUIEventManager eventManager = null;
+        private readonly IPanelStackSystem panelStackSystem = null;
+        private readonly IPanelViewContainer container = null;
         
-        [SerializeField] 
-        private PanelStackSystem panelStackSystem = null;
-
-        public PanelStackSystem System => panelStackSystem;
-        
-        private List<IPanelViewController> activeControllers = null;
-
-        public RectTransform ParentTransform => (RectTransform)transform;
-        
-        private void OnEnable()
+        public PanelStackController(IPanelStackSystem stackSystem, IPanelViewContainer viewContainer, IUIEventManager eventManager = null)
         {
-            panelStackSystem.AddController(this);
+            panelStackSystem = stackSystem;
+            container = viewContainer;
+            this.eventManager = null;
         }
-        
-        private void OnDisable()
-        {
-            panelStackSystem.RemoveController(this);
-        }
-        
+
         public async Task TransitionAsync()
         {
             if (activeControllers == null)
@@ -47,7 +33,6 @@ namespace Gameframe.GUI.PanelSystem
             PanelStackUtility.GetVisiblePanelViewControllers(panelStackSystem,showControllers);
             
             var hideControllers = activeControllers.Where(x => !showControllers.Contains(x));
-            
 
             try
             {
@@ -83,7 +68,7 @@ namespace Gameframe.GUI.PanelSystem
                 }    
             }
         }
-
+        
         private void SortViews()
         {
             for (int i = 0; i < panelStackSystem.Count; i++)
@@ -106,7 +91,7 @@ namespace Gameframe.GUI.PanelSystem
                     continue;
                 }
                 
-                controller.SetParentViewContainer(this);
+                controller.SetParentViewContainer(container);
                 tasks.Add(controller.LoadViewAsync());
             }
 
@@ -129,7 +114,7 @@ namespace Gameframe.GUI.PanelSystem
             var showTasks = ListPool<Task>.Get();
             foreach (var controller in showControllers)
             {
-                controller.SetParentViewContainer(this);
+                controller.SetParentViewContainer(container);
                 showTasks.Add(controller.ShowAsync());
             }
 
@@ -139,8 +124,6 @@ namespace Gameframe.GUI.PanelSystem
             ListPool<Task>.Release(hideTasks);
             ListPool<Task>.Release(showTasks);
         }
-
     }
     
 }
-
