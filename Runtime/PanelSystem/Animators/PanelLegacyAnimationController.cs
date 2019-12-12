@@ -17,7 +17,7 @@ namespace Gameframe.GUI.PanelSystem
   [RequireComponent(typeof(Animation)),DisallowMultipleComponent]
   public class PanelLegacyAnimationController : MonoBehaviour, IPanelAnimator
   {
-    private Animation _animation;
+    private Animation _animation = null;
     private Animation Animation
     {
       get
@@ -32,12 +32,12 @@ namespace Gameframe.GUI.PanelSystem
 
     [Header("Show")]
     [SerializeField]
-    private AnimationClip showAnimation;
+    private AnimationClip showAnimation = null;
     [SerializeField] private PanelNavigationDirection showPanelNavigationDirection = PanelNavigationDirection.Forward;
 
     [Header("Hide")]
     [SerializeField]
-    private AnimationClip hideAnimation;
+    private AnimationClip hideAnimation = null;
     [SerializeField] private PanelNavigationDirection hidePanelNavigationDirection = PanelNavigationDirection.Forward;
 
     private bool _animating = false;

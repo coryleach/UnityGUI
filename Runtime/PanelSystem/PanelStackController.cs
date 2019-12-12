@@ -15,7 +15,7 @@ namespace Gameframe.GUI.PanelSystem
     public class PanelStackController : MonoBehaviour, IPanelStackController, IPanelViewContainer
     {
         [SerializeField] 
-        private UIEventManager eventManager;
+        private UIEventManager eventManager = null;
         
         [SerializeField] 
         private PanelStackSystem panelStackSystem = null;

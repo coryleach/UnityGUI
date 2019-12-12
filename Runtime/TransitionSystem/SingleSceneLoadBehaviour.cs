@@ -12,7 +12,7 @@ namespace Gameframe.GUI.TransitionSystem
         [ContextMenu("Load")]
         public void Load()
         {
-            sceneTransitionSystem.LoadSceneAsync(sceneName);
+            sceneTransitionSystem.LoadScene(sceneName);
         }
     }
 }

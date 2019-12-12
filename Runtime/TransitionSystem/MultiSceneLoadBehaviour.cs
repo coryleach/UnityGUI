@@ -11,7 +11,7 @@ namespace Gameframe.GUI.TransitionSystem
         [ContextMenu("Load")]
         public void Load()
         {
-            sceneTransitionSystem.LoadSceneAsync(loadScenes, unloadScenes);
+            sceneTransitionSystem.LoadScene(loadScenes, unloadScenes);
         }
     }   
 }

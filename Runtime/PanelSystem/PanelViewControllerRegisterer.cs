@@ -4,7 +4,8 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelViewControllerRegisterer : MonoBehaviour
     {
-        [SerializeField] private PanelViewControllerProvider provider;
+        [SerializeField] 
+        private PanelViewControllerProvider provider = null;
 
         private void Start()
         {

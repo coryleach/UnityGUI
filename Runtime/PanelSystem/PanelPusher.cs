@@ -6,11 +6,11 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelPusher : MonoBehaviour
     {
-        [SerializeField] private PanelStackSystem stack;
+        [SerializeField] private PanelStackSystem stack = null;
         
-        [SerializeField] private PanelViewControllerProvider provider;
+        [SerializeField] private PanelViewControllerProvider provider = null;
 
-        [SerializeField] private PanelType panelType;
+        [SerializeField] private PanelType panelType = null;
 
         public void Push()
         {
