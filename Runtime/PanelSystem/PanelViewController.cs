@@ -1,9 +1,6 @@
-﻿using System;
-using System.Security.Cryptography;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Application = UnityEngine.WSA.Application;
 
 namespace Gameframe.GUI.PanelSystem
 {
