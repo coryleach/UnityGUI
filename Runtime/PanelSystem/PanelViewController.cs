@@ -22,6 +22,7 @@ namespace Gameframe.GUI.PanelSystem
             baseController = new PanelViewControllerBase(type, ViewDidLoad,ViewWillAppear,ViewDidAppear,ViewWillDisappear,ViewDidDisappear);
         }
 
+        public PanelViewControllerState State => baseController.State;
         public PanelType PanelType => baseController.PanelType;
 
         public PanelViewBase View => baseController.View;
@@ -30,9 +31,9 @@ namespace Gameframe.GUI.PanelSystem
 
         public Task LoadViewAsync() => baseController.LoadViewAsync();
 
-        public Task HideAsync() => baseController.HideAsync();
+        public Task HideAsync(bool immediate = false) => baseController.HideAsync(immediate);
 
-        public Task ShowAsync() => baseController.ShowAsync();
+        public Task ShowAsync(bool immediate = false) => baseController.ShowAsync(immediate);
 
         public IPanelViewContainer ParentViewContainer => baseController.ParentViewContainer;
         
@@ -97,6 +98,7 @@ namespace Gameframe.GUI.PanelSystem
             baseController = new PanelViewControllerBase(type, ViewDidLoad,ViewWillAppear,ViewDidAppear,ViewWillDisappear,ViewDidDisappear);
         }
 
+        public PanelViewControllerState State => baseController.State;
         public PanelType PanelType => baseController.PanelType;
 
         PanelViewBase IPanelViewController.View => baseController.View;
@@ -107,9 +109,9 @@ namespace Gameframe.GUI.PanelSystem
 
         public Task LoadViewAsync() => baseController.LoadViewAsync();
 
-        public Task HideAsync() => baseController.HideAsync();
+        public Task HideAsync(bool immediate = false) => baseController.HideAsync(immediate);
 
-        public Task ShowAsync() => baseController.ShowAsync();
+        public Task ShowAsync(bool immediate = false) => baseController.ShowAsync(immediate);
 
         public IPanelViewContainer ParentViewContainer => baseController.ParentViewContainer;
         
@@ -151,14 +153,14 @@ namespace Gameframe.GUI.PanelSystem
         {
             mainSyncContext?.Post((state) =>
             {
-                if (!UnityEngine.Application.isPlaying)
+                if (!Application.isPlaying)
                 {
                     return;
                 }
                 var view = state as PanelViewBase;
                 if (view != null)
                 {
-                    UnityEngine.Object.Destroy(view.gameObject);
+                    Object.Destroy(view.gameObject);
                 }
             },baseController.View);
         }

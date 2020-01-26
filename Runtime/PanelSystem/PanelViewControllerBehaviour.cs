@@ -50,6 +50,8 @@ namespace Gameframe.GUI.PanelSystem
 
             return controller;
         }
+
+        public PanelViewControllerState State => BaseController.State;
         
         public PanelType PanelType => BaseController.PanelType;
 
@@ -85,7 +87,7 @@ namespace Gameframe.GUI.PanelSystem
             await ShowAsync();
         }
 
-        public Task ShowAsync() => BaseController.ShowAsync();
+        public Task ShowAsync(bool immediate = false) => BaseController.ShowAsync(immediate);
 
         [ContextMenu("Hide")]
         public async void Hide()
@@ -93,7 +95,7 @@ namespace Gameframe.GUI.PanelSystem
             await HideAsync();
         }
 
-        public Task HideAsync() => BaseController.HideAsync();
+        public Task HideAsync(bool immediate = false) => BaseController.HideAsync(immediate);
         
         protected virtual void ViewDidLoad()
         {
@@ -173,6 +175,8 @@ namespace Gameframe.GUI.PanelSystem
 
             return controller;
         }
+
+        public PanelViewControllerState State => BaseController.State;
         
         public PanelType PanelType => BaseController.PanelType;
 
@@ -206,7 +210,7 @@ namespace Gameframe.GUI.PanelSystem
             await ShowAsync();
         }
 
-        public Task ShowAsync() => BaseController.ShowAsync();
+        public Task ShowAsync(bool immediate = false) => BaseController.ShowAsync(immediate);
 
         [ContextMenu("Hide")]
         public async void Hide()
@@ -214,7 +218,7 @@ namespace Gameframe.GUI.PanelSystem
             await HideAsync();
         }
 
-        public Task HideAsync() => BaseController.HideAsync();
+        public Task HideAsync(bool immediate = false) => BaseController.HideAsync(immediate);
         
         protected virtual void ViewDidLoad()
         {

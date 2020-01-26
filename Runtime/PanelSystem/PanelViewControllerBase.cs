@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace Gameframe.GUI.PanelSystem
 {
-    internal enum PanelViewControllerState
+    public enum PanelViewControllerState
     {
         Disappeared,
         Appearing,
@@ -20,6 +20,7 @@ namespace Gameframe.GUI.PanelSystem
         private PanelViewBase panelView = null;
 
         private PanelViewControllerState state = PanelViewControllerState.Disappeared;
+        public PanelViewControllerState State => state;
         
         private CancellationTokenSource cancellationTokenSource = null;
 
@@ -88,7 +89,7 @@ namespace Gameframe.GUI.PanelSystem
             didLoad?.Invoke();
         }
         
-        public async Task ShowAsync()
+        public async Task ShowAsync(bool immediate = false)
         {
             //If we're currently appeared or appearing we're already doing the thing we wanna be doing so just return
             if (state == PanelViewControllerState.Appeared || state == PanelViewControllerState.Appearing)
@@ -124,8 +125,15 @@ namespace Gameframe.GUI.PanelSystem
             }
 
             willAppear?.Invoke();
-            
-            await panelView.ShowAsync(currentToken);
+
+            if (immediate)
+            {
+                panelView.ShowImmediate();
+            }
+            else
+            {
+                await panelView.ShowAsync(currentToken);
+            }
 
             if (cancellationTokenSource.IsCancellationRequested)
             {
@@ -137,7 +145,7 @@ namespace Gameframe.GUI.PanelSystem
             didAppear?.Invoke();
         }
         
-        public async Task HideAsync()
+        public async Task HideAsync(bool immediate = false)
         {
             //If we're already disappeared or disappearing we're already doing the right thing so just return
             if (state == PanelViewControllerState.Disappeared || state == PanelViewControllerState.Disappearing)
@@ -164,7 +172,14 @@ namespace Gameframe.GUI.PanelSystem
             
             willDisappear?.Invoke();
 
-            await panelView.HideAsync(currentToken);
+            if (immediate)
+            {
+                panelView.ShowImmediate();
+            }
+            else
+            {
+                await panelView.HideAsync(currentToken);
+            }
 
             if (currentToken.IsCancellationRequested)
             {

@@ -19,6 +19,16 @@ namespace Gameframe.GUI.PanelSystem
             gameObject.SetActive(false);
             return Task.CompletedTask;
         }
+
+        public override void ShowImmediate()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public override void HideImmediate()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
 

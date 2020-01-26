@@ -9,6 +9,7 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
 {
     public class FakePanelViewController : IPanelViewController
     {
+        public PanelViewControllerState State { get; } = PanelViewControllerState.Appearing;
         public PanelType PanelType => null;
 
         public PanelViewBase View => null;
@@ -25,12 +26,12 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             return Task.CompletedTask;
         }
 
-        public Task HideAsync()
+        public Task HideAsync(bool immediate = false)
         {
             return Task.CompletedTask;
         }
 
-        public Task ShowAsync()
+        public Task ShowAsync(bool immediate = false)
         {
             return Task.CompletedTask;
         }
