@@ -174,7 +174,7 @@ namespace Gameframe.GUI.PanelSystem
 
             if (immediate)
             {
-                panelView.ShowImmediate();
+                panelView.HideImmediate();
             }
             else
             {
