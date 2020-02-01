@@ -82,7 +82,12 @@ namespace Gameframe.GUI.PanelSystem
         public void SetParentViewContainer(IPanelViewContainer parent) => BaseController.SetParentViewContainer(parent);
 
         [ContextMenu("Show")]
-        public async void Show(bool immediate = false)
+        public async void Show()
+        {
+            await ShowAsync();
+        }
+        
+        public async void Show(bool immediate)
         {
             await ShowAsync(immediate);
         }
@@ -90,7 +95,12 @@ namespace Gameframe.GUI.PanelSystem
         public Task ShowAsync(bool immediate = false) => BaseController.ShowAsync(immediate);
 
         [ContextMenu("Hide")]
-        public async void Hide(bool immediate = false)
+        public async void Hide()
+        {
+            await HideAsync();
+        }
+        
+        public async void Hide(bool immediate)
         {
             await HideAsync(immediate);
         }
@@ -210,12 +220,22 @@ namespace Gameframe.GUI.PanelSystem
             await ShowAsync();
         }
 
-        public Task ShowAsync(bool immediate = false) => BaseController.ShowAsync(immediate);
-
         [ContextMenu("Hide")]
         public async void Hide()
         {
             await HideAsync();
+        }
+        
+        public async void Show(bool immediate)
+        {
+            await ShowAsync(immediate);
+        }
+
+        public Task ShowAsync(bool immediate = false) => BaseController.ShowAsync(immediate);
+
+        public async void Hide(bool immediate)
+        {
+            await HideAsync(immediate);
         }
 
         public Task HideAsync(bool immediate = false) => BaseController.HideAsync(immediate);
