@@ -82,17 +82,17 @@ namespace Gameframe.GUI.PanelSystem
         public void SetParentViewContainer(IPanelViewContainer parent) => BaseController.SetParentViewContainer(parent);
 
         [ContextMenu("Show")]
-        public async void Show()
+        public async void Show(bool immediate = false)
         {
-            await ShowAsync();
+            await ShowAsync(immediate);
         }
 
         public Task ShowAsync(bool immediate = false) => BaseController.ShowAsync(immediate);
 
         [ContextMenu("Hide")]
-        public async void Hide()
+        public async void Hide(bool immediate = false)
         {
-            await HideAsync();
+            await HideAsync(immediate);
         }
 
         public Task HideAsync(bool immediate = false) => BaseController.HideAsync(immediate);
