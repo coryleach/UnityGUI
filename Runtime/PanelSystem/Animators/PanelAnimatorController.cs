@@ -24,12 +24,9 @@ namespace Gameframe.GUI.PanelSystem
         private async Task TransitionAsync(string stateName, int layer)
         {
             //Ensure Animator is Initialized
-            if (!animator.isInitialized)
+            while ((!animator.isInitialized || !animator.gameObject.activeInHierarchy) && Application.isPlaying)
             {
-                while (!animator.isInitialized && animator.gameObject.activeInHierarchy)
-                {
-                    await Task.Yield();
-                }
+                await Task.Yield();
             }
             
             animator.Play(stateName);
