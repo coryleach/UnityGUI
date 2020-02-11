@@ -7,50 +7,6 @@ using UnityEngine.TestTools;
 
 namespace Gameframe.GUI.PanelSystem.Tests.Editor
 {
-    public class FakePanelViewController : IPanelViewController
-    {
-        public PanelViewControllerState State { get; } = PanelViewControllerState.Appearing;
-        public PanelType PanelType => null;
-
-        public PanelViewBase View => null;
-
-        public IPanelViewContainer ParentViewContainer => null;
-
-        private bool loaded = false;
-
-        public bool IsViewLoaded => loaded;
-            
-        public Task LoadViewAsync()
-        {
-            loaded = true;
-            return Task.CompletedTask;
-        }
-
-        public Task HideAsync(bool immediate = false)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task ShowAsync(bool immediate = false)
-        {
-            return Task.CompletedTask;
-        }
-
-        public void SetParentViewContainer(IPanelViewContainer parent)
-        {
-        }
-    }
-
-    public class FakePanelStackController : IPanelStackController
-    {
-        public bool transitioned = false;
-        public Task TransitionAsync()
-        {
-            transitioned = true;
-            return Task.CompletedTask;
-        }
-    }
-    
     public class PanelStackSystemTests
     {
         

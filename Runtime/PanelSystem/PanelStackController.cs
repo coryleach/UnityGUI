@@ -30,13 +30,24 @@ namespace Gameframe.GUI.PanelSystem
             }
             
             var showControllers = ListPool<IPanelViewController>.Get();
-            PanelStackUtility.GetVisiblePanelViewControllers(panelStackSystem,showControllers);
+            
+            try
+            {
+                PanelStackUtility.GetVisiblePanelViewControllers(panelStackSystem,showControllers);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
             
             var hideControllers = activeControllers.Where(x => !showControllers.Contains(x));
 
             try
             {
-                if (eventManager != null)
+                //Not using null propagation because this would bypass the unity null check
+                // ReSharper disable once UseNullPropagation
+                if (null != eventManager)
                 {
                     eventManager.Lock();
                 }
@@ -62,7 +73,9 @@ namespace Gameframe.GUI.PanelSystem
             }
             finally
             {
-                if (eventManager != null)
+                //Not using null propagation because this would bypass the unity null check
+                // ReSharper disable once UseNullPropagation
+                if (null != eventManager)
                 {
                     eventManager.Unlock();
                 }    

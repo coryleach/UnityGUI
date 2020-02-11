@@ -1,39 +1,31 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using Gameframe.GUI.Camera.UI;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Gameframe.GUI.PanelSystem.Tests.Editor
 {
-    public class FakePanelStackSystem : IPanelStackSystem
-    {
-        public IEnumerator<IPanelViewController> GetEnumerator()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public int Count { get; }
-
-        public IPanelViewController this[int index] => throw new System.NotImplementedException();
-    }
-
-    public class FakeViewContainer : IPanelViewContainer
-    {
-        public RectTransform ParentTransform { get; set;  }
-    }
-    
     public class PanelStackControllerTests
     {
-        private static PanelStackController CreateStackController()
+        private static PanelStackController CreateStackController(IPanelStackSystem stackSystem = null, IPanelViewContainer viewContainer = null, IUIEventManager eventManager = null)
         {
-            var stackSystem = new FakePanelStackSystem();
-            var container = new FakeViewContainer();
-            return new PanelStackController(stackSystem,container);
+            if (stackSystem == null)
+            {
+                stackSystem = new FakePanelStackSystem();
+            }
+
+            if (viewContainer == null)
+            {
+                viewContainer = new FakeViewContainer();
+            }
+
+            if (eventManager == null)
+            {
+                eventManager = new FakeUIEventManager();
+            }
+            
+            return new PanelStackController(stackSystem,viewContainer,eventManager);
         }
         
         [Test]
@@ -49,5 +41,25 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             var stackController = CreateStackController();
             stackController.TransitionAsync();
         }
+        
+        [UnityTest]
+        public IEnumerator LocksAndUnlocksUIEventManager()
+        {
+            var stackSystem = new FakePanelStackSystem();
+            var eventManager = new FakeUIEventManager();
+            var stackController = CreateStackController(stackSystem, eventManager:eventManager);
+            
+            var panelController = new FakePanelViewController();
+            panelController.PanelType = ScriptableObject.CreateInstance<PanelType>();
+            
+            stackSystem.Push(panelController);
+            Assert.IsTrue(stackSystem.Count == 1);
+            
+            yield return stackController.TransitionAsync().AsCoroutine();
+            
+            Assert.IsTrue(eventManager.LockCount == 1);
+            Assert.IsTrue(eventManager.UnlockCount == 1);
+        }
+        
     }
 }
