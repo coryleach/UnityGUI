@@ -50,7 +50,7 @@ A MonoBehaviour that references a PanelStackSystem. It responds to changes in th
 A scriptable object which services is a collection of PanelViewControllers. Generally you register PanelViewControllerBehaviour with a provider so that you can push them using the PanelPusher component. It also controls the location that views are parented to in the hierarchy.
 
 ### PanelViewControllerRegisterer
-add this component to a PanelViewControllerBehaviour to register the controller with a PanelViewControllerProvider instance.
+Add this component to a PanelViewControllerBehaviour to register the controller with a PanelViewControllerProvider instance.
 
 ### PanelType
 Contains information about a panel and is used by the PanelViewController to locate the prefab and instantiate the PanelView.
