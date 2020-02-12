@@ -25,6 +25,36 @@ Find the manifest.json file in the Packages folder of your project and edit it t
 }
 ```
 
+## Usage
+
+### PanelView
+PanelView which provides Show & Hide behavior which can be instant or async and awaitable.
+
+### AnimatedPanelView
+References one or more IPanelAnimator components to control animate the Show & Hide of a panel. If you await the Show & Hide async methods
+
+### PanelViewController
+Controller for the display of a PanelView.
+
+### PanelViewControllerBehaviour
+A version of PanelViewController that is also a MonoBehaviour component that can be added to a game object.
+Often you may want to set up & configure PanelViewControllers with data other than the panel type and using this class will allow you to do that in editor.
+
+### PanelStackSystem
+A scriptable object representation of a panel stack. Main purpose is in maintaining the navigation history of a menu. Push and Pop panel controllers onto this stack. If any PanelViewStackController component that subscribes to the PanelStackSystem will respond to the push and show/hide the corresponding panels. Generally the top PanelViewController on the stack is always visible.
+
+### PanelViewStackController
+A MonoBehaviour that references a PanelStackSystem. It responds to changes in the panel stack by getting the current showing and hiding controllers. It will then perform the necessary transitions.
+
+### PanelViewControllerProvider
+A scriptable object which services is a collection of PanelViewControllers. Generally you register PanelViewControllerBehaviour with a provider so that you can push them using the PanelPusher component. It also controls the location that views are parented to in the hierarchy.
+
+### PanelViewControllerRegisterer
+add this component to a PanelViewControllerBehaviour to register the controller with a PanelViewControllerProvider instance.
+
+### PanelType
+Contains information about a panel and is used by the PanelViewController to locate the prefab and instantiate the PanelView.
+
 ## Author
 
 👤 **Cory Leach**
