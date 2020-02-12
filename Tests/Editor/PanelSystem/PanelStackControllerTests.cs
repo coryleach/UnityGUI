@@ -48,10 +48,12 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             var stackSystem = new FakePanelStackSystem();
             var eventManager = new FakeUIEventManager();
             var stackController = CreateStackController(stackSystem, eventManager:eventManager);
-            
-            var panelController = new FakePanelViewController();
-            panelController.PanelType = ScriptableObject.CreateInstance<PanelType>();
-            
+
+            var panelController = new FakePanelViewController
+            {
+                PanelType = ScriptableObject.CreateInstance<PanelType>()
+            };
+
             stackSystem.Push(panelController);
             Assert.IsTrue(stackSystem.Count == 1);
             

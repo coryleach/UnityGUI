@@ -19,7 +19,7 @@ namespace Gameframe.GUI.PanelSystem
         {
             panelStackSystem = stackSystem;
             container = viewContainer;
-            this.eventManager = null;
+            this.eventManager = eventManager;
         }
 
         public async Task TransitionAsync()
@@ -37,8 +37,7 @@ namespace Gameframe.GUI.PanelSystem
             }
             catch (Exception e)
             {
-                Debug.LogException(e);
-                throw;
+                throw new AggregateException("Unable to get visible panel view controllers.",e);
             }
             
             var hideControllers = activeControllers.Where(x => !showControllers.Contains(x));
