@@ -9,7 +9,7 @@ using UnityEditor.Animations;
 namespace Gameframe.GUI.PanelSystem
 {
     [RequireComponent(typeof(Animator),typeof(CanvasGroup))]
-    public class QuickPanelAnimatorController : MonoBehaviour, IPanelAnimator
+    public class QuickPanelAnimatorController : BasePanelAnimatorController, IPanelAnimator
     {
         public enum QuickAnimation
         {
@@ -20,59 +20,22 @@ namespace Gameframe.GUI.PanelSystem
         
         [SerializeField]
         private QuickAnimation animationType = QuickAnimation.QuickFadeCanvasGroup;
-
-        [SerializeField]
-        private Animator animator = null;
         
         private int animationLayer = 0;
         
-        private const string ShowAnimation = "show";
-        private const string HideAnimation = "hide";
+        private readonly int showAnimation = Animator.StringToHash("show");
+        private readonly int hideAnimation = Animator.StringToHash("hide");
         
-        public async Task TransitionShowAsync()
+        public override async Task TransitionShowAsync()
         {
-            await TransitionAsync(ShowAnimation, animationLayer);
+            await TransitionAsync(showAnimation, animationLayer);
         }
 
-        public async Task TransitionHideAsync()
+        public override async Task TransitionHideAsync()
         {
-            await TransitionAsync(HideAnimation, animationLayer);
+            await TransitionAsync(hideAnimation, animationLayer);
         }
-
-        private async Task TransitionAsync(string stateName, int layer)
-        {
-            //Ensure Animator is Initialized
-            while ((!animator.isInitialized || !animator.gameObject.activeInHierarchy) && Application.isPlaying)
-            {
-                await Task.Yield();
-            }
-            
-            animator.Play(stateName);
-
-            //Wait until we're in the target state
-            while (!animator.GetCurrentAnimatorStateInfo(layer).IsName(stateName))
-            {
-                await Task.Yield();
-            }
-
-            float normalizedTime = 0;
-            while (normalizedTime < 1 && !Mathf.Approximately(normalizedTime,1f))
-            {
-                var info = animator.GetCurrentAnimatorStateInfo(0);
-                if (normalizedTime <= info.normalizedTime)
-                {
-                    normalizedTime = info.normalizedTime;
-                }
-                else
-                {
-                    //If suddenly normalized time is less than 1 we've looped back around or something.
-                    normalizedTime = 1f;
-                }
-
-                await Task.Yield();
-            }
-        }
-
+        
 #if UNITY_EDITOR
         private void OnValidate()
         {
