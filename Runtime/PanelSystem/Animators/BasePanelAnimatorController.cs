@@ -19,10 +19,11 @@ namespace Gameframe.GUI.PanelSystem
             {
                 await Task.Yield();
             }
+            
             animator.Play(stateHash);
 
             //Wait until we're in the target state
-            while (animator.GetCurrentAnimatorStateInfo(layer).fullPathHash != stateHash)
+            while (animator.GetCurrentAnimatorStateInfo(layer).shortNameHash != stateHash)
             {
                 await Task.Yield();
             }

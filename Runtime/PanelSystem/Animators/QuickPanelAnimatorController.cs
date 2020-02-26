@@ -49,7 +49,7 @@ namespace Gameframe.GUI.PanelSystem
                 animator.runtimeAnimatorController = GetAnimatorController(animationType);
             }
         }
-        private AnimatorController GetAnimatorController(QuickAnimation animationType)
+        public static AnimatorController GetAnimatorController(QuickAnimation animationType)
         {
             var path = "Packages/com.gameframe.gui/Animators/";
             switch (animationType)
