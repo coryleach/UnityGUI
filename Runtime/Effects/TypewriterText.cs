@@ -1,27 +1,35 @@
 ﻿using System.Collections;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Gameframe.GUI
 {
 
-  public class TypewriterText : MonoBehaviour
+  public abstract class BaseTypewriterText : MonoBehaviour
   {
+    [SerializeField]
+    protected int charactersPerSecond = 10;
+
+    public virtual int CharacterPerSecond
+    {
+      get => charactersPerSecond;
+      set => charactersPerSecond = value;
+    }
+    
+    [SerializeField]
+    protected bool playOnEnable = false;
+
+    protected Coroutine typeCoroutine = null;
+    protected string currentMessage = string.Empty;
+
+    public bool IsPlaying => typeCoroutine != null;
 
     [SerializeField]
-    private Text text = null;
-
-    [SerializeField]
-    private int charactersPerSecond = 10;
-
-    [SerializeField]
-    private bool playOnEnable = false;
-
-    private Coroutine _typeCoroutine = null;
-    private string _currentMessage = string.Empty;
-
-    public bool IsPlaying => _typeCoroutine != null;
-
+    protected UnityEvent onComplete = new UnityEvent();
+    public UnityEvent OnComplete => onComplete;
+    
     private void OnEnable()
     {
       if ( playOnEnable )
@@ -32,59 +40,86 @@ namespace Gameframe.GUI
 
     private void OnDisable()
     {
-      if ( _typeCoroutine != null )
+      if ( typeCoroutine != null )
       {
         Finish();
       }
     }
 
-    [ContextMenu("Play")]
-    public void Play()
-    {
-      Play(text.text);
-    }
-
+    public abstract void Play();
+    
     public void Play(string message)
     {
-      if ( _typeCoroutine != null )
+      if ( typeCoroutine != null )
       {
         Finish();
       }
 
-      _currentMessage = message;
-      _typeCoroutine = StartCoroutine(RunType());
+      currentMessage = message;
+      typeCoroutine = StartCoroutine(RunType());
     }
 
-    public void Finish()
+    public virtual void Finish()
     {
-      if (_typeCoroutine != null)
+      if (typeCoroutine != null)
       {
-        StopCoroutine(_typeCoroutine);
-        _typeCoroutine = null;
+        StopCoroutine(typeCoroutine);
+        typeCoroutine = null;
+        onComplete.Invoke();
       }
-      text.text = _currentMessage;
     }
 
-    private IEnumerator RunType()
-    {
-      string visibleMessage = string.Empty;
-      float interval = 1.0f / charactersPerSecond;
+    protected abstract IEnumerator RunType();
 
-      for (int i = 0; i < _currentMessage.Length; i++)
-      {
-        visibleMessage = (visibleMessage + _currentMessage[i]);
-        text.text = visibleMessage;
-        yield return new WaitForSeconds(interval);
-      }
-
-      _typeCoroutine = null;
-    }
-
-    private void OnValidate()
+    protected virtual void OnValidate()
     {
       if ( charactersPerSecond <= 0 )
       {
         charactersPerSecond = 1;
+      }
+    }
+
+  }
+
+  public class TypewriterText : BaseTypewriterText
+  {
+    [SerializeField]
+    private Text text = null;
+
+    [ContextMenu("Play")]
+    public override void Play()
+    {
+      Play(text.text);
+    }
+    
+    public override void Finish()
+    {
+      base.Finish();
+      text.text = currentMessage;
+    }
+
+    protected override IEnumerator RunType()
+    {
+      string visibleMessage = string.Empty;
+      var interval = 1.0f / charactersPerSecond;
+
+      for (var i = 0; i < currentMessage.Length; i++)
+      {
+        visibleMessage = (visibleMessage + currentMessage[i]);
+        text.text = visibleMessage;
+        yield return new WaitForSeconds(interval);
+      }
+
+      typeCoroutine = null;
+      onComplete.Invoke();
+    }
+
+    protected override void OnValidate()
+    {
+      base.OnValidate();
+      if (text == null)
+      {
+        text = GetComponent<Text>();
       }
     }
 
