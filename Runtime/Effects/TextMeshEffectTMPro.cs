@@ -23,7 +23,10 @@ namespace Gameframe.GUI
         public Vector3 localPosition;
         public Quaternion localRotation;
         public Vector3 localScale;
-        public float alpha;
+        public Color32 color0;
+        public Color32 color1;
+        public Color32 color2;
+        public Color32 color3;
     }
     
     /// <summary>
@@ -41,8 +44,6 @@ namespace Gameframe.GUI
         private EffectData[] effectDatas = new EffectData[0];
         private TMP_MeshInfo[] meshCache = null;
         private Coroutine coroutine = null;
-        private bool dirtyVerts = false;
-        private bool dirtyColors = false;
 
         private readonly List<ITextMeshVertexEffect> vertEffects = new List<ITextMeshVertexEffect>();
         private readonly List<ITextMeshColorEffect> colorEffects = new List<ITextMeshColorEffect>();
@@ -77,7 +78,6 @@ namespace Gameframe.GUI
         public void RemoveVertexEffect(ITextMeshVertexEffect vertexEffect)
         {
             vertEffects.Remove(vertexEffect);
-            dirtyVerts = true;
         }
 
         public void AddColorEffect(ITextMeshColorEffect colorEffect)
@@ -89,7 +89,6 @@ namespace Gameframe.GUI
         public void RemoveColorEffect(ITextMeshColorEffect colorEffect)
         {
             colorEffects.Remove(colorEffect);
-            dirtyColors = true;
         }
 
         private void OnTextChanged(object eventText)
@@ -151,24 +150,32 @@ namespace Gameframe.GUI
                 ApplyAnimations();
                 yield return null;
             }
-            ApplyAnimations();
+
             coroutine = null;
+            
+            //One last update when we have zero effects to reset the text mesh
+            ApplyAnimations();
         }
 
         private void ApplyAnimations()
         {
             text.ForceMeshUpdate();
+
+            if (meshCache == null)
+            {
+                meshCache = text.textInfo.CopyMeshInfoVertexData();
+            }
             
             ValidateTransforms();
 
             var flags = TMP_VertexDataUpdateFlags.None;
             
-            if (vertEffects.Count > 0 || dirtyVerts)
+            if (vertEffects.Count > 0)
             {
                 flags |= TMP_VertexDataUpdateFlags.Vertices;
             }
 
-            if (colorEffects.Count > 0 || dirtyColors)
+            if (colorEffects.Count > 0)
             {
                 flags |= TMP_VertexDataUpdateFlags.Colors32;
             }
@@ -195,16 +202,14 @@ namespace Gameframe.GUI
                     colorEffect.UpdateColorEffect(charInfo,ref effectDatas[i]);
                 }
                 
-                if (vertEffects.Count > 0 || dirtyVerts)
+                if (vertEffects.Count > 0)
                 {
                     ApplyTransforms(charInfo);
-                    dirtyVerts = false;
                 }
 
-                if (colorEffects.Count > 0 || dirtyColors)
+                if (colorEffects.Count > 0)
                 {
                     ApplyColors(charInfo);
-                    dirtyColors = false;
                 }
             }
             
@@ -216,7 +221,10 @@ namespace Gameframe.GUI
             data.localPosition = Vector3.zero;
             data.localRotation = Quaternion.identity;
             data.localScale = Vector3.one;
-            data.alpha = 1;
+            data.color0 = new Color32(1,1,1,1);
+            data.color1 = new Color32(1,1,1,1);
+            data.color2 = new Color32(1,1,1,1);
+            data.color3 = new Color32(1,1,1,1);
         }
         
         private void ApplyTransforms(TMP_CharacterInfo charInfo)
@@ -227,7 +235,6 @@ namespace Gameframe.GUI
             //Do Vertices
             var sourceVertices = meshCache[materialIndex].vertices;
 
-            // Getting this from charInfo.vertex_TL, etc. yields the wrong values
             var sourceBottomLeft = sourceVertices[vertexIndex + 0];
             var sourceTopLeft = sourceVertices[vertexIndex + 1];
             var sourceTopRight = sourceVertices[vertexIndex + 2];
@@ -256,19 +263,19 @@ namespace Gameframe.GUI
             var vertexIndex = charInfo.vertexIndex;
             var characterIndex = charInfo.index;
 
-            var animInfo = effectDatas[characterIndex];
+            var effect = effectDatas[characterIndex];
             
-            //Do Colors
             var sourceColors = meshCache[materialIndex].colors32;
+            
             var colorBottomLeft = sourceColors[vertexIndex + 0];
             var colorTopLeft = sourceColors[vertexIndex + 1];
             var colorTopRight = sourceColors[vertexIndex + 2];
             var colorBottomRight = sourceColors[vertexIndex + 3];
 
-            colorTopLeft.a = (byte)(animInfo.alpha * 255);
-            colorTopRight.a = (byte)(animInfo.alpha * 255);
-            colorBottomLeft.a = (byte)(animInfo.alpha * 255);
-            colorBottomRight.a = (byte)(animInfo.alpha * 255);
+            colorBottomLeft.a = effect.color0.a;
+            colorTopLeft.a = effect.color1.a;
+            colorTopRight.a = effect.color2.a;
+            colorBottomRight.a = effect.color3.a;
             
             var destinationColors = text.textInfo.meshInfo[materialIndex].colors32;
             destinationColors[vertexIndex + 0] = colorBottomLeft;

@@ -16,8 +16,8 @@ namespace Gameframe.GUI
         protected bool playOnEnable = false;
 
         [SerializeField] 
-        private int charactersPerSecond = 15;
-        public int CharacterPerSecond
+        private float charactersPerSecond = 15;
+        public float CharacterPerSecond
         {
             get => charactersPerSecond;
             set => charactersPerSecond = value;
@@ -89,7 +89,13 @@ namespace Gameframe.GUI
 
         public void UpdateColorEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            data.alpha = Mathf.Clamp01(progress - charInfo.index);
+            var left = Mathf.Clamp01(progress - charInfo.index);
+            var right = Mathf.Clamp01(progress - (charInfo.index+1));
+
+            data.color0.a = (byte) (255 * left);
+            data.color1.a = (byte) (255 * left);
+            data.color2.a = (byte) (255 * right);
+            data.color3.a = (byte) (255 * right);
         }
 
         private void OnValidate()
@@ -97,6 +103,11 @@ namespace Gameframe.GUI
             if (effectManager == null)
             {
                 effectManager = GetComponent<TextMeshEffectTMPro>();
+            }
+
+            if (charactersPerSecond < 0)
+            {
+                charactersPerSecond = 1;
             }
         }
         

@@ -10,8 +10,8 @@ namespace Gameframe.GUI
         private TextMeshEffectTMPro effectManager;
 
         [SerializeField] 
-        private float radius = 2;
-
+        protected Vector2 amplitude = Vector2.one;
+        
         [SerializeField]
         protected float period = 0.15f;
 
@@ -47,8 +47,8 @@ namespace Gameframe.GUI
             var t = Mathf.PI * time;
             var offset = Mathf.PI * charInfo.index * period;
             Vector3 pt;
-            pt.x = Mathf.Cos(t + offset) * radius;
-            pt.y = Mathf.Sin(t + offset) * radius;
+            pt.x = Mathf.Cos(t + offset) * amplitude.x;
+            pt.y = Mathf.Sin(t + offset) * amplitude.y;
             pt.z = 0;
             data.localPosition = pt;
         }
