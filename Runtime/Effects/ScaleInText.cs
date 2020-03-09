@@ -95,8 +95,20 @@ namespace Gameframe.GUI
 
         public void UpdateVertexEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            var t = Mathf.Sin(Mathf.Clamp01(progress - charInfo.index) * Mathf.PI * 0.5f);
-            data.localScale = Vector3.Lerp(startScale, endScale, t);
+            var t = Mathf.Clamp01(progress - charInfo.index);
+            data.localScale = Vector3.Lerp(startScale, endScale, EaseInQuad(0,1,t) );
+        }
+        
+        public static float EaseInSine(float start, float end, float value)
+        {
+            end -= start;
+            return -end * Mathf.Cos(value * (Mathf.PI * 0.5f)) + end + start;
+        }
+        
+        public static float EaseInQuad(float start, float end, float value)
+        {
+            end -= start;
+            return end * value * value + start;
         }
 
         private void OnValidate()
