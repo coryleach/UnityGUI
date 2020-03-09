@@ -24,6 +24,8 @@ public class TextEffectTMPro : MonoBehaviour
     protected void OnEnable()
     {
         TMPro_EventManager.TEXT_CHANGED_EVENT.Add(OnTextChanged);
+        time = 0;
+        InitializeCharacterTransforms();
         Refresh();
         coroutine = StartCoroutine(Animate());
     }
@@ -62,12 +64,87 @@ public class TextEffectTMPro : MonoBehaviour
     public struct CharacterTransform
     {
         public Vector3 localPosition;
-        public Vector3 localRotation;
+        public Quaternion localRotation;
         public Vector3 localScale;
+        public byte alpha;
     }
 
     [SerializeField]
-    private CharacterTransform[] characterTransform = null;
+    protected CharacterTransform[] characterTransforms = null;
+
+    [SerializeField] 
+    private float radius = 2;
+
+    [SerializeField]
+    protected float period = 0.15f;
+
+    [SerializeField] 
+    protected float speed = 1f;
+
+    [SerializeField] protected Vector2 move = Vector2.zero;
+    
+    [SerializeField] protected  Vector2 startScale = Vector2.one;
+    
+    private float time = 0;
+    
+    private void Update()
+    {
+        time += Time.deltaTime * speed;
+        var t = Mathf.PI * time;
+        for (var i = 0; i < characterTransforms.Length; i++)
+        {
+            var offset = Mathf.PI * i * period;
+            Vector3 pt;
+            pt.x = Mathf.Cos(t + offset) * radius;
+            pt.y = Mathf.Sin(t + offset) * radius;
+            pt.z = 0;
+            characterTransforms[i].localPosition = pt;
+
+            float charsPerSecond = 1.0f / 15f;
+            float charactersShowing = time / charsPerSecond;
+            float progress = charactersShowing - Mathf.Floor(charactersShowing);
+
+            if (Mathf.FloorToInt(charactersShowing) > i)
+            {
+                //characterTransforms[i].alpha = 255;
+                characterTransforms[i].localScale = Vector3.one;
+            }
+            else if ( Mathf.FloorToInt(charactersShowing) == i )
+            {
+                //characterTransforms[i].alpha = (byte)Mathf.FloorToInt(progress * 255);
+                characterTransforms[i].localScale = Vector3.Lerp(startScale, Vector3.one, progress);
+                characterTransforms[i].localPosition += Vector3.Lerp( move, Vector3.zero, progress);
+            }
+            else
+            {
+                //characterTransforms[i].alpha = 0;
+            }
+            
+            characterTransforms[i].alpha = (byte)Mathf.FloorToInt(Mathf.Clamp01(charactersShowing - i) * 255);
+
+        }
+    }
+
+    protected void UpdatePosition()
+    {
+        
+    }
+    
+    protected void UpdateAlpha()
+    {
+        
+    }
+
+    protected void InitializeCharacterTransforms(int startIndex = 0)
+    {
+        for (var i = startIndex; i < characterTransforms.Length; i++)
+        {
+            characterTransforms[i].localPosition = Vector3.zero;
+            characterTransforms[i].localRotation = Quaternion.identity;
+            characterTransforms[i].localScale = Vector3.one;
+            characterTransforms[i].alpha = 0;
+        }
+    }
     
     private IEnumerator Animate()
     {
@@ -77,41 +154,40 @@ public class TextEffectTMPro : MonoBehaviour
             
             var characterCount = text.textInfo.characterCount;
 
-            if (characterTransform == null || characterCount > characterTransform.Length)
+            if (characterTransforms == null || characterCount > characterTransforms.Length)
             {
-                characterTransform = new CharacterTransform[text.textInfo.characterCount];
-                for (var i = 0; i < characterTransform.Length; i++)
-                {
-                    characterTransform[i].localPosition = Vector3.zero;
-                    characterTransform[i].localRotation = Vector3.zero;
-                    characterTransform[i].localScale = Vector3.one;
-                }
+                var old = characterTransforms;
+                var startIndex = 0 + (characterTransforms?.Length ?? 0);
+                characterTransforms = new CharacterTransform[text.textInfo.characterCount];
+                old?.CopyTo(characterTransforms,0);
+                InitializeCharacterTransforms(startIndex);
             }
             
             //For each character
             for (var i = 0; i < characterCount; i++)
             {
                 var charInfo = text.textInfo.characterInfo[i];
-                var materialIndex = charInfo.materialReferenceIndex;
-                var vertexIndex = charInfo.vertexIndex;
-                
                 if (!charInfo.isVisible)
                 {
                     continue;
                 }
-
+                
+                var materialIndex = charInfo.materialReferenceIndex;
+                var vertexIndex = charInfo.vertexIndex;
+                
+                //Do Vertices
                 var sourceVertices = meshCache[materialIndex].vertices;
 
                 // Getting this from charInfo.vertex_TL, etc. yields the wrong values
+                var sourceBottomLeft = sourceVertices[vertexIndex + 0];
                 var sourceTopLeft = sourceVertices[vertexIndex + 1];
                 var sourceTopRight = sourceVertices[vertexIndex + 2];
-                var sourceBottomLeft = sourceVertices[vertexIndex + 0];
                 var sourceBottomRight = sourceVertices[vertexIndex + 3];
                 
                 var offset = sourceBottomLeft + (sourceBottomRight - sourceBottomLeft) * pivot.x + (sourceTopLeft - sourceBottomLeft) * pivot.y;
 
-                var anim = characterTransform[i];
-                var matrix = Matrix4x4.TRS(anim.localPosition, Quaternion.Euler(anim.localRotation), anim.localScale);
+                var anim = characterTransforms[i];
+                var matrix = Matrix4x4.TRS(anim.localPosition, anim.localRotation, anim.localScale);
                 
                 var destinationTopLeft = matrix.MultiplyPoint3x4(sourceTopLeft - offset) + offset;
                 var destinationTopRight = matrix.MultiplyPoint3x4(sourceTopRight - offset) + offset;
@@ -123,10 +199,26 @@ public class TextEffectTMPro : MonoBehaviour
                 destinationVertices[vertexIndex + 1] = destinationTopLeft;
                 destinationVertices[vertexIndex + 2] = destinationTopRight;
                 destinationVertices[vertexIndex + 3] = destinationBottomRight;
+                
+                //Do Colors
+                var sourceColors = meshCache[materialIndex].colors32;
+                var colorBottomLeft = sourceColors[vertexIndex + 0];
+                var colorTopLeft = sourceColors[vertexIndex + 1];
+                var colorTopRight = sourceColors[vertexIndex + 2];
+                var colorBottomRight = sourceColors[vertexIndex + 3];
+
+                colorTopLeft.a = anim.alpha;
+                colorTopRight.a = anim.alpha;
+                colorBottomLeft.a = anim.alpha;
+                colorBottomRight.a = anim.alpha;
+                
+                var destinationColors = text.textInfo.meshInfo[materialIndex].colors32;
+                destinationColors[vertexIndex + 0] = colorBottomLeft;
+                destinationColors[vertexIndex + 1] = colorTopLeft;
+                destinationColors[vertexIndex + 2] = colorTopRight;
+                destinationColors[vertexIndex + 3] = colorBottomRight;
             }
-            
-            text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
-            
+            text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices | TMP_VertexDataUpdateFlags.Colors32);
             yield return null;
         }
     }
