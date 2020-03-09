@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 
 namespace Gameframe.GUI.Tween
@@ -51,46 +50,21 @@ namespace Gameframe.GUI.Tween
             CancelTweensForId(obj.GetInstanceID());
         }
 
-        public static async Task DoColorAsync(this TextMeshProUGUI text, Color toColor, float duration)
+        
+        
+        public static async Task DoTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
         {
-            var startColor = text.color;
-            await DoTweenAsync(text.gameObject.GetInstanceID(), duration,
-                (t) => { text.color = Color.Lerp(startColor, toColor, t); });
+            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType);
         }
 
-        public static async void DoColor(this TextMeshProUGUI text, Color toColor, float duration)
-        {
-            await text.DoColorAsync(toColor, duration);
-        }
-
-        public static async Task DoAnchorPosYAsync(this RectTransform rectTransform, float position, float duration)
-        {
-            var startPosY = rectTransform.anchoredPosition.y;
-            await DoTweenAsync(rectTransform.gameObject.GetInstanceID(), duration, (t) =>
-            {
-                var pt = rectTransform.anchoredPosition;
-                pt.y = Mathf.Lerp(startPosY, position, t);
-                rectTransform.anchoredPosition = pt;
-            });
-        }
-
-        public static async void DoAnchorPosY(this RectTransform rectTransform, float position, float duration)
-        {
-            await rectTransform.DoAnchorPosYAsync(position, duration);
-        }
-
-        private static async Task DoTweenAsync(int id, float duration, Action<float> action)
-        {
-            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action);
-        }
-
-        private static async Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken,
-            Action<float> action)
+        public static async Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken,
+            Action<float> action, Easing easeType = Easing.Linear)
         {
             var instanceCancellationToken = StartTween(id);
 
             float t = 0;
-            action?.Invoke(0);
+            var ease = EaseFunctions.Get(easeType);
+            action?.Invoke(ease.Invoke(0));
 
             while (t < duration && Application.isPlaying)
             {
@@ -102,10 +76,10 @@ namespace Gameframe.GUI.Tween
                 }
 
                 t += Time.deltaTime;
-                action?.Invoke(Mathf.InverseLerp(0, duration, t));
+                action?.Invoke(ease.Invoke(Mathf.InverseLerp(0, duration, t)));
             }
 
-            action?.Invoke(1);
+            action?.Invoke(ease.Invoke(1));
 
             CompleteTween(id);
         }
