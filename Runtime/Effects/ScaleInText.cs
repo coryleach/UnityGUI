@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace Gameframe.GUI
 {
     [RequireComponent(typeof(TextMeshEffectTMPro))]
-    public class FadeInText : MonoBehaviour, ITextMeshColorEffect
+    public class ScaleInText : MonoBehaviour, ITextMeshVertexEffect
     {
         [SerializeField] 
         private TextMeshEffectTMPro effectManager;
@@ -33,6 +33,12 @@ namespace Gameframe.GUI
         protected UnityEvent onComplete = new UnityEvent();
         public UnityEvent OnComplete => onComplete;
 
+        [SerializeField]
+        private Vector3 startScale = Vector3.zero;
+        
+        [SerializeField]
+        protected Vector3 endScale = Vector3.one;
+        
         private void OnEnable()
         {
             if (playOnEnable)
@@ -66,7 +72,7 @@ namespace Gameframe.GUI
         {
             if (coroutine != null)
             {
-                effectManager.RemoveColorEffect(this);
+                effectManager.RemoveVertexEffect(this);
                 StopCoroutine(coroutine);
                 onComplete.Invoke();
             }
@@ -75,9 +81,9 @@ namespace Gameframe.GUI
         
         private IEnumerator RunAnimation()
         {
-            effectManager.AddColorEffect(this);
+            effectManager.AddVertexEffect(this);
             
-            progress = -0.5f;
+            progress = 0;
             while (progress < currentMessage.Length)
             {
                 progress += Time.smoothDeltaTime * charactersPerSecond;
@@ -87,15 +93,10 @@ namespace Gameframe.GUI
             Finish();
         }
 
-        public void UpdateColorEffect(TMP_CharacterInfo charInfo, ref EffectData data)
+        public void UpdateVertexEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            var left = 1 - Mathf.Clamp01(charInfo.index - (progress - 0.5f));
-            var right = 1 - Mathf.Clamp01(charInfo.index - (progress - 1f));
-
-            data.color0.a = (byte) Mathf.Round(255 * left);
-            data.color1.a = (byte) Mathf.Round(255 * left);
-            data.color2.a = (byte) Mathf.Round(255 * right);
-            data.color3.a = (byte) Mathf.Round(255 * right);
+            var t = Mathf.Sin(Mathf.Clamp01(progress - charInfo.index) * Mathf.PI * 0.5f);
+            data.localScale = Vector3.Lerp(startScale, endScale, t);
         }
 
         private void OnValidate()
