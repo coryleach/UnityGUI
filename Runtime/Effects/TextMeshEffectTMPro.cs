@@ -140,16 +140,27 @@ namespace Gameframe.GUI
             {
                 return;
             }
-            coroutine = StartCoroutine(Run());
+
+            if (colorEffects.Count + vertEffects.Count > 0)
+            {
+                coroutine = StartCoroutine(Run());
+            }
         }
         
         private IEnumerator Run()
         {
-            while (colorEffects.Count + vertEffects.Count > 0)
+            //Early out if we have no work to do so we don't try to Apply animations when we shouldn't
+            if (colorEffects.Count + vertEffects.Count == 0)
+            {
+                coroutine = null;
+                yield break;
+            }
+
+            do
             {
                 ApplyAnimations();
                 yield return null;
-            }
+            } while (colorEffects.Count + vertEffects.Count > 0);
 
             coroutine = null;
             
