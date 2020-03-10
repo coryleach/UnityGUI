@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Gameframe.GUI.Tween;
 using TMPro;
 using UnityEngine;
@@ -8,7 +7,7 @@ using UnityEngine.Events;
 namespace Gameframe.GUI
 {
     [RequireComponent(typeof(TextMeshEffectTMPro))]
-    public class ScaleInText : MonoBehaviour, ITextMeshVertexEffect
+    public class MoveInText : MonoBehaviour, ITextMeshVertexEffect
     {
         [SerializeField] 
         private TextMeshEffectTMPro effectManager;
@@ -38,10 +37,10 @@ namespace Gameframe.GUI
         public UnityEvent OnComplete => onComplete;
 
         [SerializeField]
-        private Vector3 startScale = Vector3.zero;
+        private Vector3 startOffset = Vector3.zero;
         
         [SerializeField]
-        protected Vector3 endScale = Vector3.one;
+        protected Vector3 endOffset = Vector3.one;
         
         private void OnEnable()
         {
@@ -101,8 +100,8 @@ namespace Gameframe.GUI
         {
             var t = Mathf.Clamp01(progress - charInfo.index);
             t = EaseFunctions.Ease(easeType, t);
-            var delta = endScale - startScale;
-            data.localScale = startScale + delta * t; //Vector3.Lerp(startScale, endScale, t );
+            var delta = endOffset - startOffset;
+            data.localPosition = startOffset + delta * t;
         }
         
         private void OnValidate()

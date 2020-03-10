@@ -182,7 +182,7 @@ namespace Gameframe.GUI.Tween
 
         public static float InOutSine(float x)
         {
-            return -(Cos(PI * x)) * 0.5f;
+            return (Cos(PI * x) - 1) * -0.5f;
         }
 
         public static float InExpo(float x)

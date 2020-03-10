@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Gameframe.GUI.Tween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,6 +15,12 @@ namespace Gameframe.GUI
         
         [SerializeField] 
         protected bool playOnEnable = false;
+
+        [SerializeField] 
+        protected bool smooth = false;
+
+        [SerializeField] 
+        private Easing easeType = Easing.Linear;
 
         [SerializeField] 
         private float charactersPerSecond = 15;
@@ -89,13 +96,21 @@ namespace Gameframe.GUI
 
         public void UpdateColorEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            var left = 1 - Mathf.Clamp01(charInfo.index - (progress - 0.5f));
-            var right = 1 - Mathf.Clamp01(charInfo.index - (progress - 1f));
-
+            var left = EaseFunctions.Ease(easeType,1 - Mathf.Clamp01(charInfo.index - (progress - 0.5f)));
             data.color0.a = (byte) Mathf.Round(255 * left);
             data.color1.a = (byte) Mathf.Round(255 * left);
-            data.color2.a = (byte) Mathf.Round(255 * right);
-            data.color3.a = (byte) Mathf.Round(255 * right);
+            
+            if (smooth)
+            {
+                var right = EaseFunctions.Ease(easeType, 1 - Mathf.Clamp01(charInfo.index - (progress - 1f)));
+                data.color2.a = (byte) Mathf.Round(255 * right);
+                data.color3.a = (byte) Mathf.Round(255 * right);
+            }
+            else
+            {
+                data.color2.a = (byte) Mathf.Round(255 * left);
+                data.color3.a = (byte) Mathf.Round(255 * left);
+            }
         }
 
         private void OnValidate()
