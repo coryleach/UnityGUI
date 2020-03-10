@@ -168,7 +168,7 @@ namespace Gameframe.GUI
             ApplyAnimations();
         }
 
-        private void ApplyAnimations()
+        public void ApplyAnimations()
         {
             text.ForceMeshUpdate();
 
