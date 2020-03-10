@@ -10,6 +10,17 @@ namespace Gameframe.GUI.PanelSystem
         public abstract Task HideAsync(CancellationToken cancellationToken);
         public abstract void ShowImmediate();
         public abstract void HideImmediate();
+
+        public Task ShowAsync()
+        {
+            return ShowAsync(CancellationToken.None);
+        }
+
+        public Task HideAsync()
+        {
+            return HideAsync(CancellationToken.None);
+        }
+        
     }
 }
 
