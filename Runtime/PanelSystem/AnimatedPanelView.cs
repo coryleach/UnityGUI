@@ -30,6 +30,10 @@ namespace Gameframe.GUI.PanelSystem
 
         public override async Task HideAsync(CancellationToken cancellationToken)
         {
+            if (!gameObject.activeSelf)
+            {
+                return;
+            }
             var animators = GetAnimators();
             var tasks = animators.Select(x => x.TransitionHideAsync());
             await Task.WhenAll(tasks);
