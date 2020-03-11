@@ -112,6 +112,15 @@ namespace Gameframe.GUI.PanelSystem
             stack.RemoveRange(stack.Count-count,count);
             await TransitionAsync();
         }
+        
+        /// <summary>
+        /// Pop count number of panels from the top of the stack
+        /// </summary>
+        /// <param name="count">Number of panels to pop</param>
+        public async void Pop(int count)
+        {
+            await PopAsync(count);
+        }
 
         /// <summary>
         /// Pop stack to a specific index
@@ -126,6 +135,15 @@ namespace Gameframe.GUI.PanelSystem
             }
             await TransitionAsync();
         }
+        
+        /// <summary>
+        /// Pop stack to a specific index
+        /// </summary>
+        /// <param name="index"></param>
+        public async void PopToIndex(int index)
+        {
+            await PopToIndexAsync(index);
+        }
 
         /// <summary>
         /// Push a set of panels async
@@ -139,6 +157,36 @@ namespace Gameframe.GUI.PanelSystem
         }
         
         /// <summary>
+        /// Push a set of panels async
+        /// </summary>
+        /// <param name="controllers">array of panel view controllers</param>
+        public async void Push(params IPanelViewController[] controllers)
+        {
+            await PushAsync(controllers);
+        }
+        
+        /// <summary>
+        /// Clear the stack and Push a set of panels async
+        /// </summary>
+        /// <param name="controllers">array of panel view controllers</param>
+        /// <returns>Awaitable task that completes when the transition is complete</returns>
+        public async Task ClearAndPushAsync(params IPanelViewController[] controllers)
+        {
+            stack.Clear();
+            stack.AddRange(controllers);
+            await TransitionAsync();
+        }
+        
+        /// <summary>
+        /// Clear the stack and Push a set of panels async
+        /// </summary>
+        /// <param name="controllers">array of panel view controllers</param>
+        public async void ClearAndPush(params IPanelViewController[] controllers)
+        {
+            await ClearAndPushAsync(controllers);
+        }
+        
+        /// <summary>
         /// Clear all panels from the stack
         /// </summary>
         /// <returns>Awaitable task that completes when the panel transitions complete</returns>
@@ -146,6 +194,33 @@ namespace Gameframe.GUI.PanelSystem
         {
             stack.Clear();
             await TransitionAsync();
+        }
+        
+        /// <summary>
+        /// Clear all panels from the stack
+        /// </summary>
+        public async void Clear()
+        {
+            await ClearAsync();
+        }
+        
+        /// <summary>
+        /// Clear all panels from the stack and then push a panel on top
+        /// </summary>
+        /// <returns>Awaitable task that completes when the panel transitions complete</returns>
+        public async Task ClearAndPushAsync(IPanelViewController viewController)
+        {
+            stack.Clear();
+            stack.Add(viewController);
+            await TransitionAsync();
+        }
+        
+        /// <summary>
+        /// Clear all panels from the stack and then push a panel on top
+        /// </summary>
+        public async void ClearAndPush(IPanelViewController viewController)
+        {
+            await ClearAndPushAsync(viewController);
         }
 
         private async Task TransitionAsync()
