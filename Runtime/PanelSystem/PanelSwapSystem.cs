@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
 {
+    [CreateAssetMenu(menuName = "Gameframe/PanelSystem/PanelSwapSystem")]
     public class PanelSwapSystem : ScriptableObject, IPanelSwapSystem
     {
         private readonly List<IPanelSwapController> controllers = new List<IPanelSwapController>();
