@@ -17,6 +17,13 @@ namespace Gameframe.GUI
         void UpdateColorEffect(TMP_CharacterInfo charInfo, ref EffectData data);
     }
     
+    public interface IPlayableTextMeshEffect
+    {
+        bool IsPlaying { get; }
+        void Play();
+        void Finish();
+    }
+    
     [Serializable]
     public struct EffectData
     {
