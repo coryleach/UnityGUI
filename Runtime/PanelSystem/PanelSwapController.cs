@@ -37,7 +37,10 @@ namespace Gameframe.GUI.PanelSystem
                 var showController = panelSwapSystem.CurrentViewController;
                 
                 //Load Views
-                await LoadView(showController);
+                if (showController != null)
+                {
+                    await LoadView(showController);
+                }
                 
                 var transitionTask = TransitionDefault(hideController, showController);
                 await transitionTask;
