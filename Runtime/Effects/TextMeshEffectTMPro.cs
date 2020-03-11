@@ -302,6 +302,8 @@ namespace Gameframe.GUI
             destinationColors[vertexIndex + 3] = colorBottomRight;
         }
 
+        
+        #if UNITY_EDITOR
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -312,6 +314,7 @@ namespace Gameframe.GUI
             pivot.x = Mathf.Clamp01(pivot.x);
             pivot.y = Mathf.Clamp01(pivot.y);
         }
+        #endif
         
     }
 

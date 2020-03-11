@@ -6,5 +6,9 @@ namespace Gameframe.GUI.PanelSystem
     {
         int Count { get; }
         IPanelViewController this[int index] { get; }
-    }    
+        void AddController(IPanelStackController controller);
+        void RemoveController(IPanelStackController controller);
+        void Push(IPanelViewController controller);
+        void Pop();
+    }
 }

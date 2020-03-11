@@ -63,17 +63,27 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
     {
         private readonly List<IPanelViewController> controllerList = new List<IPanelViewController>();
 
+        public void AddController(IPanelStackController controller)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RemoveController(IPanelStackController controller)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Push(IPanelViewController panelController)
         {
             panelController.ShowAsync(true).Wait();
             controllerList.Add(panelController);
         }
 
-        public IPanelViewController Pop()
+        public void Pop()
         {
             var controller = controllerList[controllerList.Count - 1];
             controllerList.RemoveAt(controllerList.Count-1);
-            return controller;
+            //return controller;
         }
         
         public IEnumerator<IPanelViewController> GetEnumerator()
