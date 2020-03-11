@@ -24,9 +24,26 @@ namespace Gameframe.GUI.PanelSystem
             {
                 controller = new PanelViewController(panelType);    
             }
-            
+
             stack.Push(controller);
         }
+        
+        public void ClearAndPush()
+        {
+            IPanelViewController controller;
+
+            if (provider != null)
+            {
+                controller = provider.GetOrCreate(panelType);
+            }
+            else
+            {
+                controller = new PanelViewController(panelType);    
+            }
+
+            stack.ClearAndPush(controller);
+        }
+        
     } 
 }
 
