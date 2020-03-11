@@ -6,7 +6,6 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelSwapControllerBehaviour : MonoBehaviour, IPanelSwapController, IPanelViewContainer
     {
-    
         [SerializeField] 
         private UIEventManager eventManager = null;
         
@@ -33,7 +32,7 @@ namespace Gameframe.GUI.PanelSystem
             panelSwapSystem.RemoveController(this);
         }
         
-        public async Task TransitionAsync()
+        public virtual async Task TransitionAsync()
         {
             await BaseController.TransitionAsync();
         }
