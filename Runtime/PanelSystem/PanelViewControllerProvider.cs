@@ -19,6 +19,11 @@ namespace Gameframe.GUI.PanelSystem
             controllers.Add(controller.PanelType,controller);   
         }
 
+        public void Remove(IPanelViewController controller)
+        {
+            controllers.Remove(controller.PanelType);
+        }
+
         public IPanelViewController GetOrCreate(PanelType type)
         {
             if (controllers.TryGetValue(type, out var controller)) return controller;
@@ -35,6 +40,11 @@ namespace Gameframe.GUI.PanelSystem
         public IPanelViewController Get(PanelType type)
         {
             return controllers.TryGetValue(type, out var controller) ? controller : default;
+        }
+
+        public void Clear()
+        {
+            controllers.Clear();
         }
     } 
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem 
 {
@@ -7,12 +8,22 @@ namespace Gameframe.GUI.PanelSystem
         [SerializeField] 
         private PanelViewControllerProvider provider = null;
 
+        private IPanelViewController controller = null;
+        
         private void Start()
         {
-            var controller = GetComponent<IPanelViewController>();
+            controller = GetComponent<IPanelViewController>();
             if (controller != null)
             {
                 provider.Add(controller);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (controller != null)
+            {
+                provider.Remove(controller);
             }
         }
     }
