@@ -21,7 +21,9 @@ namespace Gameframe.GUI
     private void Awake()
     {
       _blockerParent = new GameObject("blocker").GetOrAddComponent<RectTransform>();
-      _blockerParent.transform.parent = transform;
+      _blockerParent.transform.SetParent(transform);
+      _blockerParent.localScale = Vector3.one;
+      _blockerParent.localPosition = Vector3.zero;
       _blockerParent.gameObject.SetActive(_passThroughRect != null);
       _blockerParent.anchorMin = Vector2.zero;
       _blockerParent.anchorMax = Vector2.one;
@@ -33,11 +35,21 @@ namespace Gameframe.GUI
       _topBlocker = new GameObject("topBlocker").GetOrAddComponent<RectTransform>();
       _bottomBlocker = new GameObject("bottomBlocker").GetOrAddComponent<RectTransform>();
 
-      _leftBlocker.parent = _blockerParent;
-      _rightBlocker.parent = _blockerParent;
-      _topBlocker.parent = _blockerParent;
-      _bottomBlocker.parent = _blockerParent;
+      _leftBlocker.SetParent(_blockerParent);
+      _rightBlocker.SetParent(_blockerParent);
+      _topBlocker.SetParent(_blockerParent);
+      _bottomBlocker.SetParent(_blockerParent);
       
+      _leftBlocker.localScale = Vector3.one;
+      _rightBlocker.localScale = Vector3.one;
+      _topBlocker.localScale = Vector3.one;
+      _bottomBlocker.localScale = Vector3.one;
+      
+      _leftBlocker.localPosition = Vector3.zero;
+      _rightBlocker.localPosition = Vector3.zero;
+      _topBlocker.localPosition = Vector3.zero;
+      _bottomBlocker.localPosition = Vector3.zero;
+
       _leftBlocker.pivot = new Vector2(0, 0.5f);
       _bottomBlocker.pivot = new Vector2(0.5f, 0f);
       _topBlocker.pivot = new Vector2(0.5f, 1f);
@@ -66,7 +78,7 @@ namespace Gameframe.GUI
       img.color = Color.clear;
       img.raycastTarget = true;
       
-      Refresh();
+      _blockerParent.gameObject.SetActive(false);
     }
 
     public void Show(RectTransform passThrough)
@@ -123,8 +135,6 @@ namespace Gameframe.GUI
           return;
         }
       }
-
-      
       
       _leftBlocker.anchorMin = Vector2.zero;
       _leftBlocker.anchorMax = new Vector2(0.5f,1f);
