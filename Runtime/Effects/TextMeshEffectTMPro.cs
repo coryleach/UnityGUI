@@ -129,7 +129,7 @@ namespace Gameframe.GUI
 
         private void ValidateTransforms()
         {
-            if (effectDatas != null && text.textInfo.characterCount <= effectDatas.Length)
+            if (effectDatas != null && text.textInfo.characterCount < effectDatas.Length)
             {
                 return;
             }
@@ -222,12 +222,12 @@ namespace Gameframe.GUI
                 
                 if (vertEffects.Count > 0)
                 {
-                    ApplyTransforms(charInfo);
+                    ApplyTransforms(charInfo, i);
                 }
 
                 if (colorEffects.Count > 0)
                 {
-                    ApplyColors(charInfo);
+                    ApplyColors(charInfo, i);
                 }
             }
             
@@ -245,7 +245,14 @@ namespace Gameframe.GUI
             data.color3 = new Color32(1,1,1,1);
         }
         
-        private void ApplyTransforms(TMP_CharacterInfo charInfo)
+        /// <summary>
+        /// It turns out charInfo.index is the actual character position in the string
+        /// If you have tags like <color> etc. it will be included in the index.
+        /// Therefore we need to pass in the actual index from our loop here.
+        /// </summary>
+        /// <param name="charInfo">charInfo struct for character being modified</param>
+        /// <param name="index">index of the character. This is excluding characters in tags.</param>
+        private void ApplyTransforms(TMP_CharacterInfo charInfo, int index)
         {
             var materialIndex = charInfo.materialReferenceIndex;
             var vertexIndex = charInfo.vertexIndex;
@@ -260,7 +267,7 @@ namespace Gameframe.GUI
                     
             var offset = sourceBottomLeft + (sourceBottomRight - sourceBottomLeft) * pivot.x + (sourceTopLeft - sourceBottomLeft) * pivot.y;
 
-            var anim = effectDatas[charInfo.index];
+            var anim = effectDatas[index];
             var matrix = Matrix4x4.TRS(anim.localPosition, anim.localRotation, anim.localScale);
                     
             var destinationTopLeft = matrix.MultiplyPoint3x4(sourceTopLeft - offset) + offset;
@@ -275,13 +282,19 @@ namespace Gameframe.GUI
             destinationVertices[vertexIndex + 3] = destinationBottomRight;
         }
         
-        private void ApplyColors(TMP_CharacterInfo charInfo)
+        /// <summary>
+        /// It turns out charInfo.index is the actual character position in the string
+        /// If you have tags like <color> etc. it will be included in the index.
+        /// Therefore we need to pass in the actual index from our loop here.
+        /// </summary>
+        /// <param name="charInfo">charInfo struct for character being modified</param>
+        /// <param name="index">index of the character. This is excluding characters in tags.</param>
+        private void ApplyColors(TMP_CharacterInfo charInfo, int index)
         {
             var materialIndex = charInfo.materialReferenceIndex;
             var vertexIndex = charInfo.vertexIndex;
-            var characterIndex = charInfo.index;
 
-            var effect = effectDatas[characterIndex];
+            var effect = effectDatas[index];
             
             var sourceColors = meshCache[materialIndex].colors32;
             
