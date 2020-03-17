@@ -15,21 +15,24 @@ namespace Gameframe.GUI.PanelSystem
         protected async Task TransitionAsync(int stateHash, int layer)
         {
             //Ensure Animator is Initialized
-            while ((!animator.isInitialized || !animator.gameObject.activeInHierarchy) && Application.isPlaying)
+            while (Application.isPlaying && (!animator.isInitialized || !animator.gameObject.activeInHierarchy))
             {
                 await Task.Yield();
             }
-            
-            animator.Play(stateHash);
+
+            if (animator != null)
+            {
+                animator.Play(stateHash);
+            }
 
             //Wait until we're in the target state
-            while (animator.GetCurrentAnimatorStateInfo(layer).shortNameHash != stateHash)
+            while (Application.isPlaying && animator.GetCurrentAnimatorStateInfo(layer).shortNameHash != stateHash)
             {
                 await Task.Yield();
             }
 
             float normalizedTime = 0;
-            while (normalizedTime < 1 && !Mathf.Approximately(normalizedTime, 1f))
+            while (Application.isPlaying && normalizedTime < 1 && !Mathf.Approximately(normalizedTime, 1f))
             {
                 var info = animator.GetCurrentAnimatorStateInfo(0);
                 if (normalizedTime <= info.normalizedTime)
