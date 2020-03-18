@@ -87,7 +87,6 @@ namespace Gameframe.GUI
       {
         _highlight.gameObject.SetActive(false);
       }
-      
     }
 
     public void Show(RectTransform passThrough)
@@ -132,8 +131,6 @@ namespace Gameframe.GUI
         //OK for camera to be null here if canvas render mode is screen space overlay
         Vector3 topLeftScreenPoint = RectTransformUtility.WorldToScreenPoint(worldCamera, corners[0]);
         Vector3 bottomRightScreenPoint = RectTransformUtility.WorldToScreenPoint(worldCamera, corners[2]);
-
-        RectTransformUtility.WorldToScreenPoint(worldCamera, corners[0]);
         
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(_blockerParent, topLeftScreenPoint, worldCamera,
           out topLeft))
