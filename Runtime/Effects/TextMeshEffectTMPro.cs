@@ -27,6 +27,7 @@ namespace Gameframe.GUI
     [Serializable]
     public struct EffectData
     {
+        public int index;
         public Vector3 localPosition;
         public Quaternion localRotation;
         public Vector3 localScale;
@@ -123,6 +124,7 @@ namespace Gameframe.GUI
         {
             for (var i = startIndex; i < effectDatas.Length; i++)
             {
+                effectDatas[i].index = i;
                 ResetEffectData(ref effectDatas[i]);
             }
         }
@@ -207,7 +209,7 @@ namespace Gameframe.GUI
                 {
                     continue;
                 }
-                
+
                 ResetEffectData(ref effectDatas[i]);
                 
                 foreach (var vertEffect in vertEffects)

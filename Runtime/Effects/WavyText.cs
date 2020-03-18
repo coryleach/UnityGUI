@@ -45,7 +45,7 @@ namespace Gameframe.GUI
         public void UpdateVertexEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
             var t = Mathf.PI * time;
-            var offset = Mathf.PI * charInfo.index * period;
+            var offset = Mathf.PI * data.index * period;
             Vector3 pt;
             pt.x = Mathf.Cos(t + offset) * amplitude.x;
             pt.y = Mathf.Sin(t + offset) * amplitude.y;
