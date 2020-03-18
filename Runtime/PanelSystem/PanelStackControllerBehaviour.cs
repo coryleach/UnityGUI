@@ -27,6 +27,9 @@ namespace Gameframe.GUI.PanelSystem
 
         private PanelStackController baseController = null;
 
+        [SerializeField, Tooltip("If true the panel stack will be cleared when this object is destroyed. This may be desired when reloading the game for example.")] 
+        protected bool clearSystemStackOnDestroy = true;
+        
         private PanelStackController BaseController =>
             baseController ??
             (baseController = new PanelStackController(panelStackSystem, this, eventManager));
@@ -40,7 +43,15 @@ namespace Gameframe.GUI.PanelSystem
         {
             panelStackSystem.RemoveController(this);
         }
-        
+
+        private void OnDestroy()
+        {
+            if (clearSystemStackOnDestroy)
+            {
+                panelStackSystem.Clear();
+            }
+        }
+
         public async Task TransitionAsync()
         {
             await BaseController.TransitionAsync();
