@@ -16,6 +16,9 @@ namespace Gameframe.GUI
     [SerializeField]
     private RectTransform _passThroughRect = null;
 
+    [SerializeField, Tooltip("Highlight should be a child of this object. It will overlay the dimensions of the pass through rect or be disabled if there isn't one.")] 
+    protected RectTransform _highlight = null;
+    
     private Canvas _parentCanvas = null;
     
     private void Awake()
@@ -79,6 +82,12 @@ namespace Gameframe.GUI
       img.raycastTarget = true;
       
       _blockerParent.gameObject.SetActive(false);
+      
+      if (_highlight != null)
+      {
+        _highlight.gameObject.SetActive(false);
+      }
+      
     }
 
     public void Show(RectTransform passThrough)
@@ -99,6 +108,11 @@ namespace Gameframe.GUI
     public void Dismiss()
     {
       _blockerParent.gameObject.SetActive(false);
+      
+      if (_highlight != null)
+      {
+        _highlight.gameObject.SetActive(false);
+      }
     }
 
     [ContextMenu("Refresh")]
@@ -134,6 +148,22 @@ namespace Gameframe.GUI
           Debug.LogError("plane of the RectTransform was not hit");
           return;
         }
+
+        if (_highlight != null)
+        {
+          _highlight.gameObject.SetActive(true);
+          _highlight.pivot = new Vector2(0.5f,0.5f);
+          _highlight.anchorMin = new Vector2(0.5f,0.5f);
+          _highlight.anchorMax = new Vector2(0.5f,0.5f);
+          var rect = _passThroughRect.rect;
+          _highlight.sizeDelta = new Vector2(rect.width,rect.height);
+          _highlight.anchoredPosition = (topLeft + bottomRight) * 0.5f;
+        }
+        
+      }
+      else if (_highlight != null)
+      {
+        _highlight.gameObject.SetActive(false);
       }
       
       _leftBlocker.anchorMin = Vector2.zero;
