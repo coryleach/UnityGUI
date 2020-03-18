@@ -12,11 +12,13 @@ namespace Gameframe.GUI.PanelSystem
 
         private IEnumerable<IPanelAnimator> GetAnimators()
         {
-            if (animatorList == null)
+            if (animatorList != null)
             {
-                animatorList = new List<IPanelAnimator>();
-                GetComponents(animatorList);
+                return animatorList;
             }
+            
+            animatorList = new List<IPanelAnimator>();
+            GetComponents(animatorList);
             return animatorList;
         }
     
