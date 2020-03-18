@@ -34,9 +34,17 @@ namespace Gameframe.GUI.PanelSystem
             {
                 return;
             }
+            
             var animators = GetAnimators();
             var tasks = animators.Select(x => x.TransitionHideAsync());
+            
             await Task.WhenAll(tasks);
+
+            if (cancellationToken.IsCancellationRequested || !Application.isPlaying)
+            {
+                return;
+            }
+            
             gameObject.SetActive(false);
         }
 
