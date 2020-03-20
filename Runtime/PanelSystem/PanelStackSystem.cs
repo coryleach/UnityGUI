@@ -146,6 +146,58 @@ namespace Gameframe.GUI.PanelSystem
         }
 
         /// <summary>
+        /// This method allows popping and pushing as one action with no transition required between.
+        /// </summary>
+        /// <param name="popCount">number of panels to pop</param>
+        /// <param name="controllers">list of controllers to push</param>
+        public async Task PopAndPushAsync(int popCount, params IPanelViewController[] controllers)
+        {
+            if (popCount > stack.Count)
+            {
+                popCount = stack.Count;
+            }
+            stack.RemoveRange(stack.Count-popCount,popCount);
+            stack.AddRange(controllers);
+            await TransitionAsync();
+        }
+        
+        /// <summary>
+        /// This method allows popping and pushing as one action with no transition required between.
+        /// </summary>
+        /// <param name="popCount">number of panels to pop</param>
+        /// <param name="controllers">list of controllers to push</param>
+        public async void PopAndPush(int popCount, params IPanelViewController[] controllers)
+        {
+            await PopAndPushAsync(popCount, controllers);
+        }
+        
+        /// <summary>
+        /// This method allows popping and pushing as one action with no transition required between.
+        /// </summary>
+        /// <param name="popCount">number of panels to pop</param>
+        /// <param name="controller">controller to push</param>
+        public async Task PopAndPushAsync(int popCount, IPanelViewController controller)
+        {
+            if (popCount > stack.Count)
+            {
+                popCount = stack.Count;
+            }
+            stack.RemoveRange(stack.Count-popCount,popCount);
+            stack.Add(controller);
+            await TransitionAsync();
+        }
+
+        /// <summary>
+        /// This method allows popping and pushing as one action with no transition required between.
+        /// </summary>
+        /// <param name="popCount">number of panels to pop</param>
+        /// <param name="controller">controller to push</param>
+        public async void PopAndPush(int popCount, IPanelViewController controller)
+        {
+            await PopAndPushAsync(popCount, controller);
+        }
+        
+        /// <summary>
         /// Push a set of panels async
         /// </summary>
         /// <param name="controllers">array of panel view controllers</param>
