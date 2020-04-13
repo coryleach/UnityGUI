@@ -5,6 +5,7 @@ namespace Gameframe.GUI.PanelSystem
 {
     /// <summary>
     /// Pushes a panel controller onto the stack
+    /// Use with SceneTransitionSystem
     /// </summary>
     public class PanelStackPushTransition : ITransitionPresenter
     {
