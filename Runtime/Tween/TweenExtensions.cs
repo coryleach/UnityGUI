@@ -49,8 +49,6 @@ namespace Gameframe.GUI.Tween
         {
             CancelTweensForId(obj.GetInstanceID());
         }
-
-        
         
         public static async Task DoTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
         {
@@ -79,6 +77,12 @@ namespace Gameframe.GUI.Tween
                 action?.Invoke(ease.Invoke(Mathf.InverseLerp(0, duration, t)));
             }
 
+            //Just exit immediately if we've stopped playing in editor
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+            
             action?.Invoke(ease.Invoke(1));
 
             CompleteTween(id);
