@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to com.gameframe.gui 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.24-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://twitter.com/coryleach">
     <img alt="Twitter: coryleach" src="https://img.shields.io/twitter/follow/coryleach.svg?style=social" target="_blank" />
   </a>
@@ -16,20 +16,22 @@
 #### Using UnityPackageManager (for Unity 2019.3 or later)
 Open the package manager window (menu: Window > Package Manager)<br/>
 Select "Add package from git URL...", fill in the pop-up with the following link:<br/>
-https://github.com/coryleach/UnityGUI.git#1.0.24<br/>
+https://github.com/coryleach/UnityGUI.git#1.1.0<br/>
 
 #### Using UnityPackageManager (for Unity 2019.2 or earlier)
 Find the manifest.json file in the Packages folder of your project and edit it to look like this:
 ```js
 {
   "dependencies": {
-    "com.gameframe.gui": "https://github.com/coryleach/UnityGUI.git#1.0.24",
+    "com.gameframe.gui": "https://github.com/coryleach/UnityGUI.git#1.1.0",
     ...
   },
 }
 ```
 
 ## Usage
+
+After importing via the PackageManager import the Demo unity asset package from the demo folder.
 
 ### PanelView
 PanelView which provides Show & Hide behavior which can be instant or async and awaitable.
