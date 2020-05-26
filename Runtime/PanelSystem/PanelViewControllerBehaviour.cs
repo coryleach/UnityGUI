@@ -54,7 +54,7 @@ namespace Gameframe.GUI.PanelSystem
         public PanelViewControllerState State => BaseController.State;
         
         public PanelType PanelType => BaseController.PanelType;
-
+        
         PanelViewBase IPanelViewController.View => BaseController.View;
 
         public TPanelViewBase View => (TPanelViewBase)BaseController.View;
@@ -146,7 +146,7 @@ namespace Gameframe.GUI.PanelSystem
         [SerializeField]
         private PanelType panelType = null;
 
-        [SerializeField]
+        [SerializeField, Help("When PanelView is null the prefab assigned to the Panel Type will be instantiated and used at runtime")]
         private PanelViewBase panelView = null;
         
         private PanelViewControllerBase baseController = null;

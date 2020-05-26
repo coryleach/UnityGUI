@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Gameframe.GUI.PanelSystem
 {
@@ -12,8 +12,57 @@ namespace Gameframe.GUI.PanelSystem
 
         [SerializeField] private PanelType panelType = null;
 
+        [FormerlySerializedAs("pushEvent")] 
+        [SerializeField] private PushEvent pushOnEvent = PushEvent.Manual;
+
+        [SerializeField]
+        private bool clearBeforePush = false;
+        
+        public enum PushEvent
+        {
+            Manual,
+            ButtonClick,
+            Awake,
+            Start,
+            Enable
+        }
+
+        private void Awake()
+        {
+            if (pushOnEvent == PushEvent.Awake)
+            {
+                Push();
+            }
+            else if (pushOnEvent == PushEvent.ButtonClick)
+            {
+                GetComponent<Button>()?.onClick.AddListener(Push);
+            }
+        }
+
+        private void Start()
+        {
+            if (pushOnEvent == PushEvent.Start)
+            {
+                Push();
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (pushOnEvent == PushEvent.Enable)
+            {
+                Push();
+            }
+        }
+
         public void Push()
         {
+            if (clearBeforePush)
+            {
+                ClearAndPush();
+                return;
+            }
+            
             IPanelViewController controller;
 
             if (provider != null)
