@@ -58,10 +58,23 @@ namespace Gameframe.GUI.TransitionSystem
 
         public async void LoadScene(string[] loadScenes, string[] unloadScenes)
         {
-            await LoadSceneAsync(loadScenes, unloadScenes);
+            await LoadScenesAsync(loadScenes, unloadScenes);
         }
         
-        public async Task LoadSceneAsync(string[] loadScenes, string[] unloadScenes)
+        [Obsolete("Use LoadScenesAsync method instead", false)]
+        public Task LoadSceneAsync(string[] loadScenes, string[] unloadScenes)
+        {
+            return LoadScenesAsync(loadScenes,unloadScenes);
+        }
+        
+        /// <summary>
+        /// Unload and Load multiple scenes
+        /// </summary>
+        /// <param name="loadScenes">scenes to load</param>
+        /// <param name="unloadScenes">scenes to unload</param>
+        /// <returns>Task that completes when the load is finished</returns>
+        /// <exception cref="InvalidOperationException">Throws invalid operation exception if a transition is already in progress</exception>
+        public async Task LoadScenesAsync(string[] loadScenes, string[] unloadScenes)
         {
             if (isTransitioning)
             {
