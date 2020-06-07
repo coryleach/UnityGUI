@@ -6,10 +6,10 @@
   </a>
 </p>
 
-> This is a library of GUI helpers for UGUI </br>
-> Includes a panel system that implements a navigation stack. </br>
-> Includes a scene transition system. </br>
-> Includes a shader for blurring the background of UI panels. </br>
+This is a library of GUI helpers for UGUI  
+Includes a panel system that implements a navigation stack.  
+Includes a scene transition system.  
+Includes a shader for blurring the background of UI panels.  
 
 ## Quick Package Install
 
@@ -28,6 +28,11 @@ Find the manifest.json file in the Packages folder of your project and edit it t
   },
 }
 ```
+
+<!-- DOC-START -->
+<!-- 
+Changes between 'DOC START' and 'DOC END' will not be modified by readme update scripts
+-->
 
 ## Usage
 
@@ -60,6 +65,8 @@ Add this component to a PanelViewControllerBehaviour to register the controller 
 
 ### PanelType
 Contains information about a panel and is used by the PanelViewController to locate the prefab and instantiate the PanelView.
+
+<!-- DOC-END -->
 
 ## Author
 
