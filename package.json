@@ -1,7 +1,7 @@
 {
   "name": "com.gameframe.gui",
   "displayName": "Gameframe.GUI",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "This is a library of GUI helpers for UGUI  \r\nIncludes a panel system that implements a navigation stack.  \r\nIncludes a scene transition system.  \r\nIncludes a shader for blurring the background of UI panels.  ",
   "keywords": [],
   "author": {
