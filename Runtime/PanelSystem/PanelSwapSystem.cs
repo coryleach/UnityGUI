@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gameframe.GUI.PanelSystem
 {
@@ -11,6 +13,16 @@ namespace Gameframe.GUI.PanelSystem
         
         private IPanelViewController currentViewController = null;
         public IPanelViewController CurrentViewController => currentViewController;
+
+        private UnityEvent onSwap = new UnityEvent();
+        public UnityEvent OnSwap => onSwap;
+
+        private void OnEnable()
+        {
+            //Clearing listeners because ScriptableObject will hold onto old subscribers
+            //when running in editor
+            onSwap.RemoveAllListeners();
+        }
 
         public void AddController(IPanelSwapController controller)
         {
@@ -34,6 +46,7 @@ namespace Gameframe.GUI.PanelSystem
             {
                 await swapController.TransitionAsync();
             }
+            onSwap.Invoke();
         }
     }
 }
