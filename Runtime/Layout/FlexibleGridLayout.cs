@@ -49,13 +49,13 @@ namespace Gameframe.GUI.Layout
             //Declaring a variable here to avoid the property access
             var layoutPadding = padding;
 
-            if (autoCellWidth)
+            if (autoCellWidth && columns != 0)
             {
                 var cellWidth = (parentWidth / columns) - (spacing.x / columns)*(columns-1) - (layoutPadding.left / (float)columns) - (layoutPadding.right/(float)columns);
                 cellSize.x = cellWidth;
             }
 
-            if (autoCellHeight)
+            if (autoCellHeight && rows != 0)
             {
                 var cellHeight = (parentHeight / rows) - (spacing.y / rows)*(rows-1) - (layoutPadding.top / (float)rows) - (layoutPadding.bottom/(float)rows);
                 cellSize.y = cellHeight;
