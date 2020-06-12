@@ -317,17 +317,20 @@ namespace Gameframe.GUI.Tween
                 return n1 * x * x;
             }
             
-            if (x < 2 / d1) 
+            if (x < 2 / d1)
             {
-                return n1 * (x -= 1.5f / d1) * x + 0.75f;
+                x -= 1.5f / d1;
+                return n1 * x * x + 0.75f;
             }
             
-            if (x < 2.5 / d1) 
+            if (x < 2.5 / d1)
             {
-                return n1 * (x -= 2.2f / d1) * x + 0.9375f;
+                x -= 2.2f / d1;
+                return n1 * x * x + 0.9375f;
             }
-            
-            return n1 * (x -= 2.625f / d1) * x + 0.984375f;
+
+            x -= 2.625f / d1;
+            return n1 * x * x + 0.984375f;
         }
         
     }
