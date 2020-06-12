@@ -14,7 +14,7 @@ namespace Gameframe.GUI
         /// Collection to add this camera to on awake
         /// </summary>
         [SerializeField]
-        CameraCollection collection = null;
+        private CameraCollection collection = null;
 
         /// <summary>
         /// Unity events that recieve CameraDirector as an argument
@@ -26,11 +26,7 @@ namespace Gameframe.GUI
 
         [SerializeField]
         private CameraType cameraType = null;
-        
-        public CameraType CameraType
-        {
-            get { return cameraType; }
-        }
+        public CameraType CameraType => cameraType;
 
         [SerializeField]
         UnityEngine.Camera _camera;
@@ -50,8 +46,8 @@ namespace Gameframe.GUI
 
         public bool canOverwriteExistingCamera = true;
 
-        public CameraDirectorEvent OnDirectorEnabled = new CameraDirectorEvent();
-        public CameraDirectorEvent OnDirectorDisabled = new CameraDirectorEvent();
+        public CameraDirectorEvent OnDirectorEnabled { get; } = new CameraDirectorEvent();
+        public CameraDirectorEvent OnDirectorDisabled { get; } = new CameraDirectorEvent();
 
         protected virtual void Awake()
         {
@@ -75,8 +71,12 @@ namespace Gameframe.GUI
 
         protected virtual void OnDestroy()
         {
-            CameraDirector val = null;
-            if (collection != null && collection.Items.TryGetValue(CameraType, out val))
+            if (collection == null)
+            {
+                return;
+            }
+
+            if (collection.Items.TryGetValue(CameraType, out var val))
             {
                 if (val == this)
                 {
