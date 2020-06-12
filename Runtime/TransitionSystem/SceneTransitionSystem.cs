@@ -13,7 +13,7 @@ namespace Gameframe.GUI.TransitionSystem
         private SingleSceneTransitionTask singleSceneTransitionTask = new SingleSceneTransitionTask();
         private MultiSceneTransitionTask multiSceneTransitionTask = new MultiSceneTransitionTask();
         
-        private bool isTransitioning = false;
+        private bool isTransitioning;
         public bool IsTransitioning => isTransitioning;
 
         public void AddPresenter(ITransitionPresenter presenter)
@@ -36,7 +36,7 @@ namespace Gameframe.GUI.TransitionSystem
 
         public async void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
         {
-            await LoadSceneAsync(sceneName, mode);
+            await LoadSceneAsync(sceneName, mode).ConfigureAwait(false);
         }
         
         public async Task LoadSceneAsync(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
@@ -58,7 +58,7 @@ namespace Gameframe.GUI.TransitionSystem
 
         public async void LoadScene(string[] loadScenes, string[] unloadScenes)
         {
-            await LoadScenesAsync(loadScenes, unloadScenes);
+            await LoadScenesAsync(loadScenes, unloadScenes).ConfigureAwait(false);
         }
         
         [Obsolete("Use LoadScenesAsync method instead", false)]
@@ -92,7 +92,7 @@ namespace Gameframe.GUI.TransitionSystem
 
         public async void LoadScenes(string[] loadScenes)
         {
-            await LoadScenesAsync(loadScenes);
+            await LoadScenesAsync(loadScenes).ConfigureAwait(false);
         }
         
         public async Task LoadScenesAsync(string[] loadScenes)
