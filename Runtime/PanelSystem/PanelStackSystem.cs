@@ -65,7 +65,7 @@ namespace Gameframe.GUI.PanelSystem
         /// <param name="controller"></param>
         public async void Push(IPanelViewController controller)
         {
-            await PushAsync(controller);
+            await PushAsync(controller).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Gameframe.GUI.PanelSystem
         public async Task PushAsync(IPanelViewController controller)
         {
             stack.Add(controller);
-            await TransitionAsync();
+            await TransitionAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Gameframe.GUI.PanelSystem
         /// </summary>
         public async void Pop()
         {
-            await PopAsync();
+            await PopAsync().ConfigureAwait(false);
         }
 
         /// <summary>
