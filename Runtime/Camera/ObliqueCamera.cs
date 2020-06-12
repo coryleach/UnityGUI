@@ -1,50 +1,65 @@
-﻿namespace Gameframe.GUI
+﻿using UnityEngine;
+
+namespace Gameframe.GUI
 {
-
-  using UnityEngine;
-
+  /// <summary>
+  /// This script modifies the camera projection to get an oblique camera angle
+  /// </summary>
   public class ObliqueCamera : MonoBehaviour
   {
-
-    public float horizontal = 0;
-    public float vertical = 0;
-
+    
+    [SerializeField]
+    private float horizontal = 0;
+    public float Horizontal
+    {
+      get => horizontal;
+      set => horizontal = value;
+    }
+    
+    [SerializeField]
+    private float vertical = 0;
+    public float Vertical
+    {
+      get => vertical;
+      set => vertical = value;
+    }
+    
     public Matrix4x4 matrix;
 
-    UnityEngine.Camera myCamera;
+    private UnityEngine.Camera _myCamera;
     public UnityEngine.Camera MyCamera
     {
       get
       {
-        if (myCamera == null)
+        if (_myCamera == null)
         {
-          myCamera = GetComponent<UnityEngine.Camera>();
+          _myCamera = GetComponent<UnityEngine.Camera>();
         }
-        return myCamera;
+        return _myCamera;
       }
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
       SetObliqueness(horizontal, vertical);
     }
 
-    void SetObliqueness(float horizObl, float vertObl)
+    private void SetObliqueness(float horizObl, float vertObl)
     {
-      Matrix4x4 mat = UnityEngine.Camera.main.projectionMatrix;
+      var mat = UnityEngine.Camera.main.projectionMatrix;
       mat[0, 2] = horizObl;
       mat[1, 2] = vertObl;
       MyCamera.projectionMatrix = mat;
     }
 
     [ContextMenu("Reset Matrix")]
-    void ResetMatrix()
+    private void ResetMatrix()
     {
       MyCamera.ResetProjectionMatrix();
       matrix = MyCamera.projectionMatrix;
     }
 
-    void OnValidate()
+    private void OnValidate()
     {
       MyCamera.projectionMatrix = matrix;
     }
