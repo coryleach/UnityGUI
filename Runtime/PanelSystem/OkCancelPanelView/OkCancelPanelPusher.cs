@@ -1,16 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Gameframe.GUI.PanelSystem
 {
     public class OkCancelPanelPusher : MonoBehaviour
     {
-        public PanelType panelType;
-        public PanelStackSystem panelStackSystem;
+        [SerializeField] private PanelType panelType;
+        [SerializeField] private PanelStackSystem panelStackSystem;
         
-        public UnityEvent OnConfirm = new UnityEvent();
-        public UnityEvent OnCancel = new UnityEvent();
-
+        [FormerlySerializedAs("OnConfirm"), SerializeField] 
+        private UnityEvent onConfirm = new UnityEvent();
+        public UnityEvent OnConfirm => onConfirm;
+        
+        [FormerlySerializedAs("OnCancel"), SerializeField] 
+        private UnityEvent onCancel = new UnityEvent();
+        public UnityEvent OnCancel => onCancel;
+        
         [ContextMenu("Push")]
         public void Push()
         {
@@ -22,11 +28,11 @@ namespace Gameframe.GUI.PanelSystem
         {
             if (ok)
             {
-                OnConfirm.Invoke();
+                onConfirm.Invoke();
             }
             else
             {
-                OnCancel.Invoke();
+                onCancel.Invoke();
             }
         }
     }
