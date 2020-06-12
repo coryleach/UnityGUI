@@ -6,8 +6,16 @@ namespace Gameframe.GUI.TransitionSystem
 {
     public class SingleSceneLoadBehaviour : MonoBehaviour
     {
-        public SceneTransitionSystem sceneTransitionSystem;
-        public string sceneName;
+        [SerializeField]
+        private SceneTransitionSystem sceneTransitionSystem;
+        
+        [SerializeField]
+        private string sceneName;
+        public string SceneName
+        {
+            get => sceneName;
+            set => sceneName = value;
+        }
         
         [ContextMenu("Load")]
         public void Load()
