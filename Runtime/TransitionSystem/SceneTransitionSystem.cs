@@ -46,8 +46,8 @@ namespace Gameframe.GUI.TransitionSystem
                 throw new InvalidOperationException("Cannot load scenes while scene transition is in progress");
             }
             
-            singleSceneTransitionTask.mode = mode;
-            singleSceneTransitionTask.sceneName = sceneName;
+            singleSceneTransitionTask.Mode = mode;
+            singleSceneTransitionTask.SceneName = sceneName;
             
             isTransitioning = true;
             transition.AddTransitionTask(singleSceneTransitionTask);
@@ -82,8 +82,8 @@ namespace Gameframe.GUI.TransitionSystem
             }
             
             isTransitioning = true;
-            multiSceneTransitionTask.loadScenes = loadScenes;
-            multiSceneTransitionTask.unloadScenes = unloadScenes;
+            multiSceneTransitionTask.LoadScenes = loadScenes;
+            multiSceneTransitionTask.UnloadScenes = unloadScenes;
             transition.AddTransitionTask(multiSceneTransitionTask);
             await transition.ExecuteAsync();
             transition.RemoveTransitionTask(multiSceneTransitionTask);
@@ -103,8 +103,8 @@ namespace Gameframe.GUI.TransitionSystem
             }
             
             isTransitioning = true;
-            multiSceneTransitionTask.loadScenes = loadScenes;
-            multiSceneTransitionTask.unloadScenes = new string[0];
+            multiSceneTransitionTask.LoadScenes = loadScenes;
+            multiSceneTransitionTask.UnloadScenes = new string[0];
             transition.AddTransitionTask(multiSceneTransitionTask);
             await transition.ExecuteAsync();
             transition.RemoveTransitionTask(multiSceneTransitionTask);
