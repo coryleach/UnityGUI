@@ -7,25 +7,28 @@ namespace Gameframe.GUI
   public class PinchZoom : MonoBehaviour
   {
 
-    public float zoomSpeed = 0.5f;
+    [SerializeField]
+    private float zoomSpeed = 0.5f;
 
-    public float minimumZoom = 3f;
-    public float maximumZoom = 100f;
+    [SerializeField]
+    private float minimumZoom = 3f;
+    
+    [SerializeField]
+    private float maximumZoom = 100f;
 
-    public float mouseScrollSensitivity = 1f;
+    [SerializeField]
+    private float mouseScrollSensitivity = 1f;
 
-    public float minimumStretchZoom = 3f;
-    public float maximumStretchZoom = 102f;
+    [SerializeField]
+    private float minimumStretchZoom = 3f;
+    
+    [SerializeField]
+    private float maximumStretchZoom = 102f;
 
-    //CameraPan pan;
+    private UnityEngine.Camera _camera;
 
-    UnityEngine.Camera _camera;
-
-    // Use this for initialization
-    void Start()
+    private void Start()
     {
-
-      //pan = this.GetComponent<CameraPan>();
       _camera = GetComponent<UnityEngine.Camera>();
 
       minimumStretchZoom = minimumZoom - 2f;
@@ -35,13 +38,10 @@ namespace Gameframe.GUI
       }
 
       maximumStretchZoom = maximumZoom + 2;
-
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
       if ( EventSystem.current == null || EventSystem.current.IsPointerOverGameObject() )
       {
         return;
@@ -59,11 +59,6 @@ namespace Gameframe.GUI
 
       if ( Input.touchCount == 2 )
       {
-
-        /*if ( pan != null ) {
-          pan.Cancel();
-        }*/
-
         var touch0 = Input.touches[ 0 ];
         var touch1 = Input.touches[ 1 ];
 
@@ -72,10 +67,10 @@ namespace Gameframe.GUI
         var prevTouch1 = touch1.position - touch1.deltaPosition;
 
         //Get Previous Distance
-        float prevDistance = ( prevTouch0 - prevTouch1 ).magnitude;
-        float touchDistance = ( touch0.position - touch1.position ).magnitude;
+        var prevDistance = ( prevTouch0 - prevTouch1 ).magnitude;
+        var touchDistance = ( touch0.position - touch1.position ).magnitude;
 
-        float diff = prevDistance - touchDistance;
+        var diff = prevDistance - touchDistance;
 
         if ( _camera.orthographic )
         {
@@ -97,7 +92,7 @@ namespace Gameframe.GUI
         }
 
       }
-      else if ( Input.GetAxis( "Mouse ScrollWheel" ) != 0 )
+      else if ( !Mathf.Approximately(Input.GetAxis( "Mouse ScrollWheel" ), 0) )
       {
 
         if ( _camera.orthographic )
@@ -106,7 +101,7 @@ namespace Gameframe.GUI
           _camera.orthographicSize += Input.GetAxis( "Mouse ScrollWheel" ) * mouseScrollSensitivity * zoomSpeed;
 
           //Clamp Zoom
-          _camera.orthographicSize = Mathf.Clamp( GetComponent<UnityEngine.Camera>().orthographicSize, this.minimumStretchZoom, this.maximumStretchZoom );
+          _camera.orthographicSize = Mathf.Clamp( _camera.orthographicSize, this.minimumStretchZoom, this.maximumStretchZoom );
 
         }
         else
