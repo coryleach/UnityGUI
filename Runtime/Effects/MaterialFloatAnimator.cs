@@ -5,17 +5,18 @@ namespace Gameframe.GUI
 {
     public class MaterialFloatAnimator : MonoBehaviour
     {
-        public Material material;
-
-        [Range(0.0f, 10)] public float startValue = 0f;
-        [Range(0.0f, 10)] public float endValue = 5.0f;
-        [Range(0.1f, 50)] public float animationSpeed = 25;
+        [SerializeField]
+        private Material material;
+        
+        [SerializeField, Range(0.0f, 10)] private float startValue = 0f;
+        [SerializeField, Range(0.0f, 10)] private float endValue = 5.0f;
+        [SerializeField, Range(0.1f, 50)] private float animationSpeed = 25;
     
-        public string propertyName = "_Size";
+        [SerializeField]
+        private string propertyName = "_Size";
 
         private float currentValue;
-
-        private Coroutine coroutine = null;
+        private Coroutine coroutine;
 
         private void Start()
         {
