@@ -147,7 +147,7 @@ namespace Gameframe.GUI.Layout
       }
     }
 
-    private IEnumerator DelayedSetDirty(RectTransform rectTransform)
+    private static IEnumerator DelayedSetDirty(RectTransform rectTransform)
     {
       yield return null;
       LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
