@@ -7,13 +7,13 @@ namespace Gameframe.GUI.Camera.UI
   public class UIFollower : MonoBehaviour
   {
     [SerializeField]
-    private CameraCollection cameraCollection = null;
+    private CameraCollection cameraCollection;
 
     [SerializeField]
-    private CameraType environmentCameraType = null;
+    private CameraType environmentCameraType;
 
     [SerializeField]
-    private CameraType uiCameraType = null;
+    private CameraType uiCameraType;
 
     [SerializeField]
     private Transform target;
@@ -23,9 +23,9 @@ namespace Gameframe.GUI.Camera.UI
       set { target = value; enabled = true; }
     }
 
-    private RectTransform _rectTransform = null;
-    private CameraDirector _environmentCameraDirector = null;
-    private CameraDirector _uiCameraDirector = null;
+    private RectTransform _rectTransform;
+    private CameraDirector _environmentCameraDirector;
+    private CameraDirector _uiCameraDirector;
 
     private void Start()
     {
@@ -80,7 +80,6 @@ namespace Gameframe.GUI.Camera.UI
         _rectTransform.anchoredPosition = targetPoint;
       }
    
-      //var pt = rectTransform.parent.InverseTransformPoint(targetPoint);
     }
 
   }
