@@ -13,18 +13,18 @@ namespace Gameframe.GUI.PanelSystem
         Disappearing
     }
     
-    internal sealed class PanelViewControllerBase : IPanelViewController
+    internal sealed class PanelViewControllerBase : IPanelViewController, IDisposable
     {
-        private readonly PanelType panelType = null;
+        private readonly PanelType panelType;
 
-        private PanelViewBase panelView = null;
+        private PanelViewBase panelView;
 
         private PanelViewControllerState state = PanelViewControllerState.Disappeared;
         public PanelViewControllerState State => state;
         
-        private CancellationTokenSource cancellationTokenSource = null;
+        private CancellationTokenSource cancellationTokenSource;
 
-        private IPanelViewContainer parentPanelViewContainer = null;
+        private IPanelViewContainer parentPanelViewContainer;
 
         public PanelType PanelType => panelType;
         public PanelViewBase View => panelView;
@@ -32,11 +32,11 @@ namespace Gameframe.GUI.PanelSystem
 
         public IPanelViewContainer ParentViewContainer => parentPanelViewContainer;
         
-        private readonly Action didLoad = null;
-        private readonly Action willAppear = null;
-        private readonly Action didAppear = null;
-        private readonly Action willDisappear = null;
-        private readonly Action didDisappear = null;
+        private readonly Action didLoad;
+        private readonly Action willAppear;
+        private readonly Action didAppear;
+        private readonly Action willDisappear;
+        private readonly Action didDisappear;
         
         public PanelViewControllerBase(PanelType type, Action didLoad, Action willAppear, Action didAppear, Action willDisappear, Action didDisappear)
         {
@@ -79,7 +79,7 @@ namespace Gameframe.GUI.PanelSystem
 
             if (prefab == null)
             {
-                throw new Exception($"PanelType {panelType.name} returned null panel prefab.");
+                throw new ArgumentNullException($"PanelType {panelType.name} returned null panel prefab.");
             }
             
             bool cachedState = prefab.gameObject.activeSelf;
@@ -191,6 +191,10 @@ namespace Gameframe.GUI.PanelSystem
             state = PanelViewControllerState.Disappeared;
         }
 
+        public void Dispose()
+        {
+            cancellationTokenSource?.Dispose();
+        }
     }
 
 }
