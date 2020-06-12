@@ -7,36 +7,36 @@ using Gameframe.GUI.Utility;
 
 namespace Gameframe.GUI.Layout
 {
-
   public class RadialLayoutGroup : UIBehaviour, ILayoutGroup
   {
 
-    [SerializeField]
-    float radius = 0;
+    [SerializeField] 
+    private float radius;
 
-    [Range(0f, 360f)]
-    [SerializeField]
-    float shift = 0;
+    [Range(0f, 360f), SerializeField]
+    private float shift;
 
-    [Range(0f, 360f)]
-    [SerializeField]
-    float field = 180f;
+    [Range(0f, 360f), SerializeField]
+    private float field = 180f;
 
-    [System.NonSerialized] private RectTransform m_Rect;
-    protected RectTransform rectTransform
+    [System.NonSerialized] private RectTransform _mRect;
+
+    private RectTransform rectTransform
     {
       get
       {
-        if (m_Rect == null)
-          m_Rect = GetComponent<RectTransform>();
-        return m_Rect;
+        if (_mRect == null)
+        {
+          _mRect = GetComponent<RectTransform>();
+        }
+        return _mRect;
       }
     }
 
-    [System.NonSerialized] private List<RectTransform> m_RectChildren = new List<RectTransform>();
-    protected List<RectTransform> rectChildren { get { return m_RectChildren; } }
+    [System.NonSerialized] private readonly List<RectTransform> _mRectChildren = new List<RectTransform>();
+    protected List<RectTransform> rectChildren => _mRectChildren;
 
-    protected int DivisorOffset
+    private int DivisorOffset
     {
       get
       {
@@ -49,9 +49,9 @@ namespace Gameframe.GUI.Layout
     }
 
     // ILayoutElement Interface
-    public virtual void CalculateLayoutInputHorizontal()
+    protected virtual void CalculateLayoutInputHorizontal()
     {
-      m_RectChildren.Clear();
+      _mRectChildren.Clear();
       var toIgnoreList = ListPool<Component>.Get();
       for (int i = 0; i < rectTransform.childCount; i++)
       {
@@ -63,7 +63,7 @@ namespace Gameframe.GUI.Layout
 
         if (toIgnoreList.Count == 0)
         {
-          m_RectChildren.Add(rect);
+          _mRectChildren.Add(rect);
           continue;
         }
 
@@ -72,20 +72,19 @@ namespace Gameframe.GUI.Layout
           var ignorer = (ILayoutIgnorer)toIgnoreList[j];
           if (!ignorer.ignoreLayout)
           {
-            m_RectChildren.Add(rect);
+            _mRectChildren.Add(rect);
             break;
           }
         }
       }
       ListPool<Component>.Release(toIgnoreList);
-      //m_Tracker.Clear();
     }
 
     public void SetLayoutHorizontal()
     {
       CalculateLayoutInputHorizontal();
 
-      if (m_RectChildren.Count == 0)
+      if (_mRectChildren.Count == 0)
       {
         return;
       }
@@ -93,14 +92,14 @@ namespace Gameframe.GUI.Layout
       float interval = 0;
       float offset = (shift - 90) * Mathf.Deg2Rad;
 
-      if (m_RectChildren.Count > 1)
+      if (_mRectChildren.Count > 1)
       {
-        interval = Mathf.Deg2Rad * field / (m_RectChildren.Count + DivisorOffset);
+        interval = Mathf.Deg2Rad * field / (_mRectChildren.Count + DivisorOffset);
       }
 
-      for (int i = 0; i < m_RectChildren.Count; i++)
+      for (int i = 0; i < _mRectChildren.Count; i++)
       {
-        var child = m_RectChildren[i];
+        var child = _mRectChildren[i];
         var pt = child.anchoredPosition;
         pt.x = Mathf.Cos(interval * i + offset) * radius;
         child.anchoredPosition = pt;
@@ -109,7 +108,7 @@ namespace Gameframe.GUI.Layout
 
     public void SetLayoutVertical()
     {
-      if (m_RectChildren.Count == 0)
+      if (_mRectChildren.Count == 0)
       {
         return;
       }
@@ -117,32 +116,38 @@ namespace Gameframe.GUI.Layout
       float interval = 0;
       float offset = (shift - 90) * Mathf.Deg2Rad;
 
-      if (m_RectChildren.Count > 1)
+      if (_mRectChildren.Count > 1)
       {
-        interval = Mathf.Deg2Rad * field / (m_RectChildren.Count + DivisorOffset);
+        interval = Mathf.Deg2Rad * field / (_mRectChildren.Count + DivisorOffset);
       }
 
-      for (int i = 0; i < m_RectChildren.Count; i++)
+      for (int i = 0; i < _mRectChildren.Count; i++)
       {
-        var child = m_RectChildren[i];
+        var child = _mRectChildren[i];
         var pt = child.anchoredPosition;
         pt.y = Mathf.Sin(interval * i + offset) * radius;
         child.anchoredPosition = pt;
       }
     }
 
-    protected void SetDirty()
+    private void SetDirty()
     {
       if (!IsActive())
+      {
         return;
+      }
 
       if (!CanvasUpdateRegistry.IsRebuildingLayout())
+      {
         LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
+      }
       else
+      {
         StartCoroutine(DelayedSetDirty(rectTransform));
+      }
     }
 
-    IEnumerator DelayedSetDirty(RectTransform rectTransform)
+    private IEnumerator DelayedSetDirty(RectTransform rectTransform)
     {
       yield return null;
       LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
