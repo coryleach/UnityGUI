@@ -47,11 +47,16 @@ namespace Gameframe.GUI
 
         public TextMeshProUGUI Text => text;
         
-        public Vector2 pivot = new Vector2(0.5f,0.5f);
+        [SerializeField] private Vector2 pivot = new Vector2(0.5f,0.5f);
+        public Vector2 Pivot
+        {
+            get => pivot;
+            set => pivot = value;
+        }
 
         private EffectData[] effectDatas = new EffectData[0];
-        private TMP_MeshInfo[] meshCache = null;
-        private Coroutine coroutine = null;
+        private TMP_MeshInfo[] meshCache;
+        private Coroutine coroutine;
 
         private readonly List<ITextMeshVertexEffect> vertEffects = new List<ITextMeshVertexEffect>();
         private readonly List<ITextMeshColorEffect> colorEffects = new List<ITextMeshColorEffect>();
