@@ -14,13 +14,14 @@ namespace Gameframe.GUI.Layout
             FixedColumns
         }
         
-        public Vector2 spacing;
-        public LayoutType layoutType = LayoutType.Uniform;
-        public int rows;
-        public int columns;
-        public Vector2 cellSize;
-        public bool autoCellWidth = true;
-        public bool autoCellHeight = true;
+        [SerializeField] private Vector2 spacing;
+        [SerializeField] private LayoutType layoutType = LayoutType.Uniform;
+        
+        [SerializeField] private int rows;
+        [SerializeField] private int columns;
+        [SerializeField] private Vector2 cellSize;
+        [SerializeField] private bool autoCellWidth = true;
+        [SerializeField] private bool autoCellHeight = true;
         
         public override void CalculateLayoutInputVertical()
         {
