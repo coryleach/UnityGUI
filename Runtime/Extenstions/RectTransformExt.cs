@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Gameframe.GUI.Extensions
 {
@@ -97,6 +98,8 @@ namespace Gameframe.GUI.Extensions
           offsetMin.x -= (newSize - child.rect.width) + offsetChange;
           offsetMax.x -= offsetChange;
           break;
+        default:
+          throw new ArgumentOutOfRangeException(nameof(fixedEdge));
       }
 
       child.offsetMin = offsetMin;
