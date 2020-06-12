@@ -214,10 +214,14 @@ namespace Gameframe.GUI.Utility
                 max.x += delta.x;
                 float num1 = viewBounds.max.x - max.x;
                 float num2 = viewBounds.min.x - min.x;
-                if ((double) num2 < -1.0 / 1000.0)
+                if (num2 < -1.0 / 1000.0)
+                {
                     zero.x = num2;
-                else if ((double) num1 > 1.0 / 1000.0)
+                }
+                else if (num1 > 1.0 / 1000.0)
+                {
                     zero.x = num1;
+                }
             }
             if (vertical)
             {
@@ -225,10 +229,14 @@ namespace Gameframe.GUI.Utility
                 max.y += delta.y;
                 float num1 = viewBounds.max.y - max.y;
                 float num2 = viewBounds.min.y - min.y;
-                if ((double) num1 > 1.0 / 1000.0)
+                if (num1 > 1.0 / 1000.0)
+                {
                     zero.y = num1;
-                else if ((double) num2 < -1.0 / 1000.0)
+                }
+                else if (num2 < -1.0 / 1000.0)
+                {
                     zero.y = num2;
+                }
             }
             return zero;
         }
