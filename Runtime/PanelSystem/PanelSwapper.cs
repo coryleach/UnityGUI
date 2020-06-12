@@ -91,7 +91,7 @@ namespace Gameframe.GUI.PanelSystem
 
        if (controller != null)
        {
-         showingOurPanel = controller == currentViewController;
+         showingOurPanel = ReferenceEquals(controller, currentViewController);
        }
        else
        {
