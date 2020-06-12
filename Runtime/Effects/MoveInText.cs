@@ -25,10 +25,10 @@ namespace Gameframe.GUI
 
         public void UpdateVertexEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            var t = Mathf.Clamp01(progress - data.index);
+            var t = Mathf.Clamp01(progress - data.Index);
             t = EaseFunctions.Ease(easeType, t);
             var delta = endOffset - startOffset;
-            data.localPosition = startOffset + delta * t;
+            data.LocalPosition = startOffset + delta * t;
         }
     }
 }

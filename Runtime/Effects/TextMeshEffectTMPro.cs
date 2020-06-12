@@ -25,16 +25,112 @@ namespace Gameframe.GUI
     }
     
     [Serializable]
-    public struct EffectData
+    public struct EffectData : IEquatable<EffectData>
     {
-        public int index;
-        public Vector3 localPosition;
-        public Quaternion localRotation;
-        public Vector3 localScale;
-        public Color32 color0;
-        public Color32 color1;
-        public Color32 color2;
-        public Color32 color3;
+        [SerializeField] private int index;
+        [SerializeField] private Vector3 localPosition;
+        [SerializeField] private Quaternion localRotation;
+        [SerializeField] private Vector3 localScale;
+        [SerializeField] private Color32 color0;
+        [SerializeField] private Color32 color1;
+        [SerializeField] private Color32 color2;
+        [SerializeField] private Color32 color3;
+        
+        public int Index
+        {
+            get => index;
+            set => index = value;
+        }
+        public Vector3 LocalPosition
+        {
+            get => localPosition;
+            set => localPosition = value;
+        }
+        public Quaternion LocalRotation
+        {
+            get => localRotation;
+            set => localRotation = value;
+        }
+        public Vector3 LocalScale
+        {
+            get => localScale;
+            set => localScale = value;
+        }
+        public Color32 Color0
+        {
+            get => color0;
+            set => color0 = value;
+        }
+        public Color32 Color1
+        {
+            get => color1;
+            set => color1 = value;
+        }
+        public Color32 Color2
+        {
+            get => color2;
+            set => color2 = value;
+        }
+        public Color32 Color3
+        {
+            get => color3;
+            set => color3 = value;
+        }
+
+        public void SetAlpha(int colorIndex, byte alpha)
+        {
+            switch (colorIndex)
+            {
+                case 0:
+                    color0.a = alpha;
+                    break;
+                case 1:
+                    color1.a = alpha;
+                    break;
+                case 2:
+                    color2.a = alpha;
+                    break;
+                case 3:
+                    color3.a = alpha;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public bool Equals(EffectData other)
+        {
+            return index == other.index && localPosition.Equals(other.localPosition) && localRotation.Equals(other.localRotation) && localScale.Equals(other.localScale) && color0.Equals(other.color0) && color1.Equals(other.color1) && color2.Equals(other.color2) && color3.Equals(other.color3);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is EffectData other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
+                var hashCode = index;
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
+                hashCode = (hashCode * 397) ^ localPosition.GetHashCode();
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
+                hashCode = (hashCode * 397) ^ localRotation.GetHashCode();
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
+                hashCode = (hashCode * 397) ^ localScale.GetHashCode();
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
+                hashCode = (hashCode * 397) ^ color0.GetHashCode();
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
+                hashCode = (hashCode * 397) ^ color1.GetHashCode();
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
+                hashCode = (hashCode * 397) ^ color2.GetHashCode();
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
+                hashCode = (hashCode * 397) ^ color3.GetHashCode();
+                return hashCode;
+            }
+        }
     }
     
     /// <summary>
@@ -129,7 +225,7 @@ namespace Gameframe.GUI
         {
             for (var i = startIndex; i < effectDatas.Length; i++)
             {
-                effectDatas[i].index = i;
+                effectDatas[i].Index = i;
                 ResetEffectData(ref effectDatas[i]);
             }
         }
@@ -241,15 +337,15 @@ namespace Gameframe.GUI
             text.UpdateVertexData(flags);
         }
 
-        private void ResetEffectData(ref EffectData data)
+        private static void ResetEffectData(ref EffectData data)
         {
-            data.localPosition = Vector3.zero;
-            data.localRotation = Quaternion.identity;
-            data.localScale = Vector3.one;
-            data.color0 = new Color32(1,1,1,1);
-            data.color1 = new Color32(1,1,1,1);
-            data.color2 = new Color32(1,1,1,1);
-            data.color3 = new Color32(1,1,1,1);
+            data.LocalPosition = Vector3.zero;
+            data.LocalRotation = Quaternion.identity;
+            data.LocalScale = Vector3.one;
+            data.Color0 = new Color32(1,1,1,1);
+            data.Color1 = new Color32(1,1,1,1);
+            data.Color2 = new Color32(1,1,1,1);
+            data.Color3 = new Color32(1,1,1,1);
         }
         
         /// <summary>
@@ -275,7 +371,7 @@ namespace Gameframe.GUI
             var offset = sourceBottomLeft + (sourceBottomRight - sourceBottomLeft) * pivot.x + (sourceTopLeft - sourceBottomLeft) * pivot.y;
 
             var anim = effectDatas[index];
-            var matrix = Matrix4x4.TRS(anim.localPosition, anim.localRotation, anim.localScale);
+            var matrix = Matrix4x4.TRS(anim.LocalPosition, anim.LocalRotation, anim.LocalScale);
                     
             var destinationTopLeft = matrix.MultiplyPoint3x4(sourceTopLeft - offset) + offset;
             var destinationTopRight = matrix.MultiplyPoint3x4(sourceTopRight - offset) + offset;
@@ -310,10 +406,10 @@ namespace Gameframe.GUI
             var colorTopRight = sourceColors[vertexIndex + 2];
             var colorBottomRight = sourceColors[vertexIndex + 3];
 
-            colorBottomLeft.a = effect.color0.a;
-            colorTopLeft.a = effect.color1.a;
-            colorTopRight.a = effect.color2.a;
-            colorBottomRight.a = effect.color3.a;
+            colorBottomLeft.a = effect.Color0.a;
+            colorTopLeft.a = effect.Color1.a;
+            colorTopRight.a = effect.Color2.a;
+            colorBottomRight.a = effect.Color3.a;
             
             var destinationColors = text.textInfo.meshInfo[materialIndex].colors32;
             destinationColors[vertexIndex + 0] = colorBottomLeft;

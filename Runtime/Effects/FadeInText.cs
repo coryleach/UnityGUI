@@ -22,20 +22,22 @@ namespace Gameframe.GUI
 
         public void UpdateColorEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            var left = EaseFunctions.Ease(easeType,1 - Mathf.Clamp01(data.index - (progress - 0.5f)));
-            data.color0.a = (byte) Mathf.Round(255 * left);
-            data.color1.a = (byte) Mathf.Round(255 * left);
+            var left = EaseFunctions.Ease(easeType,1 - Mathf.Clamp01(data.Index - (progress - 0.5f)));
+            var leftAlpha = (byte) Mathf.Round(255 * left);
+            data.SetAlpha(0,leftAlpha);
+            data.SetAlpha(1,leftAlpha);
             
             if (smooth)
             {
-                var right = EaseFunctions.Ease(easeType, 1 - Mathf.Clamp01(data.index - (progress - 1f)));
-                data.color2.a = (byte) Mathf.Round(255 * right);
-                data.color3.a = (byte) Mathf.Round(255 * right);
+                var right = EaseFunctions.Ease(easeType, 1 - Mathf.Clamp01(data.Index - (progress - 1f)));
+                var rightAlpha = (byte) Mathf.Round(255 * right);
+                data.SetAlpha(2,rightAlpha);
+                data.SetAlpha(3,rightAlpha);
             }
             else
             {
-                data.color2.a = (byte) Mathf.Round(255 * left);
-                data.color3.a = (byte) Mathf.Round(255 * left);
+                data.SetAlpha(2,leftAlpha);
+                data.SetAlpha(3,leftAlpha);
             }
         }
     }
