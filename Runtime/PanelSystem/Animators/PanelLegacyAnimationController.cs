@@ -17,7 +17,7 @@ namespace Gameframe.GUI.PanelSystem
   [RequireComponent(typeof(Animation)),DisallowMultipleComponent]
   public class PanelLegacyAnimationController : MonoBehaviour, IPanelAnimator
   {
-    private Animation _animation = null;
+    private Animation _animation;
     private Animation Animation
     {
       get
@@ -32,31 +32,37 @@ namespace Gameframe.GUI.PanelSystem
 
     [Header("Show")]
     [SerializeField]
-    private AnimationClip showAnimation = null;
+    private AnimationClip showAnimation;
     [SerializeField] private PanelNavigationDirection showPanelNavigationDirection = PanelNavigationDirection.Forward;
 
     [Header("Hide")]
     [SerializeField]
-    private AnimationClip hideAnimation = null;
+    private AnimationClip hideAnimation;
     [SerializeField] private PanelNavigationDirection hidePanelNavigationDirection = PanelNavigationDirection.Forward;
 
-    private bool _animating = false;
+    private bool _animating;
 
-    private Action callback = null;
-    private float time = 0;
+    private Action callback;
+    private float time;
     private PanelNavigationDirection direction = PanelNavigationDirection.Forward;
 
     [SerializeField] 
-    private bool debug = false;
+    private bool debug;
 
     private void OnEnable()
     {
-      if (debug) Debug.LogFormat("OnEnable {0}", this.name);
+      if (debug)
+      {
+        Debug.LogFormat("OnEnable {0}", name);
+      }
     }
 
     private void OnDisable()
     {
-      if (debug) Debug.LogFormat("OnDisable {0}", this.name);
+      if (debug)
+      {
+        Debug.LogFormat("OnDisable {0}", name);
+      }
       FinishImmediate();
     }
 
@@ -182,11 +188,17 @@ namespace Gameframe.GUI.PanelSystem
     {
       if (_animating)
       {
-        if (debug) Debug.Log("Starting While Playing");
+        if (debug)
+        {
+          Debug.Log("Starting While Playing");
+        }
         FinishAnimation();
       }
 
-      if (debug) { Debug.Log("StartAnimation"); }
+      if (debug)
+      {
+        Debug.Log("StartAnimation");
+      }
 
       if (clip == null)
       {
@@ -210,7 +222,10 @@ namespace Gameframe.GUI.PanelSystem
       direction = panelNavigationDirection;
       callback = onFinish;
 
-      if (debug) Debug.Log("Callback Assigned");
+      if (debug)
+      {
+        Debug.Log("Callback Assigned");
+      }
 
       //Initialize
       foreach (AnimationState state in Animation)
