@@ -28,7 +28,7 @@ namespace Gameframe.GUI
             var t = Mathf.Clamp01(progress - data.index);
             t = EaseFunctions.Ease(easeType, t);
             var delta = endScale - startScale;
-            data.localScale = startScale + delta * t; //Vector3.Lerp(startScale, endScale, t );
+            data.localScale = startScale + delta * t;
         }
     }
 }
