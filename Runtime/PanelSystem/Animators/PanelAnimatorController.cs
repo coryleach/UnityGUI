@@ -5,9 +5,12 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelAnimatorController : BasePanelAnimatorController
     {
-        public int animationLayer = 0;
-        public string showAnimation = "show";
-        public string hideAnimation = "hide";
+        [SerializeField]
+        private int animationLayer;
+        [SerializeField]
+        private string showAnimation = "show";
+        [SerializeField]
+        private string hideAnimation = "hide";
     
         public override async Task TransitionShowAsync()
         {
@@ -19,7 +22,7 @@ namespace Gameframe.GUI.PanelSystem
             await TransitionAsync(Animator.StringToHash(hideAnimation), animationLayer);
         }
         
-        private void OnValidate()
+        public void OnValidate()
         {
             if (animator == null)
             {
