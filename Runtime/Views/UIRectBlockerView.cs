@@ -6,20 +6,20 @@ namespace Gameframe.GUI
 {
   public class UIRectBlockerView : MonoBehaviour
   {
-    private RectTransform _blockerParent = null;
+    private RectTransform _blockerParent;
     
-    private RectTransform _leftBlocker = null;
-    private RectTransform _rightBlocker = null;
-    private RectTransform _topBlocker = null;
-    private RectTransform _bottomBlocker = null;
+    private RectTransform _leftBlocker;
+    private RectTransform _rightBlocker;
+    private RectTransform _topBlocker;
+    private RectTransform _bottomBlocker;
 
     [SerializeField]
-    private RectTransform _passThroughRect = null;
+    private RectTransform _passThroughRect;
 
     [SerializeField, Tooltip("Highlight should be a child of this object. It will overlay the dimensions of the pass through rect or be disabled if there isn't one.")] 
-    protected RectTransform _highlight = null;
+    protected RectTransform _highlight;
     
-    private Canvas _parentCanvas = null;
+    private Canvas _parentCanvas;
     
     private void Awake()
     {
