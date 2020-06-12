@@ -26,10 +26,10 @@ namespace Gameframe.GUI
         }
 
         [SerializeField] 
-        private RectTransform _target = null;
+        private RectTransform _target;
 
         [SerializeField] 
-        private RectTransform _attachment = null;
+        private RectTransform _attachment;
 
         [SerializeField] 
         private Location locationOnTarget = Location.MiddleCenter;
@@ -38,7 +38,7 @@ namespace Gameframe.GUI
         private bool rotate = true;
 
         [SerializeField, Tooltip("Will keep the child attachment within the bounds parent rect by flipping the attachment position.")] 
-        private bool keepInView = false;
+        private bool keepInView;
 
         [SerializeField, Tooltip("The distance the attachment can get to an edge before flipping to be kept in view")] 
         private float padding = 100;
@@ -49,9 +49,9 @@ namespace Gameframe.GUI
             set => padding = value;
         }
 
-        private Canvas _parentCanvas = null;
+        private Canvas _parentCanvas;
         
-        private RectTransform _myRectTransform = null;
+        private RectTransform _myRectTransform;
 
         private void Awake()
         {
@@ -76,8 +76,13 @@ namespace Gameframe.GUI
             }
             Refresh();
         }
+
+        public void Show(RectTransform target)
+        {
+            Show(target,Location.TopMiddle);
+        }
         
-        public void Show(RectTransform target, Location location = Location.TopMiddle)
+        public void Show(RectTransform target, Location location)
         {
             locationOnTarget = location;
             _target = target;
@@ -120,24 +125,19 @@ namespace Gameframe.GUI
                 var distanceToLeft = pointerPoint.x - parentRect.min.x;
                 var distanceToRight = parentRect.max.x - pointerPoint.x;
 
+                var closeToTop = distanceToTop < padding;
+                var closeToBottom = distanceToBottom < padding;
+                var closeToLeft = distanceToLeft < padding;
+                var closeToRight = distanceToRight < padding;
+                
                 //Get pointer point within rect.
-                if (distanceToTop < padding && IsTop(location))
-                {
-                    location = FlipHorizontal(location);
-                    pointerPoint = GetPoint(location);
-                }
-                else if (distanceToBottom < padding && IsBottom(location))
+                if ((closeToTop && IsTop(location)) || (closeToBottom && IsBottom(location)))
                 {
                     location = FlipHorizontal(location);
                     pointerPoint = GetPoint(location);
                 }
 
-                if (distanceToLeft < padding && IsLeft(location))
-                {
-                    location = FlipVertical(location);
-                    pointerPoint = GetPoint(location);
-                }
-                else if (distanceToRight < padding && IsRight(location))
+                if ((closeToLeft && IsLeft(location)) || (closeToRight && IsRight(location)))
                 {
                     location = FlipVertical(location);
                     pointerPoint = GetPoint(location);
