@@ -6,10 +6,12 @@ using Gameframe.GUI.Tween;
 
 namespace Gameframe.GUI
 {
+  
   public class NotificationMessageText : PoolableGameObject
   {
+    
     [SerializeField]
-    private TextMeshProUGUI text = null;
+    private TextMeshProUGUI text;
   
     [SerializeField]
     private float moveDuration = 0.5f;
@@ -23,10 +25,12 @@ namespace Gameframe.GUI
     [SerializeField]
     private float fadeDuration = 0.5f;
   
-    private int bumps = 0;
+    private int bumps;
+
+    private RectTransform RectTransform => transform as RectTransform;
     
-    public RectTransform rectTransform => transform as RectTransform;
-  
+    private NotificationMessageView messageView;
+    
     public void Message(string message)
     {
       Message(message, Color.white);
@@ -35,8 +39,8 @@ namespace Gameframe.GUI
     public void Message(string message, Color color)
     {
       text.text = message;
-      rectTransform.anchoredPosition = new Vector2(0, -rectTransform.sizeDelta.y);
-      rectTransform.DoAnchorPosY(0, moveDuration);//.SetEase(Ease.OutSine);
+      RectTransform.anchoredPosition = new Vector2(0, -RectTransform.sizeDelta.y);
+      RectTransform.DoAnchorPosY(0, moveDuration);
       text.color = new Color(1,1,1,0);
       text.DoColor(color, moveDuration);
       StartCoroutine(Fade());
@@ -45,7 +49,7 @@ namespace Gameframe.GUI
     public void BumpUp()
     {
       bumps += 1;
-      rectTransform.DoAnchorPosY(bumps * rectTransform.sizeDelta.y, moveDuration);//.SetEase(Ease.OutSine);
+      RectTransform.DoAnchorPosY(bumps * RectTransform.sizeDelta.y, moveDuration);
     }
   
     private IEnumerator Fade()
@@ -62,8 +66,6 @@ namespace Gameframe.GUI
       yield return new WaitForSeconds(fadeDuration);
       Despawn();
     }
-  
-    private NotificationMessageView messageView = null;
     
     public override void OnPoolableSpawned()
     {
@@ -75,8 +77,8 @@ namespace Gameframe.GUI
     {
       base.OnPoolableDespawn();
       bumps = 0;
-      rectTransform.DoKillTweens();
-      rectTransform.anchoredPosition = new Vector2(0, -80);
+      RectTransform.DoKillTweens();
+      RectTransform.anchoredPosition = new Vector2(0, -80);
       if (messageView != null)
       {
         messageView.RemoveText(this);
@@ -84,5 +86,6 @@ namespace Gameframe.GUI
     }
   
   }
+  
 }
 
