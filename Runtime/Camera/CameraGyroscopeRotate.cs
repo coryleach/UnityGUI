@@ -19,9 +19,9 @@
     [SerializeField] 
     private float smoothTime = 1f;
 
-    private float velocityX = 0;
-    private float velocityY = 0;
-    private float velocityZ = 0;
+    private float velocityX;
+    private float velocityY;
+    private float velocityZ;
 
     private float delay = 0.5f;
 
@@ -29,12 +29,12 @@
 
     private void Start()
     {
-      startRotation = transform.eulerAngles;
       if (!SystemInfo.supportsGyroscope)
       {
         enabled = false;
         return;
       }
+      startRotation = transform.eulerAngles;
     }
 
     private void OnEnable()
