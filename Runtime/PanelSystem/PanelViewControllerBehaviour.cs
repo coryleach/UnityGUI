@@ -11,12 +11,12 @@ namespace Gameframe.GUI.PanelSystem
     public abstract class PanelViewControllerBehaviour<TPanelViewBase> : MonoBehaviour, IPanelViewController, IPanelViewContainer where TPanelViewBase : PanelViewBase
     {
         [SerializeField]
-        private PanelType panelType = null;
+        private PanelType panelType;
 
         [SerializeField]
-        private PanelViewBase panelView = null;
+        private PanelViewBase panelView;
         
-        private PanelViewControllerBase baseController = null;
+        private PanelViewControllerBase baseController;
 
         private PanelViewControllerBase BaseController => baseController ?? (baseController = CreateController());
 
@@ -65,7 +65,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public IPanelViewContainer ParentViewContainer => BaseController.ParentViewContainer;
 
-        private RectTransform rectTransform = null;
+        private RectTransform rectTransform;
 
         public RectTransform ParentTransform
         {
@@ -83,24 +83,24 @@ namespace Gameframe.GUI.PanelSystem
 
         public async void Show()
         {
-            await ShowAsync();
+            await ShowAsync().ConfigureAwait(false);
         }
         
         public async void Show(bool immediate)
         {
-            await ShowAsync(immediate);
+            await ShowAsync(immediate).ConfigureAwait(false);
         }
 
         public Task ShowAsync(bool immediate = false) => BaseController.ShowAsync(immediate);
 
         public async void Hide()
         {
-            await HideAsync();
+            await HideAsync().ConfigureAwait(false);
         }
         
         public async void Hide(bool immediate)
         {
-            await HideAsync(immediate);
+            await HideAsync(immediate).ConfigureAwait(false);
         }
 
         public Task HideAsync(bool immediate = false) => BaseController.HideAsync(immediate);
