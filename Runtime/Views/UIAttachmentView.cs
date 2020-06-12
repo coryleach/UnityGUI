@@ -26,10 +26,10 @@ namespace Gameframe.GUI
         }
 
         [SerializeField] 
-        private RectTransform _target = null;
+        private RectTransform _target;
 
         [SerializeField] 
-        private RectTransform _attachment = null;
+        private RectTransform _attachment;
 
         [SerializeField] 
         private Location locationOnTarget = Location.MiddleCenter;
@@ -38,7 +38,7 @@ namespace Gameframe.GUI
         private bool rotate = true;
 
         [SerializeField, Tooltip("Will keep the child attachment within the bounds parent rect by flipping the attachment position.")] 
-        private bool keepInView = false;
+        private bool keepInView;
 
         [SerializeField, Tooltip("The distance the attachment can get to an edge before flipping to be kept in view")] 
         private float padding = 100;
@@ -49,9 +49,9 @@ namespace Gameframe.GUI
             set => padding = value;
         }
 
-        private Canvas _parentCanvas = null;
+        private Canvas _parentCanvas;
         
-        private RectTransform _myRectTransform = null;
+        private RectTransform _myRectTransform;
 
         private void Awake()
         {
@@ -120,24 +120,19 @@ namespace Gameframe.GUI
                 var distanceToLeft = pointerPoint.x - parentRect.min.x;
                 var distanceToRight = parentRect.max.x - pointerPoint.x;
 
+                var closeToTop = distanceToTop < padding;
+                var closeToBottom = distanceToBottom < padding;
+                var closeToLeft = distanceToLeft < padding;
+                var closeToRight = distanceToRight < padding;
+                
                 //Get pointer point within rect.
-                if (distanceToTop < padding && IsTop(location))
-                {
-                    location = FlipHorizontal(location);
-                    pointerPoint = GetPoint(location);
-                }
-                else if (distanceToBottom < padding && IsBottom(location))
+                if ((closeToTop && IsTop(location)) || (closeToBottom && IsBottom(location)))
                 {
                     location = FlipHorizontal(location);
                     pointerPoint = GetPoint(location);
                 }
 
-                if (distanceToLeft < padding && IsLeft(location))
-                {
-                    location = FlipVertical(location);
-                    pointerPoint = GetPoint(location);
-                }
-                else if (distanceToRight < padding && IsRight(location))
+                if ((closeToLeft && IsLeft(location)) || (closeToRight && IsRight(location)))
                 {
                     location = FlipVertical(location);
                     pointerPoint = GetPoint(location);
@@ -206,7 +201,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private bool IsTop(Location location)
+        private static bool IsTop(Location location)
         {
             switch (location)
             {
@@ -226,7 +221,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private bool IsBottom(Location location)
+        private static bool IsBottom(Location location)
         {
             switch (location)
             {
@@ -246,7 +241,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private bool IsLeft(Location location)
+        private static bool IsLeft(Location location)
         {
             switch (location)
             {
@@ -266,7 +261,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private bool IsRight(Location location)
+        private static bool IsRight(Location location)
         {
             switch (location)
             {
@@ -288,7 +283,6 @@ namespace Gameframe.GUI
 
         private Vector2 GetPoint(Location location)
         {
-            var pointerPoint = Vector2.zero;
             var corners = new Vector3[4];
             _target.GetWorldCorners(corners);
 
@@ -299,7 +293,7 @@ namespace Gameframe.GUI
             var screenPoint = GetPoint(worldCamera, corners, location);
 
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(_myRectTransform, screenPoint, worldCamera,
-                out pointerPoint))
+                out var pointerPoint))
             {
                 Debug.LogError("plane of the RectTransform was not hit");
                 return Vector2.zero;
