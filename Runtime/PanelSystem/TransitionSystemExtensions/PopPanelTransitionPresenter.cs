@@ -18,6 +18,8 @@ namespace Gameframe.GUI.PanelSystem
     
         public Task StartTransitionAsync()
         {
+            //Nothing to do on start transition.
+            //We don't pop until the transition is ready to finish
             return Task.CompletedTask;
         }
 
@@ -28,6 +30,9 @@ namespace Gameframe.GUI.PanelSystem
 
         public async Task FinishTransitionAsync()
         {
+            //Transition is ready to finish
+            //This will pop a panel off the stack and then allow the transition to complete
+            //For example we might not want to have a scene transition curtain raise till a panel is popped
             await _stack.PopAsync(); 
         }
     }    
