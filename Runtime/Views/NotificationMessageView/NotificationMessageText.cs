@@ -31,14 +31,14 @@ namespace Gameframe.GUI
     
     private NotificationMessageView messageView;
     
-    public void Message(string message)
+    public void Message(string messageText)
     {
-      Message(message, Color.white);
+      Message(messageText, Color.white);
     }
     
-    public void Message(string message, Color color)
+    public void Message(string messageText, Color color)
     {
-      text.text = message;
+      text.text = messageText;
       RectTransform.anchoredPosition = new Vector2(0, -RectTransform.sizeDelta.y);
       RectTransform.DoAnchorPosY(0, moveDuration);
       text.color = new Color(1,1,1,0);
