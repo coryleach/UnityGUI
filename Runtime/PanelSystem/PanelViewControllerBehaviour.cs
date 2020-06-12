@@ -143,13 +143,13 @@ namespace Gameframe.GUI.PanelSystem
     /// </summary>
     public class PanelViewControllerBehaviour : MonoBehaviour, IPanelViewController, IPanelViewContainer
     {
-        [SerializeField]
-        private PanelType panelType = null;
+        [SerializeField] 
+        private PanelType panelType;
 
         [SerializeField, Help("When PanelView is null the prefab assigned to the Panel Type will be instantiated and used at runtime")]
-        private PanelViewBase panelView = null;
+        private PanelViewBase panelView;
         
-        private PanelViewControllerBase baseController = null;
+        private PanelViewControllerBase baseController;
 
         private PanelViewControllerBase BaseController => baseController ?? (baseController = CreateController());
 
@@ -196,7 +196,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public IPanelViewContainer ParentViewContainer => BaseController.ParentViewContainer;
 
-        private RectTransform rectTransform = null;
+        private RectTransform rectTransform;
 
         public RectTransform ParentTransform
         {
@@ -215,28 +215,32 @@ namespace Gameframe.GUI.PanelSystem
         [ContextMenu("Show")]
         public async void Show()
         {
-            await ShowAsync();
+            await ShowAsync().ConfigureAwait(false);
         }
 
         [ContextMenu("Hide")]
         public async void Hide()
         {
-            await HideAsync();
+            await HideAsync().ConfigureAwait(false);
         }
         
         public async void Show(bool immediate)
         {
-            await ShowAsync(immediate);
+            await ShowAsync(immediate).ConfigureAwait(false);
         }
 
-        public Task ShowAsync(bool immediate = false) => BaseController.ShowAsync(immediate);
+        public Task ShowAsync(bool immediate) => BaseController.ShowAsync(immediate);
+
+        public Task ShowAsync() => BaseController.ShowAsync(false);
 
         public async void Hide(bool immediate)
         {
-            await HideAsync(immediate);
+            await HideAsync(immediate).ConfigureAwait(false);
         }
 
-        public Task HideAsync(bool immediate = false) => BaseController.HideAsync(immediate);
+        public Task HideAsync(bool immediate) => BaseController.HideAsync(immediate);
+        
+        public Task HideAsync() => BaseController.HideAsync(false);
         
         protected virtual void ViewDidLoad()
         {
