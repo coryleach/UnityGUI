@@ -46,7 +46,8 @@ namespace Gameframe.GUI.PanelSystem
     private float time = 0;
     private PanelNavigationDirection direction = PanelNavigationDirection.Forward;
 
-    public bool debug = false;
+    [SerializeField] 
+    private bool debug = false;
 
     private void OnEnable()
     {
