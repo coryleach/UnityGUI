@@ -64,12 +64,12 @@ namespace Gameframe.GUI.PanelSystem
             
         }
 
-        internal static SynchronizationContext mainSyncContext = null;
-        
+        internal static SynchronizationContext MainSyncContext { get; private set; }
+
         [RuntimeInitializeOnLoadMethod]
         private static void Initialize()
         {
-            mainSyncContext = SynchronizationContext.Current;
+            MainSyncContext = SynchronizationContext.Current;
         }
 
         internal static void CleanupDestroyedPanel(object state)
@@ -95,7 +95,7 @@ namespace Gameframe.GUI.PanelSystem
         /// </summary>
         ~PanelViewController()
         {
-            mainSyncContext?.Post(CleanupDestroyedPanel,baseController.View);
+            MainSyncContext?.Post(CleanupDestroyedPanel,baseController.View);
         }
         
     }
@@ -159,7 +159,7 @@ namespace Gameframe.GUI.PanelSystem
         ~PanelViewController()
         {
             //Using internal variable & method from PanelViewController to avoid AOT compile issues with this generic class
-            PanelViewController.mainSyncContext?.Post(PanelViewController.CleanupDestroyedPanel,baseController.View);
+            PanelViewController.MainSyncContext?.Post(PanelViewController.CleanupDestroyedPanel,baseController.View);
         }
         
     }
