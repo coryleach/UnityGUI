@@ -76,8 +76,13 @@ namespace Gameframe.GUI
             }
             Refresh();
         }
+
+        public void Show(RectTransform target)
+        {
+            Show(target,Location.TopMiddle);
+        }
         
-        public void Show(RectTransform target, Location location = Location.TopMiddle)
+        public void Show(RectTransform target, Location location)
         {
             locationOnTarget = location;
             _target = target;
