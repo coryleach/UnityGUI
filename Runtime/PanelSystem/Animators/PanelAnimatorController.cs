@@ -22,11 +22,11 @@ namespace Gameframe.GUI.PanelSystem
             await TransitionAsync(Animator.StringToHash(hideAnimation), animationLayer);
         }
         
-        public void OnValidate()
+        private void OnValidate()
         {
-            if (animator == null)
+            if (base.animator == null)
             {
-                animator = GetComponent<Animator>();
+                base.animator = GetComponent<Animator>();
             }
         }
     }
