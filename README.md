@@ -3,7 +3,8 @@
 <!-- BADGE-START -->
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/325ed211df6d42b980b7cdbc9afe5eb7)](https://www.codacy.com/manual/coryleach/UnityGUI?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coryleach/UnityGUI&amp;utm_campaign=Badge_Grade)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/coryleach/UnityGui?include_prereleases)
-[![license](https://img.shields.io/github/license/coryleach/UnityAsync)](https://github.com/coryleach/UnityAsync/blob/master/LICENSE)
+[![openupm](https://img.shields.io/npm/v/com.gameframe.gui?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.gameframe.gui/)
+[![license](https://img.shields.io/github/license/coryleach/UnityGui)](https://github.com/coryleach/UnityGui/blob/master/LICENSE)
 
 [![twitter](https://img.shields.io/twitter/follow/coryleach.svg?style=social)](https://twitter.com/coryleach)
 <!-- BADGE-END -->
