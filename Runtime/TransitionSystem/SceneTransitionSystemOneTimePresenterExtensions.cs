@@ -22,22 +22,22 @@ namespace Gameframe.GUI.TransitionSystem
             await LoadScenesAsync(transitionSystem, scenesToLoad, scenesToUnload, oneTimePresenter).ConfigureAwait(false);
         }
         
-        public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] loadScenes, string[] unloadScenes, ITransitionPresenter oneTimePresenter)
+        public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] scenesToLoad, string[] scenesToUnload, ITransitionPresenter oneTimePresenter)
         {
             transitionSystem.AddPresenter(oneTimePresenter);
-            await transitionSystem.LoadScenesAsync(loadScenes, unloadScenes).ConfigureAwait(true);
+            await transitionSystem.LoadScenesAsync(scenesToLoad, scenesToUnload).ConfigureAwait(true);
             transitionSystem.RemovePresenter(oneTimePresenter);
         }
 
-        public static async void LoadScenes(this SceneTransitionSystem transitionSystem, string[] loadScenes, ITransitionPresenter oneTimePresenter)
+        public static async void LoadScenes(this SceneTransitionSystem transitionSystem, string[] scenesToLoad, ITransitionPresenter oneTimePresenter)
         {
-            await LoadScenesAsync(transitionSystem, loadScenes, oneTimePresenter).ConfigureAwait(false);
+            await LoadScenesAsync(transitionSystem, scenesToLoad, oneTimePresenter).ConfigureAwait(false);
         }
         
-        public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] loadScenes, ITransitionPresenter oneTimePresenter)
+        public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] scenesToLoad, ITransitionPresenter oneTimePresenter)
         {
             transitionSystem.AddPresenter(oneTimePresenter);
-            await transitionSystem.LoadScenesAsync(loadScenes).ConfigureAwait(true);
+            await transitionSystem.LoadScenesAsync(scenesToLoad).ConfigureAwait(true);
             transitionSystem.RemovePresenter(oneTimePresenter);
         }
     }
