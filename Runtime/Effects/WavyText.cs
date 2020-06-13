@@ -19,7 +19,7 @@ namespace Gameframe.GUI
         protected float speed = 1f;
 
         [SerializeField] 
-        protected bool resetTimeOnEnable = false;
+        protected bool resetTimeOnEnable;
         
         private float time;
 

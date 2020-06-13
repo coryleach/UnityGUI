@@ -13,7 +13,7 @@ namespace Gameframe.GUI.Layout
   {
     private readonly float[] offsets = new float[4];
 
-    private void SumOffsets(IList<float> sumOffsets, RectTransform currentRectTransform)
+    private static void SumOffsets(IList<float> offsets, RectTransform currentRectTransform)
     {
       if (currentRectTransform == null)
       {
@@ -26,12 +26,12 @@ namespace Gameframe.GUI.Layout
         return;
       }
 
-      sumOffsets[(int)RectTransform.Edge.Left] += currentRectTransform.GetInsetFromParentLeftEdge(parent);
-      sumOffsets[(int)RectTransform.Edge.Right] += currentRectTransform.GetInsetFromParentRightEdge(parent);
-      sumOffsets[(int)RectTransform.Edge.Top] += currentRectTransform.GetInsetFromParentTopEdge(parent);
-      sumOffsets[(int)RectTransform.Edge.Bottom] += currentRectTransform.GetInsetFromParentBottomEdge(parent);
+      offsets[(int)RectTransform.Edge.Left] += currentRectTransform.GetInsetFromParentLeftEdge(parent);
+      offsets[(int)RectTransform.Edge.Right] += currentRectTransform.GetInsetFromParentRightEdge(parent);
+      offsets[(int)RectTransform.Edge.Top] += currentRectTransform.GetInsetFromParentTopEdge(parent);
+      offsets[(int)RectTransform.Edge.Bottom] += currentRectTransform.GetInsetFromParentBottomEdge(parent);
 
-      SumOffsets(sumOffsets, parent);
+      SumOffsets(offsets, parent);
     }
 
     public override void CalculateLayoutInputHorizontal()

@@ -31,7 +31,7 @@ namespace Gameframe.GUI
             text.text = currentMessage;
         }
 
-        private WaitForEndOfFrame waitEndOfFrame = new WaitForEndOfFrame();
+        private readonly WaitForEndOfFrame waitEndOfFrame = new WaitForEndOfFrame();
         private WaitForSeconds waitInterval;
         
         protected override IEnumerator RunType()
