@@ -86,18 +86,17 @@ namespace Gameframe.GUI.TransitionSystem
             for (var index = 0; index < LoadScenes.Length; index++)
             {
                 var sceneName = LoadScenes[index];
-                var async = SceneManager.LoadSceneAsync(sceneName, Mode);
-                if (async != null)
+                var asyncOperation = SceneManager.LoadSceneAsync(sceneName, Mode);
+                if (asyncOperation != null)
                 {
                     //Allow them all to load till 90% complete
-                    async.allowSceneActivation = false;
-                    loadTasks.Add(async);
+                    asyncOperation.allowSceneActivation = false;
+                    loadTasks.Add(asyncOperation);
                 }
                 else
                 {
                     Debug.LogError($"Failed to load scene {sceneName}. LoadSceneAsync returned null.");
                 }
-                
             }
 
             var waiting = false;

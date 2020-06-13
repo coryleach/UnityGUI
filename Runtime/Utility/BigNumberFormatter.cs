@@ -14,23 +14,23 @@ namespace Gameframe.GUI.Utility
 
     static string[] specialSymbols = { "K", " M", "B", "T" };
 
-    public string Format(string format, object arg, IFormatProvider formatProvider)
+    public string Format(string formatText, object arg, IFormatProvider formatProvider)
     {
       if (arg is float)
       {
-        return InternalFormat(format, (double)arg, formatProvider);
+        return InternalFormat(formatText, (double)arg, formatProvider);
       }
       else if (arg is double)
       {
-        return InternalFormat(format, (double)arg, formatProvider);
+        return InternalFormat(formatText, (double)arg, formatProvider);
       }
       else if (arg is long)
       {
-        return InternalFormat(format, (double)arg, formatProvider);
+        return InternalFormat(formatText, (double)arg, formatProvider);
       }
       else if (arg is int)
       {
-        return InternalFormat(format, (double)arg, formatProvider);
+        return InternalFormat(formatText, (double)arg, formatProvider);
       }
       else
       {
