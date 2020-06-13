@@ -14,7 +14,7 @@ namespace Gameframe.GUI.Utility
 
     static string[] specialSymbols = { "K", " M", "B", "T" };
 
-    public string Format(string formatText, object arg, IFormatProvider formatProvider)
+    public string Format(string format, object arg, IFormatProvider formatProvider)
     {
       if (arg is float)
       {
