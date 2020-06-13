@@ -57,7 +57,9 @@ namespace Gameframe.GUI.Layout
       {
         var rect = rectTransform.GetChild(i) as RectTransform;
         if (rect == null || !rect.gameObject.activeInHierarchy)
+        {
           continue;
+        }
 
         rect.GetComponents(typeof(ILayoutIgnorer), toIgnoreList);
 
