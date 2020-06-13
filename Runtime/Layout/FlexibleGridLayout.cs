@@ -79,10 +79,12 @@ namespace Gameframe.GUI.Layout
 
         public override void SetLayoutHorizontal()
         {
+            //Layout is set in CalculateLayoutInputVertical
         }
 
         public override void SetLayoutVertical()
         {
+            //Layout is set in CalculateLayoutInputVertical
         }
     }
 }
