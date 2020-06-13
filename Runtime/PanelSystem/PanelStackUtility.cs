@@ -19,7 +19,7 @@ namespace Gameframe.GUI.PanelSystem
                 output.Add(currentController);
                 
                 //Stop as soon as we hit a panel that is fully opaque
-                if (currentController.PanelType.visibility == PanelType.Visibility.Opaque)
+                if (currentController.PanelType.VisibilityType == PanelType.Visibility.Opaque)
                 {
                     return;
                 }

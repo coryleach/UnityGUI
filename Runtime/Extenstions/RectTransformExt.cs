@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace Gameframe.GUI.Extensions
@@ -51,8 +52,9 @@ namespace Gameframe.GUI.Extensions
           return child.GetInsetFromParentLeftEdge(parent);
         case RectTransform.Edge.Right:
           return child.GetInsetFromParentRightEdge(parent);
+        default:
+          throw new InvalidEnumArgumentException();
       }
-      return 0f;
     }
 
     /// <summary>

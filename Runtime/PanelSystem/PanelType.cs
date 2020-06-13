@@ -19,8 +19,15 @@ namespace Gameframe.GUI.PanelSystem
         [SerializeField] private PanelViewBase prefab;
         public PanelViewBase Prefab => prefab;
         
-        public Visibility visibility = Visibility.Opaque;
-        
+        [SerializeField]
+        private Visibility visibility = Visibility.Opaque;
+
+        public Visibility VisibilityType
+        {
+            get => visibility;
+            set => visibility = value;
+        }
+
         public virtual Task<PanelViewBase> GetPrefabAsync()
         {
             return Task.FromResult(prefab);
