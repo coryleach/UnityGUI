@@ -9,13 +9,9 @@ namespace Gameframe.GUI.Layout
 public class GridRowsAndColumns : UIBehaviour
 {
 
-  [SerializeField]
-  int rows = 0;
-  [SerializeField]
-  int columns = 0;
-
-  [SerializeField]
-  float maxAspectRatio = 1;
+  [SerializeField] private int rows;
+  [SerializeField] private int columns;
+  [SerializeField] private float maxAspectRatio = 1;
 
 	protected override void Start()
   {
@@ -49,7 +45,7 @@ public class GridRowsAndColumns : UIBehaviour
     RefreshLayout();
   }
 
-  void RefreshLayout()
+  private void RefreshLayout()
   {
     var gridLayout = GetComponent<GridLayoutGroup>();
     var rectTransform = transform as RectTransform;

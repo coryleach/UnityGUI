@@ -9,10 +9,10 @@ namespace Gameframe.GUI.Utility
     public class TextReference
     {
         [SerializeField]
-        private Text uguiText = null;
+        private Text uguiText;
         
         [SerializeField]
-        private TextMeshProUGUI tmpText = null;
+        private TextMeshProUGUI tmpText;
 
         public string Text
         {
