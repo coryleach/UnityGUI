@@ -9,7 +9,7 @@ namespace Gameframe.GUI
   {
     
     [SerializeField]
-    private float horizontal = 0;
+    private float horizontal;
     public float Horizontal
     {
       get => horizontal;
@@ -17,14 +17,15 @@ namespace Gameframe.GUI
     }
     
     [SerializeField]
-    private float vertical = 0;
+    private float vertical;
     public float Vertical
     {
       get => vertical;
       set => vertical = value;
     }
     
-    public Matrix4x4 matrix;
+    [SerializeField]
+    private Matrix4x4 matrix;
 
     private UnityEngine.Camera _myCamera;
     public UnityEngine.Camera MyCamera
