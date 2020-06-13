@@ -90,9 +90,9 @@ namespace Gameframe.GUI.TransitionSystem
             isTransitioning = false;
         }
 
-        public async void LoadScenes(string[] loadScenes)
+        public async void LoadScenes(string[] scenesToLoad)
         {
-            await LoadScenesAsync(loadScenes).ConfigureAwait(false);
+            await LoadScenesAsync(scenesToLoad).ConfigureAwait(false);
         }
         
         public async Task LoadScenesAsync(string[] loadScenes)

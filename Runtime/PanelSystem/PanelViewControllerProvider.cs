@@ -26,7 +26,10 @@ namespace Gameframe.GUI.PanelSystem
 
         public IPanelViewController GetOrCreate(PanelType type)
         {
-            if (controllers.TryGetValue(type, out var controller)) return controller;
+            if (controllers.TryGetValue(type, out var controller))
+            {
+                return controller;
+            }
             controller = new PanelViewController(type);
             controllers.Add(type,controller);
             return controller;

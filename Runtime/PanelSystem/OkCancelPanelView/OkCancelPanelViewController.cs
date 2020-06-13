@@ -5,7 +5,7 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class OkCancelPanelViewController : PanelViewController
     {
-        private readonly Action<bool> callback = null;
+        private readonly Action<bool> callback;
         
         public OkCancelPanelViewController(PanelType type, Action<bool> callback) : base(type)
         {

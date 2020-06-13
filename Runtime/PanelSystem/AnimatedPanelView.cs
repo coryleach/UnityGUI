@@ -8,7 +8,7 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class AnimatedPanelView : PanelViewBase
     {
-        private List<IPanelAnimator> animatorList = null;
+        private List<IPanelAnimator> animatorList;
 
         private IEnumerable<IPanelAnimator> GetAnimators()
         {
