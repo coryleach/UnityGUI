@@ -1,6 +1,4 @@
-engines:
-  duplication:
-    enabled: true
-    exclude_paths:
-      - '/Tests/Editor/*.cs'
-      - '/Tests/Runtime/*.cs'
+exclude_paths:
+    - '*.md'
+    - 'Tests/Editor/*.cs'
+    - 'Tests/Runtime/*.cs'
