@@ -1,6 +1,6 @@
 <h1 align="center">Gameframe.GUI 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.1.3-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-2.0.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://twitter.com/Cory Leach">
     <img alt="Twitter: coryleach" src="https://img.shields.io/twitter/follow/coryleach.svg?style=social" target="_blank" />
   </a>
@@ -16,7 +16,7 @@ Includes a shader for blurring the background of UI panels.
 #### Using UnityPackageManager (for Unity 2019.3 or later)
 Open the package manager window (menu: Window > Package Manager)<br/>
 Select "Add package from git URL...", fill in the pop-up with the following link:<br/>
-https://github.com/coryleach/UnityGUI.git#1.1.3<br/>
+https://github.com/coryleach/UnityGUI.git#2.0.0<br/>
 
 #### Using UnityPackageManager (for Unity 2019.1 or later)
 
@@ -24,14 +24,14 @@ Find the manifest.json file in the Packages folder of your project and edit it t
 ```js
 {
   "dependencies": {
-    "com.gameframe.gui": "https://github.com/coryleach/UnityGUI.git#1.1.3",
+    "com.gameframe.gui": "https://github.com/coryleach/UnityGUI.git#2.0.0",
     ...
   },
 }
 ```
 
 <!-- DOC-START -->
-<!-- 
+<!--
 Changes between 'DOC START' and 'DOC END' will not be modified by readme update scripts
 -->
 
