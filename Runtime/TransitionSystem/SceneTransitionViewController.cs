@@ -18,7 +18,7 @@ namespace Gameframe.GUI.TransitionSystem
         [Serializable]
         public class ProgressEvent : UnityEvent<float> {}
 
-        private ProgressEvent onProgressUpdate = new ProgressEvent();
+        private readonly ProgressEvent onProgressUpdate = new ProgressEvent();
         public ProgressEvent OnProgressUpdate => onProgressUpdate;
         
         private void OnEnable()

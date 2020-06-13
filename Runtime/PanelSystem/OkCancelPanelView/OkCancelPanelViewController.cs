@@ -26,7 +26,7 @@ namespace Gameframe.GUI.PanelSystem
 
         private void SubscribeToView()
         {
-            if (View is OkCancelPanelView okCancelView)
+            if (this.View is OkCancelPanelView okCancelView)
             {
                 okCancelView.onConfirm += Ok;
                 okCancelView.onCancel += Cancel;
@@ -39,7 +39,7 @@ namespace Gameframe.GUI.PanelSystem
 
         private void UnsubscribeToView()
         {
-            if (View is OkCancelPanelView okCancelView)
+            if (this.View is OkCancelPanelView okCancelView)
             {
                 okCancelView.onConfirm -= Ok;
                 okCancelView.onCancel -= Cancel;

@@ -38,7 +38,7 @@ namespace Gameframe.GUI.Utility
       }
     }
 
-    string InternalFormat(string format, double arg, IFormatProvider formatProvider)
+    private static string InternalFormat(string format, double arg, IFormatProvider formatProvider)
     {
 
       int significantDigits = (int)(Math.Log10(arg) + 1);
