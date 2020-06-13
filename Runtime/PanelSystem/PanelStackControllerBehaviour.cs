@@ -16,16 +16,16 @@ namespace Gameframe.GUI.PanelSystem
     public class PanelStackControllerBehaviour : MonoBehaviour, IPanelStackController, IPanelViewContainer
     {
         [SerializeField] 
-        private UIEventManager eventManager = null;
+        private UIEventManager eventManager;
         
         [SerializeField] 
-        private PanelStackSystem panelStackSystem = null;
+        private PanelStackSystem panelStackSystem;
 
         public PanelStackSystem System => panelStackSystem;
         
         public RectTransform ParentTransform => (RectTransform)transform;
 
-        private PanelStackController baseController = null;
+        private PanelStackController baseController;
 
         [SerializeField, Tooltip("If true the panel stack will be cleared when this object is destroyed. This may be desired when reloading the game for example.")] 
         protected bool clearSystemStackOnDestroy = true;

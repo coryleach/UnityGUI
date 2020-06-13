@@ -8,7 +8,7 @@ namespace Gameframe.GUI
     public class FadeInText : PlayableTextMeshEffect, ITextMeshColorEffect
     {
         [SerializeField] 
-        private bool smooth = false;
+        private bool smooth;
         
         protected override void AddToManager(TextMeshEffectTMPro effectManager)
         {

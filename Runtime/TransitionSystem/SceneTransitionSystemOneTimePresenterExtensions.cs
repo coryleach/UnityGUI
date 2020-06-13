@@ -17,9 +17,9 @@ namespace Gameframe.GUI.TransitionSystem
             transitionSystem.RemovePresenter(oneTimePresenter);
         }
         
-        public static async void LoadScenes(this SceneTransitionSystem transitionSystem, string[] loadScenes, string[] unloadScenes, ITransitionPresenter oneTimePresenter)
+        public static async void LoadScenes(this SceneTransitionSystem transitionSystem, string[] scenesToLoad, string[] scenesToUnload, ITransitionPresenter oneTimePresenter)
         {
-            await LoadScenesAsync(transitionSystem, loadScenes, unloadScenes, oneTimePresenter).ConfigureAwait(false);
+            await LoadScenesAsync(transitionSystem, scenesToLoad, scenesToUnload, oneTimePresenter).ConfigureAwait(false);
         }
         
         public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] loadScenes, string[] unloadScenes, ITransitionPresenter oneTimePresenter)

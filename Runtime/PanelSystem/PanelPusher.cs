@@ -6,17 +6,17 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelPusher : MonoBehaviour
     {
-        [SerializeField] private PanelStackSystem stack = null;
+        [SerializeField] private PanelStackSystem stack;
         
-        [SerializeField] private PanelViewControllerProvider provider = null;
+        [SerializeField] private PanelViewControllerProvider provider;
 
-        [SerializeField] private PanelType panelType = null;
+        [SerializeField] private PanelType panelType;
 
         [FormerlySerializedAs("pushEvent")] 
         [SerializeField] private PushEvent pushOnEvent = PushEvent.Manual;
 
         [SerializeField]
-        private bool clearBeforePush = false;
+        private bool clearBeforePush;
         
         public enum PushEvent
         {
