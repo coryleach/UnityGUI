@@ -52,7 +52,7 @@ namespace Gameframe.GUI.Tween
         
         public static async Task DoTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
         {
-            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType);
+            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType).ConfigureAwait(false);
         }
 
         public static async Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken,

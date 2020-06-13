@@ -116,7 +116,7 @@ namespace Gameframe.GUI.PanelSystem
 
             if (!IsViewLoaded)
             {
-                await LoadViewAsync();
+                await LoadViewAsync().ConfigureAwait(true);
 
                 if (currentToken.IsCancellationRequested)
                 {
