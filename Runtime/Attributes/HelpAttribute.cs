@@ -11,13 +11,13 @@ namespace Gameframe.GUI
     [AttributeUsage(AttributeTargets.Field)]
     public class HelpAttribute : PropertyAttribute
     {
-        public readonly string text;
-        public readonly HelpType type;
+        public string Text { get; }
+        public HelpType Type { get; }
 
         public HelpAttribute(string text, HelpType type = HelpType.Info)
         {
-            this.text = text;
-            this.type = type;
+            Text = text;
+            Type = type;
         }
     }
     
@@ -25,7 +25,7 @@ namespace Gameframe.GUI
     {
         Info,
         Warning,
-        Error,
+        Error
     }
 
 #if UNITY_EDITOR
@@ -58,7 +58,7 @@ namespace Gameframe.GUI
 
             float minHeight = paddingHeight * 5;
 
-            var content = new GUIContent(HelpAttribute.text);
+            var content = new GUIContent(HelpAttribute.Text);
             var style = (GUIStyle)"helpbox";
 
             var height = style.CalcHeight(content, EditorGUIUtility.currentViewWidth);
@@ -87,7 +87,7 @@ namespace Gameframe.GUI
                 helpPos.height -= addedHeight;
             }
 
-            EditorGUI.HelpBox(helpPos, HelpAttribute.text, HelpAttribute.type.GetMessageType());
+            EditorGUI.HelpBox(helpPos, HelpAttribute.Text, HelpAttribute.Type.GetMessageType());
 
             position.y += helpPos.height + marginHeight;
             position.height = baseHeight;

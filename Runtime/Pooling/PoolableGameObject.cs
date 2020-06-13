@@ -4,7 +4,7 @@ namespace Gameframe.GUI.Pooling
 {
     public class PoolableGameObject : MonoBehaviour
     {
-        private Pool _pool = null;
+        private Pool _pool;
         public Pool SourcePool
         {
             get => _pool;

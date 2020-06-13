@@ -9,11 +9,11 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelSwapController : IPanelSwapController
     {
-        private readonly IUIEventManager eventManager = null;
-        private readonly IPanelSwapSystem panelSwapSystem = null;
-        private readonly IPanelViewContainer container = null;
+        private readonly IUIEventManager eventManager;
+        private readonly IPanelSwapSystem panelSwapSystem;
+        private readonly IPanelViewContainer container;
         
-        private IPanelViewController activePanelController = null;
+        private IPanelViewController activePanelController;
         
         public PanelSwapController(IPanelSwapSystem swapSystem, IPanelViewContainer viewContainer, IUIEventManager eventManager = null)
         {
@@ -39,11 +39,11 @@ namespace Gameframe.GUI.PanelSystem
                 //Load Views
                 if (showController != null)
                 {
-                    await LoadView(showController);
+                    await LoadView(showController).ConfigureAwait(true);
                 }
                 
                 var transitionTask = TransitionDefault(hideController, showController);
-                await transitionTask;
+                await transitionTask.ConfigureAwait(true);
                 
                 activePanelController = showController;
             }
@@ -90,12 +90,12 @@ namespace Gameframe.GUI.PanelSystem
 
             if (hideTask != null)
             {
-                await hideTask;
+                await hideTask.ConfigureAwait(true);
             }
 
             if (showTask != null)
             {
-                await showTask;
+                await showTask.ConfigureAwait(true);
             }
         }
 

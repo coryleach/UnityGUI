@@ -16,11 +16,11 @@ namespace Gameframe.GUI.PanelSystem
      
      [SerializeField] private SwapEvent swapEvent = SwapEvent.Manual;
 
-     [Header("Button"), SerializeField] private Button button = null;
-     [SerializeField] private bool controlButtonInteractivity = false;
+     [Header("Button"), SerializeField] private Button button;
+     [SerializeField] private bool controlButtonInteractivity;
 
-     [Header("Image Colors"), SerializeField] private Image image = null;
-     [SerializeField] private bool controlImageTint = false;
+     [Header("Image Colors"), SerializeField] private Image image;
+     [SerializeField] private bool controlImageTint;
      [SerializeField] private Color activeColor = Color.white;
      [SerializeField] private Color disabledColor = Color.grey;
      

@@ -5,9 +5,12 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelAnimatorController : BasePanelAnimatorController
     {
-        public int animationLayer = 0;
-        public string showAnimation = "show";
-        public string hideAnimation = "hide";
+        [SerializeField]
+        private int animationLayer;
+        [SerializeField]
+        private string showAnimation = "show";
+        [SerializeField]
+        private string hideAnimation = "hide";
     
         public override async Task TransitionShowAsync()
         {
@@ -21,9 +24,9 @@ namespace Gameframe.GUI.PanelSystem
         
         private void OnValidate()
         {
-            if (animator == null)
+            if (base.animator == null)
             {
-                animator = GetComponent<Animator>();
+                base.animator = GetComponent<Animator>();
             }
         }
     }

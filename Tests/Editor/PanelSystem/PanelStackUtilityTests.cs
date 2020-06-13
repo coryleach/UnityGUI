@@ -14,10 +14,10 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             var showControllersList = new List<IPanelViewController>();
 
             var opaquePanelType = ScriptableObject.CreateInstance<PanelType>();
-            opaquePanelType.visibility = PanelType.Visibility.Opaque;
+            opaquePanelType.VisibilityType = PanelType.Visibility.Opaque;
 
             var transparentPanelType = ScriptableObject.CreateInstance<PanelType>();
-            transparentPanelType.visibility = PanelType.Visibility.Transparent;
+            transparentPanelType.VisibilityType = PanelType.Visibility.Transparent;
 
             PanelStackUtility.GetVisiblePanelViewControllers(fakeSystem,showControllersList);
             Assert.IsTrue(showControllersList.Count == 0);

@@ -6,7 +6,7 @@ namespace Gameframe.GUI.PanelSystem
     public abstract class BasePanelAnimatorController : MonoBehaviour, IPanelAnimator
     {
         [SerializeField]
-        protected Animator animator = null;
+        protected Animator animator;
 
         public abstract Task TransitionShowAsync();
         
@@ -20,11 +20,13 @@ namespace Gameframe.GUI.PanelSystem
                 await Task.Yield();
             }
 
-            if (animator != null)
+            if (!Application.isPlaying || animator == null)
             {
-                animator.Play(stateHash);
+                return;
             }
 
+            animator.Play(stateHash);
+            
             //Wait until we're in the target state
             while (Application.isPlaying && animator.GetCurrentAnimatorStateInfo(layer).shortNameHash != stateHash)
             {
@@ -35,6 +37,7 @@ namespace Gameframe.GUI.PanelSystem
             while (Application.isPlaying && normalizedTime < 1 && !Mathf.Approximately(normalizedTime, 1f))
             {
                 var info = animator.GetCurrentAnimatorStateInfo(0);
+                
                 if (normalizedTime <= info.normalizedTime)
                 {
                     normalizedTime = info.normalizedTime;

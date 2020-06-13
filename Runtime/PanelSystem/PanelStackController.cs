@@ -11,9 +11,9 @@ namespace Gameframe.GUI.PanelSystem
     public class PanelStackController : IPanelStackController
     {
         private List<IPanelViewController> activeControllers = new List<IPanelViewController>();
-        private readonly IUIEventManager eventManager = null;
-        private readonly IPanelStackSystem panelStackSystem = null;
-        private readonly IPanelViewContainer container = null;
+        private readonly IUIEventManager eventManager;
+        private readonly IPanelStackSystem panelStackSystem;
+        private readonly IPanelViewContainer container;
         
         public PanelStackController(IPanelStackSystem stackSystem, IPanelViewContainer viewContainer, IUIEventManager eventManager = null)
         {
@@ -52,7 +52,7 @@ namespace Gameframe.GUI.PanelSystem
                 }
 
                 //Load Views
-                await LoadViews(showControllers);
+                await LoadViews(showControllers).ConfigureAwait(true);
                 
                 //Sort Views so things overlay property
                 SortViews();
@@ -64,7 +64,7 @@ namespace Gameframe.GUI.PanelSystem
                 ListPool<IPanelViewController>.Release(activeControllers);
                 activeControllers = showControllers;
                 
-                await transitionTask;
+                await transitionTask.ConfigureAwait(true);
             }
             catch (Exception e)
             {

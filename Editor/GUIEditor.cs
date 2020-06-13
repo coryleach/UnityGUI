@@ -46,7 +46,6 @@ namespace Gameframe.GUI.Editor
                 AssetDatabase.AddObjectToAsset(newClip, controller);
                 Debug.Log("Added & Will Import: " + AssetDatabase.GetAssetPath(newClip));
                 AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(newClip));
-                //AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(oldClip));
             }
         }
         

@@ -2,20 +2,25 @@
 using System.Threading.Tasks;
 using Gameframe.GUI.Camera.UI;
 using Gameframe.GUI.PanelSystem;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Gameframe.GUI.TransitionSystem
 {
     public class SceneTransitionViewController : PanelViewControllerBehaviour, ITransitionPresenter
     {
-        public UIEventManager eventManager;
-        public SceneTransitionSystem sceneTransitionSystem;
+        [SerializeField]
+        private UIEventManager eventManager;
+        
+        [SerializeField]
+        private SceneTransitionSystem sceneTransitionSystem;
 
         [Serializable]
         public class ProgressEvent : UnityEvent<float> {}
 
-        public ProgressEvent progressEvent = new ProgressEvent();
-
+        private readonly ProgressEvent onProgressUpdate = new ProgressEvent();
+        public ProgressEvent OnProgressUpdate => onProgressUpdate;
+        
         private void OnEnable()
         {
             sceneTransitionSystem.AddPresenter(this);
@@ -39,7 +44,7 @@ namespace Gameframe.GUI.TransitionSystem
 
         public virtual void TransitionProgress(float progress)
         {
-            progressEvent.Invoke(progress);
+            onProgressUpdate.Invoke(progress);
         }
 
         public async Task FinishTransitionAsync()

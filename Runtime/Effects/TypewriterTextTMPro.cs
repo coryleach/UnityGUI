@@ -7,7 +7,7 @@ namespace Gameframe.GUI
     public class TypewriterTextTMPro : BaseTypewriterText
     {
         [SerializeField]
-        private TextMeshProUGUI text = null;
+        private TextMeshProUGUI text;
 
         public override int CharacterPerSecond
         {
@@ -31,8 +31,8 @@ namespace Gameframe.GUI
             text.text = currentMessage;
         }
 
-        private WaitForEndOfFrame waitEndOfFrame = new WaitForEndOfFrame();
-        private WaitForSeconds waitInterval = null;
+        private readonly WaitForEndOfFrame waitEndOfFrame = new WaitForEndOfFrame();
+        private WaitForSeconds waitInterval;
         
         protected override IEnumerator RunType()
         {

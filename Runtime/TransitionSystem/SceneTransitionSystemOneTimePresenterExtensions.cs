@@ -7,37 +7,37 @@ namespace Gameframe.GUI.TransitionSystem
     {
         public static async void LoadScene(this SceneTransitionSystem transitionSystem, string sceneName, ITransitionPresenter oneTimePresenter, LoadSceneMode mode = LoadSceneMode.Single)
         {
-            await LoadSceneAsync(transitionSystem, sceneName, oneTimePresenter, mode);
+            await LoadSceneAsync(transitionSystem, sceneName, oneTimePresenter, mode).ConfigureAwait(false);
         }
 
         public static async Task LoadSceneAsync(this SceneTransitionSystem transitionSystem, string sceneName, ITransitionPresenter oneTimePresenter, LoadSceneMode mode = LoadSceneMode.Single)
         {
             transitionSystem.AddPresenter(oneTimePresenter);
-            await transitionSystem.LoadSceneAsync(sceneName,mode);
+            await transitionSystem.LoadSceneAsync(sceneName,mode).ConfigureAwait(true);
             transitionSystem.RemovePresenter(oneTimePresenter);
         }
         
-        public static async void LoadScenes(this SceneTransitionSystem transitionSystem, string[] loadScenes, string[] unloadScenes, ITransitionPresenter oneTimePresenter)
+        public static async void LoadScenes(this SceneTransitionSystem transitionSystem, string[] scenesToLoad, string[] scenesToUnload, ITransitionPresenter oneTimePresenter)
         {
-            await LoadScenesAsync(transitionSystem, loadScenes, unloadScenes, oneTimePresenter);
+            await LoadScenesAsync(transitionSystem, scenesToLoad, scenesToUnload, oneTimePresenter).ConfigureAwait(false);
         }
         
-        public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] loadScenes, string[] unloadScenes, ITransitionPresenter oneTimePresenter)
+        public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] scenesToLoad, string[] scenesToUnload, ITransitionPresenter oneTimePresenter)
         {
             transitionSystem.AddPresenter(oneTimePresenter);
-            await transitionSystem.LoadSceneAsync(loadScenes, unloadScenes);
+            await transitionSystem.LoadScenesAsync(scenesToLoad, scenesToUnload).ConfigureAwait(true);
             transitionSystem.RemovePresenter(oneTimePresenter);
         }
 
-        public static async void LoadScenes(this SceneTransitionSystem transitionSystem, string[] loadScenes, ITransitionPresenter oneTimePresenter)
+        public static async void LoadScenes(this SceneTransitionSystem transitionSystem, string[] scenesToLoad, ITransitionPresenter oneTimePresenter)
         {
-            await LoadScenesAsync(transitionSystem, loadScenes, oneTimePresenter);
+            await LoadScenesAsync(transitionSystem, scenesToLoad, oneTimePresenter).ConfigureAwait(false);
         }
         
-        public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] loadScenes, ITransitionPresenter oneTimePresenter)
+        public static async Task LoadScenesAsync(this SceneTransitionSystem transitionSystem, string[] scenesToLoad, ITransitionPresenter oneTimePresenter)
         {
             transitionSystem.AddPresenter(oneTimePresenter);
-            await transitionSystem.LoadScenesAsync(loadScenes);
+            await transitionSystem.LoadScenesAsync(scenesToLoad).ConfigureAwait(true);
             transitionSystem.RemovePresenter(oneTimePresenter);
         }
     }

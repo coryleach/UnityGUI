@@ -7,16 +7,16 @@ namespace Gameframe.GUI.PanelSystem
     public class PanelSwapControllerBehaviour : MonoBehaviour, IPanelSwapController, IPanelViewContainer
     {
         [SerializeField] 
-        private UIEventManager eventManager = null;
+        private UIEventManager eventManager;
         
         [SerializeField] 
-        private PanelSwapSystem panelSwapSystem = null;
+        private PanelSwapSystem panelSwapSystem;
 
         public PanelSwapSystem System => panelSwapSystem;
         
-        private PanelSwapController baseController = null;
+        private PanelSwapController baseController;
 
-        public RectTransform ParentTransform => (RectTransform) transform;
+        public RectTransform ParentTransform => (RectTransform) this.transform;
         
         private PanelSwapController BaseController =>
             baseController ??

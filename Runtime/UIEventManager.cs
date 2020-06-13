@@ -53,8 +53,8 @@ namespace Gameframe.GUI.Camera.UI
     {
       eventSystem = GetComponent<EventSystem>();
       _current = this;
-      inputLock.onUnlocked.AddListener( this.OnUnlock );
-      inputLock.onLocked.AddListener( this.OnLock );
+      inputLock.OnUnlocked.AddListener( this.OnUnlock );
+      inputLock.OnLocked.AddListener( this.OnLock );
     }
 
     public void Lock()

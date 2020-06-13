@@ -13,7 +13,7 @@ namespace Gameframe.GUI.TransitionSystem
         private SingleSceneTransitionTask singleSceneTransitionTask = new SingleSceneTransitionTask();
         private MultiSceneTransitionTask multiSceneTransitionTask = new MultiSceneTransitionTask();
         
-        private bool isTransitioning = false;
+        private bool isTransitioning;
         public bool IsTransitioning => isTransitioning;
 
         public void AddPresenter(ITransitionPresenter presenter)
@@ -36,7 +36,7 @@ namespace Gameframe.GUI.TransitionSystem
 
         public async void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
         {
-            await LoadSceneAsync(sceneName, mode);
+            await LoadSceneAsync(sceneName, mode).ConfigureAwait(false);
         }
         
         public async Task LoadSceneAsync(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
@@ -46,8 +46,8 @@ namespace Gameframe.GUI.TransitionSystem
                 throw new InvalidOperationException("Cannot load scenes while scene transition is in progress");
             }
             
-            singleSceneTransitionTask.mode = mode;
-            singleSceneTransitionTask.sceneName = sceneName;
+            singleSceneTransitionTask.Mode = mode;
+            singleSceneTransitionTask.SceneName = sceneName;
             
             isTransitioning = true;
             transition.AddTransitionTask(singleSceneTransitionTask);
@@ -58,7 +58,7 @@ namespace Gameframe.GUI.TransitionSystem
 
         public async void LoadScene(string[] loadScenes, string[] unloadScenes)
         {
-            await LoadScenesAsync(loadScenes, unloadScenes);
+            await LoadScenesAsync(loadScenes, unloadScenes).ConfigureAwait(false);
         }
         
         [Obsolete("Use LoadScenesAsync method instead", false)]
@@ -82,17 +82,17 @@ namespace Gameframe.GUI.TransitionSystem
             }
             
             isTransitioning = true;
-            multiSceneTransitionTask.loadScenes = loadScenes;
-            multiSceneTransitionTask.unloadScenes = unloadScenes;
+            multiSceneTransitionTask.LoadScenes = loadScenes;
+            multiSceneTransitionTask.UnloadScenes = unloadScenes;
             transition.AddTransitionTask(multiSceneTransitionTask);
             await transition.ExecuteAsync();
             transition.RemoveTransitionTask(multiSceneTransitionTask);
             isTransitioning = false;
         }
 
-        public async void LoadScenes(string[] loadScenes)
+        public async void LoadScenes(string[] scenesToLoad)
         {
-            await LoadScenesAsync(loadScenes);
+            await LoadScenesAsync(scenesToLoad).ConfigureAwait(false);
         }
         
         public async Task LoadScenesAsync(string[] loadScenes)
@@ -103,8 +103,8 @@ namespace Gameframe.GUI.TransitionSystem
             }
             
             isTransitioning = true;
-            multiSceneTransitionTask.loadScenes = loadScenes;
-            multiSceneTransitionTask.unloadScenes = new string[0];
+            multiSceneTransitionTask.LoadScenes = loadScenes;
+            multiSceneTransitionTask.UnloadScenes = new string[0];
             transition.AddTransitionTask(multiSceneTransitionTask);
             await transition.ExecuteAsync();
             transition.RemoveTransitionTask(multiSceneTransitionTask);

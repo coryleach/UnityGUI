@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Gameframe.GUI
 {
     [RequireComponent(typeof(TextMeshEffectTMPro))]
-    public class ScaleInText : PlayableTextMeshEffect, ITextMeshVertexEffect
+    public class ScaleInText : VertexTextMeshEffect
     {
         [SerializeField]
         private Vector3 startScale = Vector3.zero;
@@ -13,22 +13,12 @@ namespace Gameframe.GUI
         [SerializeField]
         protected Vector3 endScale = Vector3.one;
 
-        protected override void AddToManager(TextMeshEffectTMPro effectManager)
+        public override void UpdateVertexEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            effectManager.AddVertexEffect(this);
-        }
-
-        protected override void RemoveFromManager(TextMeshEffectTMPro effectManager)
-        {
-            effectManager.RemoveVertexEffect(this);
-        }
-       
-        public void UpdateVertexEffect(TMP_CharacterInfo charInfo, ref EffectData data)
-        {
-            var t = Mathf.Clamp01(progress - data.index);
+            var t = Mathf.Clamp01(progress - data.Index);
             t = EaseFunctions.Ease(easeType, t);
             var delta = endScale - startScale;
-            data.localScale = startScale + delta * t; //Vector3.Lerp(startScale, endScale, t );
+            data.LocalScale = startScale + delta * t;
         }
     }
 }

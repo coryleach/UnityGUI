@@ -152,34 +152,34 @@ namespace Gameframe.GUI
             }
         }
 
-        private Vector3 GetPoint(UnityEngine.Camera camera, Vector3[] corners, Location location)
+        private static Vector3 GetPoint(UnityEngine.Camera cam, Vector3[] corners, Location location)
         {
             switch (location)
             {
                 case Location.BottomLeft:
-                    return RectTransformUtility.WorldToScreenPoint(camera, corners[0]);
+                    return RectTransformUtility.WorldToScreenPoint(cam, corners[0]);
                 case Location.MiddleLeft:
-                    return RectTransformUtility.WorldToScreenPoint(camera, (corners[0] + corners[1]) * 0.5f);
+                    return RectTransformUtility.WorldToScreenPoint(cam, (corners[0] + corners[1]) * 0.5f);
                 case Location.TopLeft:
-                    return RectTransformUtility.WorldToScreenPoint(camera, corners[1]);
+                    return RectTransformUtility.WorldToScreenPoint(cam, corners[1]);
                 case Location.BottomMiddle:
-                    return RectTransformUtility.WorldToScreenPoint(camera, (corners[0] + corners[3]) * 0.5f);
+                    return RectTransformUtility.WorldToScreenPoint(cam, (corners[0] + corners[3]) * 0.5f);
                 case Location.MiddleCenter:
-                    return RectTransformUtility.WorldToScreenPoint(camera, (corners[0] + corners[2]) * 0.5f);
+                    return RectTransformUtility.WorldToScreenPoint(cam, (corners[0] + corners[2]) * 0.5f);
                 case Location.TopMiddle:
-                    return RectTransformUtility.WorldToScreenPoint(camera, (corners[1] + corners[2]) * 0.5f);
+                    return RectTransformUtility.WorldToScreenPoint(cam, (corners[1] + corners[2]) * 0.5f);
                 case Location.BottomRight:
-                    return RectTransformUtility.WorldToScreenPoint(camera, corners[3]);
+                    return RectTransformUtility.WorldToScreenPoint(cam, corners[3]);
                 case Location.MiddleRight:
-                    return RectTransformUtility.WorldToScreenPoint(camera, (corners[3] + corners[2]) * 0.5f);
+                    return RectTransformUtility.WorldToScreenPoint(cam, (corners[3] + corners[2]) * 0.5f);
                 case Location.TopRight:
-                    return RectTransformUtility.WorldToScreenPoint(camera, corners[2]);
+                    return RectTransformUtility.WorldToScreenPoint(cam, corners[2]);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(location), location, null);
             }
         }
 
-        private Quaternion GetRotation(Location location)
+        private static Quaternion GetRotation(Location location)
         {
             switch (location)
             {
@@ -206,7 +206,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private bool IsTop(Location location)
+        private static bool IsTop(Location location)
         {
             switch (location)
             {
@@ -226,7 +226,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private bool IsBottom(Location location)
+        private static bool IsBottom(Location location)
         {
             switch (location)
             {
@@ -246,7 +246,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private bool IsLeft(Location location)
+        private static bool IsLeft(Location location)
         {
             switch (location)
             {
@@ -266,7 +266,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private bool IsRight(Location location)
+        private static bool IsRight(Location location)
         {
             switch (location)
             {
@@ -288,7 +288,6 @@ namespace Gameframe.GUI
 
         private Vector2 GetPoint(Location location)
         {
-            var pointerPoint = Vector2.zero;
             var corners = new Vector3[4];
             _target.GetWorldCorners(corners);
 
@@ -299,7 +298,7 @@ namespace Gameframe.GUI
             var screenPoint = GetPoint(worldCamera, corners, location);
 
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(_myRectTransform, screenPoint, worldCamera,
-                out pointerPoint))
+                out var pointerPoint))
             {
                 Debug.LogError("plane of the RectTransform was not hit");
                 return Vector2.zero;
@@ -308,7 +307,7 @@ namespace Gameframe.GUI
             return pointerPoint;
         }
 
-        private Location FlipHorizontal(Location location)
+        private static Location FlipHorizontal(Location location)
         {
             switch (location)
             {
@@ -329,7 +328,7 @@ namespace Gameframe.GUI
             }
         }
 
-        private Location FlipVertical(Location location)
+        private static Location FlipVertical(Location location)
         {
             switch (location)
             {

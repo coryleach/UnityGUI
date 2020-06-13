@@ -11,7 +11,7 @@ namespace Gameframe.GUI
         private TextMeshEffectTMPro effectManager;
         
         [SerializeField]
-        protected bool playOnEnable = false;
+        protected bool playOnEnable;
 
         [SerializeField] 
         protected Easing easeType = Easing.Linear;
@@ -28,9 +28,9 @@ namespace Gameframe.GUI
         protected UnityEvent onComplete = new UnityEvent();
         public UnityEvent OnComplete => onComplete;
         
-        protected float progress = 0;
+        protected float progress;
         
-        private Coroutine coroutine = null;
+        private Coroutine coroutine;
 
         public bool IsPlaying => coroutine != null;
         

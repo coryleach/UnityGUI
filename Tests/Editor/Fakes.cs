@@ -10,13 +10,13 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
     {
         public PanelViewControllerState State { get; private set; } = PanelViewControllerState.Appearing;
         
-        public PanelType PanelType { get; set; } = null;
+        public PanelType PanelType { get; set; }
 
-        public PanelViewBase View { get; private set; } = null;
+        public PanelViewBase View { get; private set; }
 
-        public IPanelViewContainer ParentViewContainer { get; private set; } = null;
+        public IPanelViewContainer ParentViewContainer { get; private set; }
 
-        private bool loaded = false;
+        private bool loaded;
 
         public bool IsViewLoaded => loaded;
             
@@ -51,7 +51,7 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
 
     public class FakePanelStackController : IPanelStackController
     {
-        public bool transitioned = false;
+        public bool transitioned;
         public Task TransitionAsync()
         {
             transitioned = true;
@@ -108,8 +108,8 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
 
     public class FakeUIEventManager : IUIEventManager
     {
-        public int LockCount { get; private set; } = 0;
-        public int UnlockCount { get; private set; } = 0;
+        public int LockCount { get; private set; }
+        public int UnlockCount { get; private set; }
         
         public void Lock()
         {

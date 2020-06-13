@@ -6,8 +6,8 @@ namespace Gameframe.GUI.TransitionSystem
 {
         public class Transition
         {
-            private List<ITransitionTask> transitionTasks = new List<ITransitionTask>();
-            private List<ITransitionPresenter> transitionPresenters = new List<ITransitionPresenter>();
+            private readonly List<ITransitionTask> transitionTasks = new List<ITransitionTask>();
+            private readonly List<ITransitionPresenter> transitionPresenters = new List<ITransitionPresenter>();
     
             public void AddPresenter(ITransitionPresenter presenter)
             {
@@ -35,7 +35,7 @@ namespace Gameframe.GUI.TransitionSystem
             /// </summary>
             public async void Execute()
             {
-                await ExecuteAsync();
+                await ExecuteAsync().ConfigureAwait(false);
             }
             
             /// <summary>

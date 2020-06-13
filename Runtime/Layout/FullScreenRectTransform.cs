@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Gameframe.GUI.Extensions;
 using UnityEngine.UI;
 
@@ -10,10 +11,9 @@ namespace Gameframe.GUI.Layout
   /// </summary>
   public class FullScreenRectTransform : LayoutGroup
   {
+    private readonly float[] offsets = new float[4];
 
-    float[] offsets = new float[4];
-
-    void SumOffsets(float[] sumOffsets, RectTransform currentRectTransform)
+    private static void SumOffsets(IList<float> offsets, RectTransform currentRectTransform)
     {
       if (currentRectTransform == null)
       {
@@ -26,21 +26,22 @@ namespace Gameframe.GUI.Layout
         return;
       }
 
-      sumOffsets[(int)RectTransform.Edge.Left] += currentRectTransform.GetInsetFromParentLeftEdge(parent);
-      sumOffsets[(int)RectTransform.Edge.Right] += currentRectTransform.GetInsetFromParentRightEdge(parent);
-      sumOffsets[(int)RectTransform.Edge.Top] += currentRectTransform.GetInsetFromParentTopEdge(parent);
-      sumOffsets[(int)RectTransform.Edge.Bottom] += currentRectTransform.GetInsetFromParentBottomEdge(parent);
+      offsets[(int)RectTransform.Edge.Left] += currentRectTransform.GetInsetFromParentLeftEdge(parent);
+      offsets[(int)RectTransform.Edge.Right] += currentRectTransform.GetInsetFromParentRightEdge(parent);
+      offsets[(int)RectTransform.Edge.Top] += currentRectTransform.GetInsetFromParentTopEdge(parent);
+      offsets[(int)RectTransform.Edge.Bottom] += currentRectTransform.GetInsetFromParentBottomEdge(parent);
 
-      SumOffsets(sumOffsets, parent);
+      SumOffsets(offsets, parent);
     }
 
     public override void CalculateLayoutInputHorizontal()
     {
       //Fit Rect to parent
-      rectTransform.anchorMin = Vector2.zero;
-      rectTransform.anchorMax = Vector2.one;
-      rectTransform.anchoredPosition = Vector2.zero;
-      rectTransform.sizeDelta = Vector2.zero;
+      var myRectTransform = rectTransform;
+      myRectTransform.anchorMin = Vector2.zero;
+      myRectTransform.anchorMax = Vector2.one;
+      myRectTransform.anchoredPosition = Vector2.zero;
+      myRectTransform.sizeDelta = Vector2.zero;
 
       //Add Padding
       offsets[(int)RectTransform.Edge.Left] = -padding.left;
@@ -57,6 +58,7 @@ namespace Gameframe.GUI.Layout
 
     public override void CalculateLayoutInputVertical()
     {
+      //Required implementation of abstract method but we don't need to do anything here
     }
 
     public override void SetLayoutHorizontal()

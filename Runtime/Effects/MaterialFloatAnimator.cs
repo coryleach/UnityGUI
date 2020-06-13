@@ -8,7 +8,7 @@ namespace Gameframe.GUI
         [SerializeField]
         private Material material;
         
-        [SerializeField, Range(0.0f, 10)] private float startValue = 0f;
+        [SerializeField, Range(0.0f, 10)] private float startValue;
         [SerializeField, Range(0.0f, 10)] private float endValue = 5.0f;
         [SerializeField, Range(0.1f, 50)] private float animationSpeed = 25;
     

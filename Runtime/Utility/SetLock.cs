@@ -11,12 +11,19 @@ namespace Gameframe.GUI.Utility
   /// </summary>
   public class SetLock : MonoBehaviour
   {
+    
+    private readonly HashSet<object> _set = new HashSet<object>();
 
-    HashSet<object> set = new HashSet<object>();
+    [SerializeField]
+    private UnityEvent onUnlocked = new UnityEvent();
 
-    public UnityEvent onUnlocked = new UnityEvent();
-    public UnityEvent onLocked = new UnityEvent();
+    public UnityEvent OnUnlocked => onUnlocked;
+    
+    [SerializeField]
+    private UnityEvent onLocked = new UnityEvent();
 
+    public UnityEvent OnLocked => onLocked;
+    
     /// <summary>
     /// Locks the lock
     /// </summary>
@@ -25,7 +32,7 @@ namespace Gameframe.GUI.Utility
     {
       bool wasUnlocked = IsUnlocked;
     
-      if ( set.Add(requester) )
+      if ( _set.Add(requester) )
       {
         if ( wasUnlocked && IsLocked )
         {
@@ -42,7 +49,7 @@ namespace Gameframe.GUI.Utility
     /// <param name="requester">The object that originally requested the lock</param>
     public bool Unlock(object requester)
     {
-      if ( set.Remove(requester) )
+      if ( _set.Remove(requester) )
       {
         if ( IsUnlocked )
         {
@@ -55,12 +62,12 @@ namespace Gameframe.GUI.Utility
 
     public bool IsUnlocked
     {
-      get { return set.Count == 0; }
+      get { return _set.Count == 0; }
     }
 
     public bool IsLocked
     {
-      get { return set.Count != 0; }
+      get { return _set.Count != 0; }
     }
 
   }

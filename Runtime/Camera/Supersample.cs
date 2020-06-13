@@ -9,23 +9,25 @@ namespace Gameframe.GUI
   public class Supersample : MonoBehaviour
   {
     
-    RenderTexture supersampleRenderTexture;
-    public UnityEngine.Camera cam;
+    private RenderTexture _supersampleRenderTexture;
+    
+    [SerializeField]
+    private UnityEngine.Camera cam;
 
-    const float factor = 1.5f;
+    private const float Factor = 1.5f;
 
-    void Start()
+    private void Start()
     {
-      supersampleRenderTexture = new RenderTexture( Mathf.RoundToInt( Screen.width * factor ), Mathf.RoundToInt( Screen.height * factor ), 24, RenderTextureFormat.ARGB32 );
+      _supersampleRenderTexture = new RenderTexture( Mathf.RoundToInt( Screen.width * Factor ), Mathf.RoundToInt( Screen.height * Factor ), 24, RenderTextureFormat.ARGB32 );
     }
 
-    void OnRenderImage( RenderTexture source, RenderTexture destination )
+    private void OnRenderImage( RenderTexture source, RenderTexture destination )
     {
-      cam.targetTexture = supersampleRenderTexture;
+      cam.targetTexture = _supersampleRenderTexture;
       cam.Render();
       cam.targetTexture = null;
 
-      Graphics.Blit( supersampleRenderTexture, destination );
+      Graphics.Blit( _supersampleRenderTexture, destination );
     }
 
   }

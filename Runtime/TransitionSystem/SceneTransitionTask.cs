@@ -8,36 +8,36 @@ namespace Gameframe.GUI.TransitionSystem
 {
     public class SingleSceneTransitionTask : ITransitionTask
     {
-        public string sceneName = string.Empty;
+        public string SceneName { get; set; } = string.Empty;
         public float Progress { get; private set; }
-        public LoadSceneMode mode = LoadSceneMode.Single;
-        
+        public LoadSceneMode Mode { get; set; }  = LoadSceneMode.Single;
+
         public async Task ExecuteAsync()
         {
             var loadTasks = ListPool<AsyncOperation>.Get();
 
             //Start Loads
-            var async = SceneManager.LoadSceneAsync(sceneName, mode);
+            var loadOperation = SceneManager.LoadSceneAsync(SceneName, Mode);
             
-            if (async == null)
+            if (loadOperation == null)
             {
                 return;
             }
             
             //Allow them all to load till 90% complete
-            async.allowSceneActivation = false;
+            loadOperation.allowSceneActivation = false;
 
-            while (async.progress < 0.9f)
+            while (loadOperation.progress < 0.9f)
             {
-                Progress = async.progress;
+                Progress = loadOperation.progress;
                 await Task.Yield();
             }
 
-            async.allowSceneActivation = true;
+            loadOperation.allowSceneActivation = true;
             
-            while (!async.isDone)
+            while (!loadOperation.isDone)
             {
-                Progress = async.progress;
+                Progress = loadOperation.progress;
                 await Task.Yield();
             }
             
@@ -53,11 +53,11 @@ namespace Gameframe.GUI.TransitionSystem
     
     public class MultiSceneTransitionTask : ITransitionTask
     {
-        public string[] unloadScenes;
-        public string[] loadScenes;
+        public string[] UnloadScenes { get; set; }
+        public string[] LoadScenes { get; set; }
         public float Progress { get; private set; }
-        public LoadSceneMode mode = LoadSceneMode.Additive;
-        
+        public LoadSceneMode Mode { get; set; } = LoadSceneMode.Additive;
+
         public async Task ExecuteAsync()
         {
             var unloadTasks = ListPool<AsyncOperation>.Get();
@@ -65,16 +65,16 @@ namespace Gameframe.GUI.TransitionSystem
             
             Progress = 0;
             
-            int totalScenes = unloadScenes.Length + loadScenes.Length;
+            int totalScenes = UnloadScenes.Length + LoadScenes.Length;
             
             //Start Unloads
-            for (var index = 0; index < unloadScenes.Length; index++)
+            for (var index = 0; index < UnloadScenes.Length; index++)
             {
-                var sceneName = unloadScenes[index];
-                var async = SceneManager.UnloadSceneAsync(sceneName);
-                if (async != null)
+                var sceneName = UnloadScenes[index];
+                var unloadOperation = SceneManager.UnloadSceneAsync(sceneName);
+                if (unloadOperation != null)
                 {
-                    unloadTasks.Add(async);
+                    unloadTasks.Add(unloadOperation);
                 }
                 else
                 {
@@ -83,21 +83,20 @@ namespace Gameframe.GUI.TransitionSystem
             }
 
             //Start Loads
-            for (var index = 0; index < loadScenes.Length; index++)
+            for (var index = 0; index < LoadScenes.Length; index++)
             {
-                var sceneName = loadScenes[index];
-                var async = SceneManager.LoadSceneAsync(sceneName, mode);
-                if (async != null)
+                var sceneName = LoadScenes[index];
+                var asyncOperation = SceneManager.LoadSceneAsync(sceneName, Mode);
+                if (asyncOperation != null)
                 {
                     //Allow them all to load till 90% complete
-                    async.allowSceneActivation = false;
-                    loadTasks.Add(async);
+                    asyncOperation.allowSceneActivation = false;
+                    loadTasks.Add(asyncOperation);
                 }
                 else
                 {
                     Debug.LogError($"Failed to load scene {sceneName}. LoadSceneAsync returned null.");
                 }
-                
             }
 
             var waiting = false;

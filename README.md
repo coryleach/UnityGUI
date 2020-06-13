@@ -1,10 +1,13 @@
 <h1 align="center">Gameframe.GUI 👋</h1>
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.1.3-blue.svg?cacheSeconds=2592000" />
-  <a href="https://twitter.com/Cory Leach">
-    <img alt="Twitter: coryleach" src="https://img.shields.io/twitter/follow/coryleach.svg?style=social" target="_blank" />
-  </a>
-</p>
+
+<!-- BADGE-START -->
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/325ed211df6d42b980b7cdbc9afe5eb7)](https://www.codacy.com/manual/coryleach/UnityGUI?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coryleach/UnityGUI&amp;utm_campaign=Badge_Grade)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/coryleach/UnityGui?include_prereleases)
+[![openupm](https://img.shields.io/npm/v/com.gameframe.gui?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.gameframe.gui/)
+[![license](https://img.shields.io/github/license/coryleach/UnityGui)](https://github.com/coryleach/UnityGui/blob/master/LICENSE)
+
+[![twitter](https://img.shields.io/twitter/follow/coryleach.svg?style=social)](https://twitter.com/coryleach)
+<!-- BADGE-END -->
 
 This is a library of GUI helpers for UGUI    
 Includes a panel system that implements a navigation stack.    
@@ -16,7 +19,7 @@ Includes a shader for blurring the background of UI panels.
 #### Using UnityPackageManager (for Unity 2019.3 or later)
 Open the package manager window (menu: Window > Package Manager)<br/>
 Select "Add package from git URL...", fill in the pop-up with the following link:<br/>
-https://github.com/coryleach/UnityGUI.git#1.1.3<br/>
+https://github.com/coryleach/UnityGUI.git#2.0.0<br/>
 
 #### Using UnityPackageManager (for Unity 2019.1 or later)
 
@@ -24,14 +27,14 @@ Find the manifest.json file in the Packages folder of your project and edit it t
 ```js
 {
   "dependencies": {
-    "com.gameframe.gui": "https://github.com/coryleach/UnityGUI.git#1.1.3",
+    "com.gameframe.gui": "https://github.com/coryleach/UnityGUI.git#2.0.0",
     ...
   },
 }
 ```
 
 <!-- DOC-START -->
-<!-- 
+<!--
 Changes between 'DOC START' and 'DOC END' will not be modified by readme update scripts
 -->
 

@@ -19,9 +19,9 @@ namespace Gameframe.GUI
     }
     
     [SerializeField]
-    protected bool playOnEnable = false;
+    protected bool playOnEnable;
 
-    protected Coroutine typeCoroutine = null;
+    protected Coroutine typeCoroutine;
     protected string currentMessage = string.Empty;
 
     public bool IsPlaying => typeCoroutine != null;
@@ -84,7 +84,7 @@ namespace Gameframe.GUI
   public class TypewriterText : BaseTypewriterText
   {
     [SerializeField]
-    private Text text = null;
+    private Text text;
 
     [ContextMenu("Play")]
     public override void Play()

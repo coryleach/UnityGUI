@@ -8,9 +8,9 @@ namespace Gameframe.GUI
   {
     
     [SerializeField]
-    private NotificationMessageText prefab = null;
+    private NotificationMessageText prefab;
   
-    private Pool pool = null;
+    private Pool pool;
     private readonly List<NotificationMessageText> activeTexts = new List<NotificationMessageText>();
   
     private void Start()

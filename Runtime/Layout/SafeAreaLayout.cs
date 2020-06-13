@@ -4,10 +4,10 @@ namespace Gameframe.GUI.Layout
 {
     public class SafeAreaLayout : MonoBehaviour
     {
-        private RectTransform _safeAreaRect = null;
+        private RectTransform _safeAreaRect;
 
         [SerializeField]
-        private Canvas _canvas = null;
+        private Canvas _canvas;
 
 #if UNITY_EDITOR
         private static bool debug = false;

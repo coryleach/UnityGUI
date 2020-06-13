@@ -9,7 +9,7 @@ namespace Gameframe.GUI
     private bool allowOverwrite = true;
 
     [SerializeField]
-    private bool throwExceptions = false;
+    private bool throwExceptions;
 
     private readonly Dictionary<TKey, TValue> _items = new Dictionary<TKey, TValue>();
 
