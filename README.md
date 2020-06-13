@@ -1,7 +1,7 @@
 <h1 align="center">Gameframe.GUI 👋</h1>
 
 <!-- BADGE-START -->
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d2749fdbc70f422a9d1efccb56d48bff)](https://www.codacy.com/manual/coryleach/UnityGui?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coryleach/UnityGui&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/325ed211df6d42b980b7cdbc9afe5eb7)](https://www.codacy.com/manual/coryleach/UnityGUI?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coryleach/UnityGUI&amp;utm_campaign=Badge_Grade)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/coryleach/UnityGui?include_prereleases)
 [![license](https://img.shields.io/github/license/coryleach/UnityAsync)](https://github.com/coryleach/UnityAsync/blob/master/LICENSE)
 
