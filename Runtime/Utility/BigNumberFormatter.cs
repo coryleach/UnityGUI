@@ -18,19 +18,19 @@ namespace Gameframe.GUI.Utility
     {
       if (arg is float)
       {
-        return InternalFormat(formatText, (double)arg, formatProvider);
+        return InternalFormat((double)arg);
       }
       else if (arg is double)
       {
-        return InternalFormat(formatText, (double)arg, formatProvider);
+        return InternalFormat((double)arg);
       }
       else if (arg is long)
       {
-        return InternalFormat(formatText, (double)arg, formatProvider);
+        return InternalFormat((double)arg);
       }
       else if (arg is int)
       {
-        return InternalFormat(formatText, (double)arg, formatProvider);
+        return InternalFormat((double)arg);
       }
       else
       {
@@ -38,7 +38,7 @@ namespace Gameframe.GUI.Utility
       }
     }
 
-    private static string InternalFormat(string format, double arg, IFormatProvider formatProvider)
+    private static string InternalFormat(double arg)
     {
 
       int significantDigits = (int)(Math.Log10(arg) + 1);
