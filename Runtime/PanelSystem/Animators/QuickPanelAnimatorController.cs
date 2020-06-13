@@ -21,7 +21,7 @@ namespace Gameframe.GUI.PanelSystem
         [SerializeField]
         private QuickAnimation animationType = QuickAnimation.QuickFadeCanvasGroup;
         
-        private int animationLayer = 0;
+        private readonly int animationLayer = 0;
         
         private readonly int showAnimation = Animator.StringToHash("show");
         private readonly int hideAnimation = Animator.StringToHash("hide");
