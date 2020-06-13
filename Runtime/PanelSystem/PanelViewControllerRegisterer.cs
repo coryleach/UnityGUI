@@ -1,14 +1,13 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem 
 {
     public class PanelViewControllerRegisterer : MonoBehaviour
     {
         [SerializeField, Help("This component registers a panel controller with a panel controller provider. The panel provider is used to map PanelType to PanelViewController.")] 
-        private PanelViewControllerProvider provider = null;
+        private PanelViewControllerProvider provider;
 
-        private IPanelViewController controller = null;
+        private IPanelViewController controller;
 
         [SerializeField]
         private RegisterEvent regsiterOnEvent = RegisterEvent.Start; 
