@@ -16,7 +16,7 @@ namespace Gameframe.GUI.PanelSystem
         
         private PanelSwapController baseController;
 
-        public RectTransform ParentTransform => (RectTransform) transform;
+        public RectTransform ParentTransform => (RectTransform) this.transform;
         
         private PanelSwapController BaseController =>
             baseController ??

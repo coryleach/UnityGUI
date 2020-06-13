@@ -19,9 +19,9 @@ namespace Gameframe.GUI
 
         private void Refresh()
         {
-            var canvasRenderer = GetComponent<CanvasRenderer>();
-            var meshRenderer = GetComponent<MeshRenderer>();
-            var meshFilter = GetComponent<MeshFilter>();
+            var canvasRenderer = this.GetComponent<CanvasRenderer>();
+            var meshRenderer = this.GetComponent<MeshRenderer>();
+            var meshFilter = this.GetComponent<MeshFilter>();
 
             if (canvasRenderer == null || meshRenderer == null || meshFilter == null)
             {

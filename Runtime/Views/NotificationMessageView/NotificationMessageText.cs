@@ -33,7 +33,7 @@ namespace Gameframe.GUI
     
     public void Message(string messageText)
     {
-      Message(messageText, Color.white);
+      this.Message(messageText, Color.white);
     }
     
     public void Message(string messageText, Color color)
