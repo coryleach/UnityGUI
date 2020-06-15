@@ -1,0 +1,23 @@
+language: objective-c
+os: osx
+osx_image: xcode11.2
+branches:
+  only:
+    - master
+cache:
+  timeout: 86400
+  directories:
+    - $HOME/unity_download_cache/ #Cache unity installer files
+before_install:
+  - bash <(curl -fsSL https://raw.githubusercontent.com/coryleach/UnityTravisCI/master/bin/before-install.sh)
+install:
+  - ./install.sh
+  - source ./find-unity.sh #source this because it exports required env vars
+before_script:
+  - ./get-license.sh
+  - source ./setup-project.sh #source this because it exports project path
+script:
+  - ./run-tests.sh
+after_script:
+  - ./return-license.sh
+  - ./clean-project.sh
