@@ -8,6 +8,7 @@ cache:
   timeout: 86400
   directories:
     - $HOME/unity_download_cache/ #Cache unity installer files
+    - $HOME/project_cache/ #Cache for created unity projects
 before_install:
   - bash <(curl -fsSL https://raw.githubusercontent.com/coryleach/UnityTravisCI/master/bin/before-install.sh)
 install:
@@ -18,6 +19,10 @@ before_script:
   - source ./setup-project.sh #source this because it exports project path
 script:
   - ./run-tests.sh
-after_script:
+after_success:
   - ./return-license.sh
   - ./clean-project.sh
+after_failure:
+  - ./return-license.sh
+  - ./clean-project.sh
+
