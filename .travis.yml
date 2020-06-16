@@ -18,7 +18,8 @@ before_script:
   - ./get-license.sh
 script:
   - source ./setup-project.sh #source this because it exports project path
-  - ./run-tests.sh
+  - ./run-tests.sh editmode
+  - ./run-tests.sh playmode
 after_success:
   - ./return-license.sh
   - ./clean-project.sh

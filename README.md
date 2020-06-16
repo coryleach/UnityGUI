@@ -4,6 +4,7 @@
 <h1 align="center">Gameframe.GUI 👋</h1>
 
 <!-- BADGE-START -->
+[![Build Status](https://travis-ci.org/coryleach/UnityGUI.svg?branch=master)](https://travis-ci.org/coryleach/UnityGUI)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/325ed211df6d42b980b7cdbc9afe5eb7)](https://www.codacy.com/manual/coryleach/UnityGUI?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=coryleach/UnityGUI&amp;utm_campaign=Badge_Grade)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/coryleach/UnityGui?include_prereleases)
 [![openupm](https://img.shields.io/npm/v/com.gameframe.gui?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.gameframe.gui/)
