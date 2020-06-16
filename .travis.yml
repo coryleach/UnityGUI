@@ -12,7 +12,6 @@ cache:
 before_install:
   - bash <(curl -fsSL https://raw.githubusercontent.com/coryleach/UnityTravisCI/master/bin/before-install.sh)
 install:
-  - ./clean-project.sh
   - ./install.sh
   - source ./find-unity.sh #source this because it exports required env vars
 before_script:
