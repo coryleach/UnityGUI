@@ -24,7 +24,7 @@ namespace Gameframe.GUI.PanelSystem
     
         public override async Task ShowAsync(CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested)
+            if (!Application.isPlaying || cancellationToken.IsCancellationRequested)
             {
                 return;
             }
@@ -37,7 +37,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public override async Task HideAsync(CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested || !gameObject.activeSelf)
+            if (!Application.isPlaying || cancellationToken.IsCancellationRequested || !gameObject.activeSelf)
             {
                 return;
             }
