@@ -44,7 +44,7 @@ Changes between 'DOC START' and 'DOC END' will not be modified by readme update 
 
 ## Usage
 
-After importing via the PackageManager import the Demo unity asset package from the demo folder.
+After importing this package via the PackageManager import the Demo/Demo.unitypackage file from the Assets->Import Package option in the menu.
 
 ### PanelView
 PanelView which provides Show & Hide behavior which can be instant or async and awaitable.
