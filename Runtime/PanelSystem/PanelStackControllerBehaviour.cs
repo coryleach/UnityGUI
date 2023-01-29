@@ -19,9 +19,9 @@ namespace Gameframe.GUI.PanelSystem
         private UIEventManager eventManager;
         
         [SerializeField] 
-        private PanelStackSystem panelStackSystem;
+        private ScriptablePanelStackSystem panelStackSystem;
 
-        public PanelStackSystem System => panelStackSystem;
+        public ScriptablePanelStackSystem System => panelStackSystem;
         
         public RectTransform ParentTransform => (RectTransform)transform;
 

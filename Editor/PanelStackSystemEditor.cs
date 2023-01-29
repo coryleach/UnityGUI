@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
 {
-  [CustomEditor(typeof(PanelStackSystem))]
+  [CustomEditor(typeof(ScriptablePanelStackSystem))]
   public class PanelStackSystemEditor : UnityEditor.Editor
   {
     public override bool RequiresConstantRepaint()
@@ -18,7 +18,7 @@ namespace Gameframe.GUI.PanelSystem
       EditorGUILayout.BeginVertical("box");
       EditorGUILayout.LabelField("Current Stack");
       
-      var stack = (PanelStackSystem) target;
+      var stack = (ScriptablePanelStackSystem) target;
       for (int i = stack.Count-1; i >= 0; i--)
       {
         EditorGUILayout.BeginVertical("box");

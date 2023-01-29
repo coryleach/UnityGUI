@@ -7,7 +7,7 @@ namespace Gameframe.GUI.PanelSystem
     public class OkCancelPanelPusher : MonoBehaviour
     {
         [SerializeField] private PanelType panelType;
-        [SerializeField] private PanelStackSystem panelStackSystem;
+        [SerializeField] private ScriptablePanelStackSystem panelStackSystem;
         
         [FormerlySerializedAs("OnConfirm"), SerializeField] 
         private UnityEvent onConfirm = new UnityEvent();

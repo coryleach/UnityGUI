@@ -9,9 +9,9 @@ namespace Gameframe.GUI.PanelSystem
     /// </summary>
     public class PanelStackPopTransition : ITransitionPresenter
     {
-        private readonly PanelStackSystem _stack;
+        private readonly ScriptablePanelStackSystem _stack;
 
-        public PanelStackPopTransition(PanelStackSystem stack)
+        public PanelStackPopTransition(ScriptablePanelStackSystem stack)
         {
             _stack = stack;
         }

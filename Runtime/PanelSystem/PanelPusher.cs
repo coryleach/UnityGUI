@@ -6,18 +6,18 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelPusher : MonoBehaviour
     {
-        [SerializeField] private PanelStackSystem stack;
-        
+        [SerializeField] private ScriptablePanelStackSystem stack;
+
         [SerializeField] private PanelViewControllerProvider provider;
 
         [SerializeField] private PanelType panelType;
 
-        [FormerlySerializedAs("pushEvent")] 
+        [FormerlySerializedAs("pushEvent")]
         [SerializeField] private PushEvent pushOnEvent = PushEvent.Manual;
 
         [SerializeField]
         private bool clearBeforePush;
-        
+
         public enum PushEvent
         {
             Manual,
@@ -62,7 +62,7 @@ namespace Gameframe.GUI.PanelSystem
                 ClearAndPush();
                 return;
             }
-            
+
             IPanelViewController controller;
 
             if (provider != null)
@@ -71,12 +71,12 @@ namespace Gameframe.GUI.PanelSystem
             }
             else
             {
-                controller = new PanelViewController(panelType);    
+                controller = new PanelViewController(panelType);
             }
 
             stack.Push(controller);
         }
-        
+
         public void ClearAndPush()
         {
             IPanelViewController controller;
@@ -87,12 +87,11 @@ namespace Gameframe.GUI.PanelSystem
             }
             else
             {
-                controller = new PanelViewController(panelType);    
+                controller = new PanelViewController(panelType);
             }
 
             stack.ClearAndPush(controller);
         }
-        
-    } 
-}
 
+    }
+}
