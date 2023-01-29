@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Gameframe.GUI.PanelSystem
 {
-    [CreateAssetMenu(menuName = "Gameframe/PanelSystem/PanelSwapSystem")]
-    public class PanelSwapSystem : ScriptableObject, IPanelSwapSystem
+    public class PanelSwapSystem : IPanelSwapSystem
     {
         private readonly List<IPanelSwapController> _controllers = new List<IPanelSwapController>();
-        
+
         private IPanelViewController _currentViewController;
         public IPanelViewController CurrentViewController => _currentViewController;
 
@@ -49,4 +47,3 @@ namespace Gameframe.GUI.PanelSystem
         }
     }
 }
-

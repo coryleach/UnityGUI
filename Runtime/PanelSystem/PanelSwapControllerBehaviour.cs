@@ -10,9 +10,9 @@ namespace Gameframe.GUI.PanelSystem
         private UIEventManager eventManager;
         
         [SerializeField] 
-        private PanelSwapSystem panelSwapSystem;
+        private ScriptablePanelSwapSystem panelSwapSystem;
 
-        public PanelSwapSystem System => panelSwapSystem;
+        public ScriptablePanelSwapSystem System => panelSwapSystem;
         
         private PanelSwapController baseController;
 

@@ -5,7 +5,7 @@ namespace Gameframe.GUI.PanelSystem
 {
    public class PanelSwapper : MonoBehaviour
    {
-     [SerializeField] private PanelSwapSystem swapSystem;
+     [SerializeField] private ScriptablePanelSwapSystem swapSystem;
 
      [SerializeField, Help("If controller is null PanelSwapper will attempt to get the controller from the provider using PanelType")] 
      private PanelViewControllerBehaviour controller;
