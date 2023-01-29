@@ -14,13 +14,6 @@ namespace Gameframe.GUI.PanelSystem
         private readonly UnityEvent onSwap = new UnityEvent();
         public UnityEvent OnSwap => onSwap;
 
-        private void OnEnable()
-        {
-            //Clearing listeners because ScriptableObject will hold onto old subscribers
-            //when running in editor
-            onSwap.RemoveAllListeners();
-        }
-
         public void AddController(IPanelSwapController controller)
         {
             _controllers.Add(controller);
