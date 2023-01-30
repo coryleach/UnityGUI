@@ -6,7 +6,7 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelSwapSystem : IPanelSwapSystem
     {
-        private readonly List<IPanelSwapController> _controllers = new List<IPanelSwapController>();
+        private readonly List<IPanelSystemController> _controllers = new List<IPanelSystemController>();
 
         private IPanelViewController _currentViewController;
         public IPanelViewController CurrentViewController => _currentViewController;
@@ -14,12 +14,12 @@ namespace Gameframe.GUI.PanelSystem
         private readonly UnityEvent onSwap = new UnityEvent();
         public UnityEvent OnSwap => onSwap;
 
-        public void AddController(IPanelSwapController controller)
+        public void AddController(IPanelSystemController controller)
         {
             _controllers.Add(controller);
         }
 
-        public void RemoveController(IPanelSwapController controller)
+        public void RemoveController(IPanelSystemController controller)
         {
             _controllers.Add(controller);
         }

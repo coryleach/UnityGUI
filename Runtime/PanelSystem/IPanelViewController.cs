@@ -1,13 +1,7 @@
 ﻿using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
 {
-    public interface IPanelViewContainer
-    {
-        RectTransform ParentTransform { get; }
-    }
-    
     public interface IPanelViewController
     {
         PanelViewControllerState State { get; }

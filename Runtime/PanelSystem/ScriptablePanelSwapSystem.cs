@@ -20,9 +20,9 @@ namespace Gameframe.GUI.PanelSystem
 
         public IPanelViewController CurrentViewController => _system.CurrentViewController;
 
-        public void AddController(IPanelSwapController controller) => _system.AddController(controller);
+        public void AddController(IPanelSystemController controller) => _system.AddController(controller);
 
-        public void RemoveController(IPanelSwapController controller) => _system.RemoveController(controller);
+        public void RemoveController(IPanelSystemController controller) => _system.RemoveController(controller);
 
         public void Show(IPanelViewController controller) => _system.Show(controller);
 

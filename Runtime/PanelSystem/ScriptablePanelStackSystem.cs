@@ -12,7 +12,7 @@ namespace Gameframe.GUI.PanelSystem
     [CreateAssetMenu(menuName = "Gameframe/PanelSystem/PanelStackSystem")]
     public class ScriptablePanelStackSystem : ScriptableObject, IPanelStackSystem
     {
-        
+
         private PanelStackSystem _system = new PanelStackSystem();
 
         /// <summary>
@@ -44,13 +44,13 @@ namespace Gameframe.GUI.PanelSystem
         /// Add a panel stack controller to internal list of event subscribers
         /// </summary>
         /// <param name="controller">Controller to be added</param>
-        public void AddController(IPanelStackController controller) => _system.AddController(controller);
+        public void AddController(IPanelSystemController controller) => _system.AddController(controller);
 
         /// <summary>
         /// Remove a panel stack Controller from list of stack event subscribers
         /// </summary>
         /// <param name="controller">Controller to be removed</param>
-        public void RemoveController(IPanelStackController controller)
+        public void RemoveController(IPanelSystemController controller)
         {
             _system.RemoveController(controller);
         }

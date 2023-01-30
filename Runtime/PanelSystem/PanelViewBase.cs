@@ -6,6 +6,8 @@ namespace Gameframe.GUI.PanelSystem
 {
     public abstract class PanelViewBase : MonoBehaviour
     {
+        public RectTransform Rect => (RectTransform) transform;
+
         public abstract Task ShowAsync(CancellationToken cancellationToken);
         public abstract Task HideAsync(CancellationToken cancellationToken);
         public abstract void ShowImmediate();
@@ -20,8 +22,6 @@ namespace Gameframe.GUI.PanelSystem
         {
             return HideAsync(CancellationToken.None);
         }
-        
+
     }
 }
-
-

@@ -11,7 +11,7 @@ namespace Gameframe.GUI.PanelSystem
     public class PanelStackSystem : IPanelStackSystem
     {
         private readonly List<IPanelViewController> stack = new List<IPanelViewController>();
-        private readonly List<IPanelStackController> stackControllers = new List<IPanelStackController>();
+        private readonly List<IPanelSystemController> systemControllers = new List<IPanelSystemController>();
 
         /// <summary>
         /// Number of panels in the stack
@@ -33,18 +33,18 @@ namespace Gameframe.GUI.PanelSystem
         /// Add a panel stack controller to internal list of event subscribers
         /// </summary>
         /// <param name="controller">Controller to be added</param>
-        public void AddController(IPanelStackController controller)
+        public void AddController(IPanelSystemController controller)
         {
-            stackControllers.Add(controller);
+            systemControllers.Add(controller);
         }
 
         /// <summary>
         /// Remove a panel stack Controller from list of stack event subscribers
         /// </summary>
         /// <param name="controller">Controller to be removed</param>
-        public void RemoveController(IPanelStackController controller)
+        public void RemoveController(IPanelSystemController controller)
         {
-            stackControllers.Remove(controller);
+            systemControllers.Remove(controller);
         }
 
         /// <summary>
@@ -265,17 +265,17 @@ namespace Gameframe.GUI.PanelSystem
 
         private async Task TransitionAsync()
         {
-            if (stackControllers.Count == 1)
+            if (systemControllers.Count == 1)
             {
-                await stackControllers[0].TransitionAsync();
+                await systemControllers[0].TransitionAsync();
             }
             else
             {
-                var tasks = new Task[stackControllers.Count];
+                var tasks = new Task[systemControllers.Count];
 
-                for (var i = 0; i < stackControllers.Count; i++)
+                for (var i = 0; i < systemControllers.Count; i++)
                 {
-                    tasks[i] = stackControllers[i].TransitionAsync();
+                    tasks[i] = systemControllers[i].TransitionAsync();
                 }
 
                 await Task.WhenAll(tasks).ConfigureAwait(false);
