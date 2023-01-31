@@ -109,19 +109,19 @@ namespace Gameframe.GUI.PanelSystem
         {
         }
 
-        protected virtual void ViewWillAppear()
+        protected virtual void ViewWillAppear(ITransitionEvent transitionEvent)
         {
         }
 
-        protected virtual void ViewDidAppear()
+        protected virtual void ViewDidAppear(ITransitionEvent transitionEvent)
         {
         }
 
-        protected virtual void ViewWillDisappear()
+        protected virtual void ViewWillDisappear(ITransitionEvent transitionEvent)
         {
         }
 
-        protected virtual void ViewDidDisappear()
+        protected virtual void ViewDidDisappear(ITransitionEvent transitionEvent)
         {
         }
 

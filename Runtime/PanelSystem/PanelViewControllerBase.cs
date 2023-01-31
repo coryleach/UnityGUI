@@ -5,6 +5,8 @@ using Object = UnityEngine.Object;
 
 namespace Gameframe.GUI.PanelSystem
 {
+    public delegate void PanelTransitionCallback(ITransitionEvent transitionEvent = null);
+
     internal sealed class PanelViewControllerBase : IPanelViewController, IDisposable
     {
         private readonly PanelType panelType;
@@ -25,12 +27,12 @@ namespace Gameframe.GUI.PanelSystem
         public IPanelViewContainer ParentViewContainer => parentPanelViewContainer;
 
         private readonly Action didLoad;
-        private readonly Action willAppear;
-        private readonly Action didAppear;
-        private readonly Action willDisappear;
-        private readonly Action didDisappear;
+        private readonly PanelTransitionCallback willAppear;
+        private readonly PanelTransitionCallback didAppear;
+        private readonly PanelTransitionCallback willDisappear;
+        private readonly PanelTransitionCallback didDisappear;
 
-        public PanelViewControllerBase(PanelType type, Action didLoad, Action willAppear, Action didAppear, Action willDisappear, Action didDisappear)
+        public PanelViewControllerBase(PanelType type, Action didLoad, PanelTransitionCallback willAppear, PanelTransitionCallback didAppear, PanelTransitionCallback willDisappear, PanelTransitionCallback didDisappear)
         {
             panelType = type;
             this.didLoad = didLoad;
@@ -40,7 +42,7 @@ namespace Gameframe.GUI.PanelSystem
             this.didDisappear = didDisappear;
         }
 
-        public PanelViewControllerBase(PanelType type, PanelViewBase view, Action didLoad, Action willAppear, Action didAppear, Action willDisappear, Action didDisappear)
+        public PanelViewControllerBase(PanelType type, PanelViewBase view, Action didLoad, PanelTransitionCallback willAppear, PanelTransitionCallback didAppear, PanelTransitionCallback willDisappear, PanelTransitionCallback didDisappear)
         {
             panelType = type;
             panelView = view;
@@ -116,7 +118,7 @@ namespace Gameframe.GUI.PanelSystem
                 }
             }
 
-            willAppear?.Invoke();
+            willAppear?.Invoke(transitionEvent);
 
             if (immediate)
             {
@@ -134,7 +136,7 @@ namespace Gameframe.GUI.PanelSystem
 
             state = PanelViewControllerState.Appeared;
 
-            didAppear?.Invoke();
+            didAppear?.Invoke(transitionEvent);
         }
 
         public async Task HideAsync(bool immediate = false, ITransitionEvent transitionEvent = null)
@@ -162,7 +164,7 @@ namespace Gameframe.GUI.PanelSystem
 
             var currentToken = cancellationTokenSource.Token;
 
-            willDisappear?.Invoke();
+            willDisappear?.Invoke(transitionEvent);
 
             if (immediate)
             {
@@ -178,7 +180,7 @@ namespace Gameframe.GUI.PanelSystem
                 return;
             }
 
-            didDisappear?.Invoke();
+            didDisappear?.Invoke(transitionEvent);
 
             state = PanelViewControllerState.Disappeared;
         }

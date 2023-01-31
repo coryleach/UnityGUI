@@ -6,21 +6,21 @@ namespace Gameframe.GUI.PanelSystem
     public class OkCancelPanelViewController : PanelViewController
     {
         private readonly Action<bool> callback;
-        
+
         public OkCancelPanelViewController(PanelType type, Action<bool> callback) : base(type)
         {
             this.callback = callback;
         }
 
-        protected override void ViewWillAppear()
+        protected override void ViewWillAppear(ITransitionEvent transitionEvent)
         {
-            base.ViewWillAppear();
-            SubscribeToView();   
+            base.ViewWillAppear(transitionEvent);
+            SubscribeToView();
         }
 
-        protected override void ViewWillDisappear()
+        protected override void ViewWillDisappear(ITransitionEvent transitionEvent)
         {
-            base.ViewWillDisappear();
+            base.ViewWillDisappear(transitionEvent);
             UnsubscribeToView();
         }
 
@@ -76,4 +76,3 @@ namespace Gameframe.GUI.PanelSystem
         }
     }
 }
-

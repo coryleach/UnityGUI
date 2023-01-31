@@ -72,32 +72,31 @@ namespace Gameframe.GUI.PanelSystem
             await controller.LoadViewAsync();
         }
 
-        public struct TransitionEvent : ITransitionEvent
+        public class TransitionEvent : ITransitionEvent
         {
             public IPanelViewController hideController;
             public IPanelViewController showController;
         }
+
+        private TransitionEvent currentEvent = new TransitionEvent();
 
         private async Task TransitionDefault(IPanelViewController hideController, IPanelViewController showController)
         {
             Task hideTask = null;
             Task showTask = null;
 
-            var transitionEvent = new TransitionEvent()
-            {
-                hideController = hideController,
-                showController = showController
-            };
+            currentEvent.hideController = hideController;
+            currentEvent.showController = showController;
 
             if (hideController != null)
             {
-                hideTask = hideController.HideAsync(transitionEvent: transitionEvent);
+                hideTask = hideController.HideAsync(transitionEvent: currentEvent);
             }
 
             if (showController != null)
             {
                 showController.SetParentViewContainer(container);
-                showTask = showController.ShowAsync(transitionEvent: transitionEvent);
+                showTask = showController.ShowAsync(transitionEvent: currentEvent);
             }
 
             if (hideTask != null)
