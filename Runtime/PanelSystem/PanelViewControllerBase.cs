@@ -5,14 +5,6 @@ using Object = UnityEngine.Object;
 
 namespace Gameframe.GUI.PanelSystem
 {
-    public enum PanelViewControllerState
-    {
-        Disappeared,
-        Appearing,
-        Appeared,
-        Disappearing
-    }
-    
     internal sealed class PanelViewControllerBase : IPanelViewController, IDisposable
     {
         private readonly PanelType panelType;
@@ -21,7 +13,7 @@ namespace Gameframe.GUI.PanelSystem
 
         private PanelViewControllerState state = PanelViewControllerState.Disappeared;
         public PanelViewControllerState State => state;
-        
+
         private CancellationTokenSource cancellationTokenSource;
 
         private IPanelViewContainer parentPanelViewContainer;
@@ -31,13 +23,13 @@ namespace Gameframe.GUI.PanelSystem
         public bool IsViewLoaded => panelView != null;
 
         public IPanelViewContainer ParentViewContainer => parentPanelViewContainer;
-        
+
         private readonly Action didLoad;
         private readonly Action willAppear;
         private readonly Action didAppear;
         private readonly Action willDisappear;
         private readonly Action didDisappear;
-        
+
         public PanelViewControllerBase(PanelType type, Action didLoad, Action willAppear, Action didAppear, Action willDisappear, Action didDisappear)
         {
             panelType = type;
@@ -47,7 +39,7 @@ namespace Gameframe.GUI.PanelSystem
             this.willDisappear = willDisappear;
             this.didDisappear = didDisappear;
         }
-        
+
         public PanelViewControllerBase(PanelType type, PanelViewBase view, Action didLoad, Action willAppear, Action didAppear, Action willDisappear, Action didDisappear)
         {
             panelType = type;
@@ -74,21 +66,21 @@ namespace Gameframe.GUI.PanelSystem
             {
                 return;
             }
-            
+
             var prefab = await panelType.GetPrefabAsync();
 
             if (prefab == null)
             {
                 throw new ArgumentNullException($"PanelType {panelType.name} returned null panel prefab.");
             }
-            
+
             bool cachedState = prefab.gameObject.activeSelf;
             prefab.gameObject.SetActive(false);
             panelView = Object.Instantiate(prefab,ParentViewContainer?.ParentTransform);
             prefab.gameObject.SetActive(cachedState);
             didLoad?.Invoke();
         }
-        
+
         public async Task ShowAsync(bool immediate = false)
         {
             //If we're currently appeared or appearing we're already doing the thing we wanna be doing so just return
@@ -96,7 +88,7 @@ namespace Gameframe.GUI.PanelSystem
             {
                 return;
             }
-            
+
             //If we're in the middle of disappearing we need to cancel the disappearing action
             if (state == PanelViewControllerState.Disappearing)
             {
@@ -104,7 +96,7 @@ namespace Gameframe.GUI.PanelSystem
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource = null;
             }
-            
+
             state = PanelViewControllerState.Appearing;
 
             if (cancellationTokenSource == null)
@@ -139,12 +131,12 @@ namespace Gameframe.GUI.PanelSystem
             {
                 return;
             }
-            
+
             state = PanelViewControllerState.Appeared;
-            
+
             didAppear?.Invoke();
         }
-        
+
         public async Task HideAsync(bool immediate = false)
         {
             //If we're already disappeared or disappearing we're already doing the right thing so just return
@@ -152,7 +144,7 @@ namespace Gameframe.GUI.PanelSystem
             {
                 return;
             }
-            
+
             //If we're currently appearing we should cancel the appear using our cancellation token
             if (state == PanelViewControllerState.Appearing && cancellationTokenSource != null)
             {
@@ -169,7 +161,7 @@ namespace Gameframe.GUI.PanelSystem
             }
 
             var currentToken = cancellationTokenSource.Token;
-            
+
             willDisappear?.Invoke();
 
             if (immediate)
@@ -185,9 +177,9 @@ namespace Gameframe.GUI.PanelSystem
             {
                 return;
             }
-            
+
             didDisappear?.Invoke();
-            
+
             state = PanelViewControllerState.Disappeared;
         }
 
