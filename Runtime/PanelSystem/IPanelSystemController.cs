@@ -10,4 +10,9 @@ namespace Gameframe.GUI.PanelSystem
         /// <returns>Task that completes when transition is finished</returns>
         Task TransitionAsync();
     }
+
+    public interface ITransitionEvent
+    {
+
+    }
 }

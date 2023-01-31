@@ -22,7 +22,7 @@ namespace Gameframe.GUI.PanelSystem
             PanelSystem.RemoveController(this);
         }
 
-        public virtual  async Task TransitionAsync()
+        public virtual async Task TransitionAsync()
         {
             await BaseController.TransitionAsync();
         }

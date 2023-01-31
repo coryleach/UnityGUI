@@ -30,13 +30,13 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             return Task.CompletedTask;
         }
 
-        public Task HideAsync(bool immediate = false)
+        public Task HideAsync(bool immediate = false, ITransitionEvent transitionEvent = null)
         {
             State = PanelViewControllerState.Disappeared;
             return Task.CompletedTask;
         }
 
-        public Task ShowAsync(bool immediate = false)
+        public Task ShowAsync(bool immediate = false, ITransitionEvent transitionEvent = null)
         {
             State = PanelViewControllerState.Appeared;
             LoadViewAsync().Wait();

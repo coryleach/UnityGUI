@@ -10,8 +10,8 @@ namespace Gameframe.GUI.PanelSystem
         IPanelViewContainer ParentViewContainer { get; }
         bool IsViewLoaded { get; }
         Task LoadViewAsync();
-        Task HideAsync(bool immediate = false);
-        Task ShowAsync(bool immediate = false);
+        Task HideAsync(bool immediate = false, ITransitionEvent transitionEvent = null);
+        Task ShowAsync(bool immediate = false, ITransitionEvent transitionEvent = null);
         void SetParentViewContainer(IPanelViewContainer parent);
     }
 }

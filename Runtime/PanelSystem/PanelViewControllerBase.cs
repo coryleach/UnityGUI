@@ -81,7 +81,7 @@ namespace Gameframe.GUI.PanelSystem
             didLoad?.Invoke();
         }
 
-        public async Task ShowAsync(bool immediate = false)
+        public async Task ShowAsync(bool immediate = false, ITransitionEvent transitionEvent = null)
         {
             //If we're currently appeared or appearing we're already doing the thing we wanna be doing so just return
             if (state == PanelViewControllerState.Appeared || state == PanelViewControllerState.Appearing)
@@ -137,7 +137,7 @@ namespace Gameframe.GUI.PanelSystem
             didAppear?.Invoke();
         }
 
-        public async Task HideAsync(bool immediate = false)
+        public async Task HideAsync(bool immediate = false, ITransitionEvent transitionEvent = null)
         {
             //If we're already disappeared or disappearing we're already doing the right thing so just return
             if (state == PanelViewControllerState.Disappeared || state == PanelViewControllerState.Disappearing)
