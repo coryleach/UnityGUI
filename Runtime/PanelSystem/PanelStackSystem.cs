@@ -14,6 +14,8 @@ namespace Gameframe.GUI.PanelSystem
     {
         private readonly List<IPanelViewController> stack = new List<IPanelViewController>();
         private readonly List<IPanelStackController> stackControllers = new List<IPanelStackController>();
+        private bool _isTransitioning = false;
+        private bool _needsTransition = false;
 
         /// <summary>
         /// Clear stack and controllers list OnEnable
@@ -40,7 +42,7 @@ namespace Gameframe.GUI.PanelSystem
         /// PanelViewController on top of the stack
         /// </summary>
         public IPanelViewController CurrentTopPanel => stack.Count == 0 ? null : stack[stack.Count - 1];
-        
+
         /// <summary>
         /// Add a panel stack controller to internal list of event subscribers
         /// </summary>
@@ -58,7 +60,7 @@ namespace Gameframe.GUI.PanelSystem
         {
             stackControllers.Remove(controller);
         }
-        
+
         /// <summary>
         /// Push panel options onto top of panel stack
         /// </summary>
@@ -76,6 +78,7 @@ namespace Gameframe.GUI.PanelSystem
         public async Task PushAsync(IPanelViewController controller)
         {
             stack.Add(controller);
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
 
@@ -97,8 +100,9 @@ namespace Gameframe.GUI.PanelSystem
             {
                 return;
             }
-            
+
             stack.RemoveAt(stack.Count - 1);
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
 
@@ -110,9 +114,10 @@ namespace Gameframe.GUI.PanelSystem
         public async Task PopAsync(int count)
         {
             stack.RemoveRange(stack.Count-count,count);
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Pop count number of panels from the top of the stack
         /// </summary>
@@ -132,10 +137,11 @@ namespace Gameframe.GUI.PanelSystem
             if ((index+1) < stack.Count)
             {
                 stack.RemoveRange(index+1, stack.Count - (index+1));
+                _needsTransition = true;
             }
             await TransitionAsync().ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Pop stack to a specific index
         /// </summary>
@@ -158,9 +164,10 @@ namespace Gameframe.GUI.PanelSystem
             }
             stack.RemoveRange(stack.Count-popCount,popCount);
             stack.AddRange(controllers);
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// This method allows popping and pushing as one action with no transition required between.
         /// </summary>
@@ -170,7 +177,7 @@ namespace Gameframe.GUI.PanelSystem
         {
             await PopAndPushAsync(popCount, controllers).ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// This method allows popping and pushing as one action with no transition required between.
         /// </summary>
@@ -184,6 +191,7 @@ namespace Gameframe.GUI.PanelSystem
             }
             stack.RemoveRange(stack.Count-popCount,popCount);
             stack.Add(controller);
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
 
@@ -196,7 +204,7 @@ namespace Gameframe.GUI.PanelSystem
         {
             await PopAndPushAsync(popCount, controller).ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Push a set of panels async
         /// </summary>
@@ -205,9 +213,10 @@ namespace Gameframe.GUI.PanelSystem
         public async Task PushAsync(params IPanelViewController[] controllers)
         {
             stack.AddRange(controllers);
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Push a set of panels async
         /// </summary>
@@ -216,7 +225,7 @@ namespace Gameframe.GUI.PanelSystem
         {
             await PushAsync(controllers).ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Clear the stack and Push a set of panels async
         /// </summary>
@@ -226,9 +235,10 @@ namespace Gameframe.GUI.PanelSystem
         {
             stack.Clear();
             stack.AddRange(controllers);
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Clear the stack and Push a set of panels async
         /// </summary>
@@ -237,7 +247,7 @@ namespace Gameframe.GUI.PanelSystem
         {
             await ClearAndPushAsync(controllers).ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Clear all panels from the stack
         /// </summary>
@@ -245,9 +255,10 @@ namespace Gameframe.GUI.PanelSystem
         public async Task ClearAsync()
         {
             stack.Clear();
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Clear all panels from the stack
         /// </summary>
@@ -255,7 +266,7 @@ namespace Gameframe.GUI.PanelSystem
         {
             await ClearAsync().ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Clear all panels from the stack and then push a panel on top
         /// </summary>
@@ -264,9 +275,10 @@ namespace Gameframe.GUI.PanelSystem
         {
             stack.Clear();
             stack.Add(viewController);
+            _needsTransition = true;
             await TransitionAsync().ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Clear all panels from the stack and then push a panel on top
         /// </summary>
@@ -277,6 +289,15 @@ namespace Gameframe.GUI.PanelSystem
 
         private async Task TransitionAsync()
         {
+            await WaitForTransitionComplete();
+
+            if (!_needsTransition)
+            {
+                return;
+            }
+            _needsTransition = false;
+
+            _isTransitioning = true;
             if (stackControllers.Count == 1)
             {
                 await stackControllers[0].TransitionAsync();
@@ -284,13 +305,22 @@ namespace Gameframe.GUI.PanelSystem
             else
             {
                 var tasks = new Task[stackControllers.Count];
-            
+
                 for (var i = 0; i < stackControllers.Count; i++)
                 {
                     tasks[i] = stackControllers[i].TransitionAsync();
                 }
 
                 await Task.WhenAll(tasks).ConfigureAwait(false);
+            }
+            _isTransitioning = false;
+        }
+
+        private async Task WaitForTransitionComplete()
+        {
+            while (_isTransitioning)
+            {
+                await Task.Yield();
             }
         }
 
@@ -307,7 +337,6 @@ namespace Gameframe.GUI.PanelSystem
         }
 
         #endregion
-        
+
     }
 }
-

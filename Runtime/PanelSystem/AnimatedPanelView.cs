@@ -24,6 +24,11 @@ namespace Gameframe.GUI.PanelSystem
     
         public override async Task ShowAsync(CancellationToken cancellationToken)
         {
+            if (!Application.isPlaying || cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+            
             gameObject.SetActive(true);
             var animators = GetAnimators();
             var tasks = animators.Select(x => x.TransitionShowAsync());
@@ -32,7 +37,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public override async Task HideAsync(CancellationToken cancellationToken)
         {
-            if (!gameObject.activeSelf)
+            if (!Application.isPlaying || cancellationToken.IsCancellationRequested || !gameObject.activeSelf)
             {
                 return;
             }
