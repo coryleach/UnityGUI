@@ -1,8 +1,8 @@
 {
   "name": "com.gameframe.gui",
   "displayName": "Gameframe.GUI",
-  "version": "2.0.0",
-  "description": "This is a library of GUI helpers for UGUI  \r\nIncludes a panel system that implements a navigation stack.  \r\nIncludes a scene transition system.  \r\nIncludes a shader for blurring the background of UI panels.  ",
+  "version": "2.0.1",
+  "description": "This is a library of GUI helpers for UGUI  \r\nIncludes a panel system that implements a navigation stack.  \r\nIncludes a scene transition system.  \r\nIncludes a shader for blurring the background of UI panels.",
   "keywords": [],
   "author": {
     "name": "Cory Leach",
