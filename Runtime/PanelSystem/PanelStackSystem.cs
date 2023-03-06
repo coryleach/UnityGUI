@@ -23,7 +23,7 @@ namespace Gameframe.GUI.PanelSystem
         private void OnEnable()
         {
             stack.Clear();
-            stackControllers.Clear();
+            systemControllers.Clear();
         }
 
         /// <summary>
