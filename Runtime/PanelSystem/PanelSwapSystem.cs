@@ -1,34 +1,25 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Gameframe.GUI.PanelSystem
 {
-    [CreateAssetMenu(menuName = "Gameframe/PanelSystem/PanelSwapSystem")]
-    public class PanelSwapSystem : ScriptableObject, IPanelSwapSystem
+    public class PanelSwapSystem : IPanelSwapSystem
     {
-        private readonly List<IPanelSwapController> _controllers = new List<IPanelSwapController>();
-        
+        private readonly List<IPanelSystemController> _controllers = new List<IPanelSystemController>();
+
         private IPanelViewController _currentViewController;
         public IPanelViewController CurrentViewController => _currentViewController;
 
         private readonly UnityEvent onSwap = new UnityEvent();
         public UnityEvent OnSwap => onSwap;
 
-        private void OnEnable()
-        {
-            //Clearing listeners because ScriptableObject will hold onto old subscribers
-            //when running in editor
-            onSwap.RemoveAllListeners();
-        }
-
-        public void AddController(IPanelSwapController controller)
+        public void AddController(IPanelSystemController controller)
         {
             _controllers.Add(controller);
         }
 
-        public void RemoveController(IPanelSwapController controller)
+        public void RemoveController(IPanelSystemController controller)
         {
             _controllers.Add(controller);
         }
@@ -49,4 +40,3 @@ namespace Gameframe.GUI.PanelSystem
         }
     }
 }
-

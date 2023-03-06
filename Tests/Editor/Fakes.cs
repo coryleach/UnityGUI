@@ -9,7 +9,7 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
     public class FakePanelViewController : IPanelViewController
     {
         public PanelViewControllerState State { get; private set; } = PanelViewControllerState.Appearing;
-        
+
         public PanelType PanelType { get; set; }
 
         public PanelViewBase View { get; private set; }
@@ -19,24 +19,24 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
         private bool loaded;
 
         public bool IsViewLoaded => loaded;
-            
+
         public Task LoadViewAsync()
         {
             loaded = true;
 
             var gameObject = new GameObject();
             View = gameObject.AddComponent<PanelView>();
-            
+
             return Task.CompletedTask;
         }
 
-        public Task HideAsync(bool immediate = false)
+        public Task HideAsync(bool immediate = false, ITransitionEvent transitionEvent = null)
         {
             State = PanelViewControllerState.Disappeared;
             return Task.CompletedTask;
         }
 
-        public Task ShowAsync(bool immediate = false)
+        public Task ShowAsync(bool immediate = false, ITransitionEvent transitionEvent = null)
         {
             State = PanelViewControllerState.Appeared;
             LoadViewAsync().Wait();
@@ -58,17 +58,17 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             return Task.CompletedTask;
         }
     }
-    
+
     public class FakePanelStackSystem : IPanelStackSystem
     {
         private readonly List<IPanelViewController> controllerList = new List<IPanelViewController>();
 
-        public void AddController(IPanelStackController controller)
+        public void AddController(IPanelSystemController controller)
         {
             throw new System.NotImplementedException();
         }
 
-        public void RemoveController(IPanelStackController controller)
+        public void RemoveController(IPanelSystemController controller)
         {
             throw new System.NotImplementedException();
         }
@@ -85,7 +85,7 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             controllerList.RemoveAt(controllerList.Count-1);
             //return controller;
         }
-        
+
         public IEnumerator<IPanelViewController> GetEnumerator()
         {
             return controllerList.GetEnumerator();
@@ -110,12 +110,12 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
     {
         public int LockCount { get; private set; }
         public int UnlockCount { get; private set; }
-        
+
         public void Lock()
         {
             LockCount++;
         }
-        
+
         public void Unlock()
         {
             UnlockCount++;

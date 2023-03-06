@@ -12,16 +12,16 @@ namespace Gameframe.GUI.PanelSystem
         private readonly IUIEventManager eventManager;
         private readonly IPanelSwapSystem panelSwapSystem;
         private readonly IPanelViewContainer container;
-        
+
         private IPanelViewController activePanelController;
-        
+
         public PanelSwapController(IPanelSwapSystem swapSystem, IPanelViewContainer viewContainer, IUIEventManager eventManager = null)
         {
             panelSwapSystem = swapSystem;
             container = viewContainer;
             this.eventManager = eventManager;
         }
-        
+
         public async Task TransitionAsync()
         {
             try
@@ -32,19 +32,19 @@ namespace Gameframe.GUI.PanelSystem
                 {
                     eventManager.Lock();
                 }
-                
+
                 var hideController = activePanelController;
                 var showController = panelSwapSystem.CurrentViewController;
-                
+
                 //Load Views
                 if (showController != null)
                 {
                     await LoadView(showController).ConfigureAwait(true);
                 }
-                
+
                 var transitionTask = TransitionDefault(hideController, showController);
                 await transitionTask.ConfigureAwait(true);
-                
+
                 activePanelController = showController;
             }
             catch (Exception e)
@@ -58,10 +58,10 @@ namespace Gameframe.GUI.PanelSystem
                 if (null != eventManager)
                 {
                     eventManager.Unlock();
-                }    
+                }
             }
         }
-        
+
         private async Task LoadView(IPanelViewController controller)
         {
             if (controller.IsViewLoaded)
@@ -71,21 +71,32 @@ namespace Gameframe.GUI.PanelSystem
             controller.SetParentViewContainer(container);
             await controller.LoadViewAsync();
         }
-        
+
+        public class TransitionEvent : ITransitionEvent
+        {
+            public IPanelViewController hideController;
+            public IPanelViewController showController;
+        }
+
+        private TransitionEvent currentEvent = new TransitionEvent();
+
         private async Task TransitionDefault(IPanelViewController hideController, IPanelViewController showController)
         {
             Task hideTask = null;
             Task showTask = null;
 
+            currentEvent.hideController = hideController;
+            currentEvent.showController = showController;
+
             if (hideController != null)
             {
-                hideTask = hideController.HideAsync();
+                hideTask = hideController.HideAsync(transitionEvent: currentEvent);
             }
-            
+
             if (showController != null)
             {
                 showController.SetParentViewContainer(container);
-                showTask = showController.ShowAsync();
+                showTask = showController.ShowAsync(transitionEvent: currentEvent);
             }
 
             if (hideTask != null)
@@ -101,5 +112,3 @@ namespace Gameframe.GUI.PanelSystem
 
     }
 }
-
-

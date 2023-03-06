@@ -11,9 +11,9 @@ namespace Gameframe.GUI.PanelSystem
     {
         private readonly PanelType panelType;
         private readonly PanelViewControllerProvider provider;
-        private readonly PanelStackSystem stack;
+        private readonly ScriptablePanelStackSystem stack;
 
-        public PanelStackPushTransition(PanelType panelType, PanelStackSystem stack, PanelViewControllerProvider provider)
+        public PanelStackPushTransition(PanelType panelType, ScriptablePanelStackSystem stack, PanelViewControllerProvider provider)
         {
             this.panelType = panelType;
             this.provider = provider;

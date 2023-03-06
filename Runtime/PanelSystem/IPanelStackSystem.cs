@@ -2,12 +2,10 @@
 
 namespace Gameframe.GUI.PanelSystem
 {
-    public interface IPanelStackSystem : IEnumerable<IPanelViewController>
+    public interface IPanelStackSystem : IEnumerable<IPanelViewController>, IPanelSystem
     {
         int Count { get; }
         IPanelViewController this[int index] { get; }
-        void AddController(IPanelStackController controller);
-        void RemoveController(IPanelStackController controller);
         void Push(IPanelViewController controller);
         void Pop();
     }

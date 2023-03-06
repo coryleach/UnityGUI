@@ -1,13 +1,6 @@
-﻿using System.Threading.Tasks;
-
-namespace Gameframe.GUI.PanelSystem
+﻿namespace Gameframe.GUI.PanelSystem
 {
-    public interface IPanelStackController
+    public interface IPanelStackController : IPanelSystemController
     {
-        /// <summary>
-        /// Transitions views to reflect state of the panel stack system
-        /// </summary>
-        /// <returns>Task that completes when transition is finished</returns>
-        Task TransitionAsync();
     }
 }
