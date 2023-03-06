@@ -5,13 +5,13 @@ namespace Gameframe.GUI.PanelSystem
 {
     public class PanelPopper : MonoBehaviour
     {
-    
-        [SerializeField] 
-        private PanelStackSystem stack;
-    
+
+        [SerializeField]
+        private ScriptablePanelStackSystem stack;
+
         [SerializeField]
         private PopEvent popEvent = PopEvent.Manual;
-        
+
         public enum PopEvent
         {
             Manual,
@@ -20,7 +20,7 @@ namespace Gameframe.GUI.PanelSystem
             Start,
             Enable
         }
-    
+
         private void Awake()
         {
             if (popEvent == PopEvent.Awake)

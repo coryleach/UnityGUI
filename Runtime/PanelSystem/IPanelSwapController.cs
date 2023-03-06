@@ -1,10 +1,7 @@
-﻿using System.Threading.Tasks;
-
+﻿
 namespace Gameframe.GUI.PanelSystem
 {
-    public interface IPanelSwapController
+    public interface IPanelSwapController : IPanelSystemController
     {
-        Task TransitionAsync();
-    }    
+    }
 }
-

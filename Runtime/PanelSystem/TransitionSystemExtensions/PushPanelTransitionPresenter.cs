@@ -11,19 +11,24 @@ namespace Gameframe.GUI.PanelSystem
     {
         private readonly PanelType panelType;
         private readonly PanelViewControllerProvider provider;
-        private readonly PanelStackSystem stack;
+        private readonly ScriptablePanelStackSystem stack;
 
-        public PanelStackPushTransition(PanelType panelType, PanelStackSystem stack, PanelViewControllerProvider provider)
+        public PanelStackPushTransition(PanelType panelType, ScriptablePanelStackSystem stack, PanelViewControllerProvider provider)
         {
             this.panelType = panelType;
             this.provider = provider;
             this.stack = stack;
         }
-    
+
         public Task StartTransitionAsync()
         {
             //Nothing to do yet. Push panel at the end of the transition.
             //Panel may want to use resources loaded in the new scene
+            return Task.CompletedTask;
+        }
+
+        public Task PreTransitionAsync()
+        {
             return Task.CompletedTask;
         }
 
@@ -33,14 +38,18 @@ namespace Gameframe.GUI.PanelSystem
             //Currently not supporting visualizing any progress for this transition
         }
 
+        public Task PostTransitionAsync()
+        {
+            return Task.CompletedTask;
+        }
+
         public async Task FinishTransitionAsync()
         {
             //Push the panel type provided and await the transition to complete before allowing transition to finish
             //We do this to make sure the panel has finished showing before finishing transition
             //This allows us to be sure a panel is showing before we drop a curtain
             var controller = provider.Get(panelType);
-            await stack.PushAsync(controller); 
+            await stack.PushAsync(controller);
         }
-    }   
+    }
 }
-

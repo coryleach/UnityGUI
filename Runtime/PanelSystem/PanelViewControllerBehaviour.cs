@@ -6,19 +6,19 @@ namespace Gameframe.GUI.PanelSystem
 {
     public abstract class PanelViewControllerBehaviourBase<TPanelViewBase> : MonoBehaviour, IPanelViewController, IPanelViewContainer
     {
-        [SerializeField] 
+        [SerializeField]
         protected PanelType panelType;
 
         [SerializeField, Help("When PanelView is null the prefab assigned to the Panel Type will be instantiated and used at runtime")]
         protected PanelViewBase panelView;
-        
+
         private PanelViewControllerBase baseController;
 
         internal PanelViewControllerBase BaseController => baseController ?? (baseController = CreateController());
 
         protected virtual void Awake()
         {
-            //Base controller is created 
+            //Base controller is created
             //Create the base controller in awake if it hasn't been created yet
             if (baseController == null)
             {
@@ -34,28 +34,30 @@ namespace Gameframe.GUI.PanelSystem
             {
                 panelView.gameObject.SetActive(false);
             }
-            
-            var controller = new PanelViewControllerBase(panelType,panelView, 
+
+            var controller = new PanelViewControllerBase(panelType,panelView,
                 ViewDidLoad,
-                ViewWillAppear, 
-                ViewDidAppear, 
-                ViewWillDisappear, 
+                ViewDidUnload,
+                ViewWillAppear,
+                ViewDidAppear,
+                ViewWillDisappear,
                 ViewDidDisappear);
-            
+
             controller.SetParentViewContainer(this);
 
             return controller;
         }
 
         public PanelViewControllerState State => BaseController.State;
-        
+
         public PanelType PanelType => BaseController.PanelType;
-        
+
         PanelViewBase IPanelViewController.View => BaseController.View;
-        
+
         public abstract TPanelViewBase View { get; }
 
         public Task LoadViewAsync() => BaseController.LoadViewAsync();
+        public Task UnloadViewAsync() => BaseController.UnloadViewAsync();
 
         public bool IsViewLoaded => BaseController.IsViewLoaded;
 
@@ -77,51 +79,55 @@ namespace Gameframe.GUI.PanelSystem
 
         public void SetParentViewContainer(IPanelViewContainer parent) => BaseController.SetParentViewContainer(parent);
 
-        public async void Show()
+        public async void Show(ITransitionEvent transitionEvent = null)
         {
-            await ShowAsync().ConfigureAwait(false);
+            await ShowAsync(transitionEvent).ConfigureAwait(false);
         }
 
-        public async void Hide()
+        public async void Hide(ITransitionEvent transitionEvent = null)
         {
-            await HideAsync().ConfigureAwait(false);
-        }
-        
-        public async void Show(bool immediate)
-        {
-            await ShowAsync(immediate).ConfigureAwait(false);
+            await HideAsync(transitionEvent).ConfigureAwait(false);
         }
 
-        public Task ShowAsync(bool immediate) => BaseController.ShowAsync(immediate);
-
-        public Task ShowAsync() => BaseController.ShowAsync(false);
-
-        public async void Hide(bool immediate)
+        public async void Show(bool immediate, ITransitionEvent transitionEvent = null)
         {
-            await HideAsync(immediate).ConfigureAwait(false);
+            await ShowAsync(immediate, transitionEvent).ConfigureAwait(false);
         }
 
-        public Task HideAsync(bool immediate) => BaseController.HideAsync(immediate);
-        
-        public Task HideAsync() => BaseController.HideAsync(false);
-        
+        public Task ShowAsync(bool immediate, ITransitionEvent transitionEvent = null) => BaseController.ShowAsync(immediate, transitionEvent);
+
+        public Task ShowAsync(ITransitionEvent transitionEvent = null) => BaseController.ShowAsync(false, transitionEvent);
+
+        public async void Hide(bool immediate, ITransitionEvent transitionEvent = null)
+        {
+            await HideAsync(immediate, transitionEvent).ConfigureAwait(false);
+        }
+
+        public Task HideAsync(bool immediate, ITransitionEvent transitionEvent = null) => BaseController.HideAsync(immediate, transitionEvent);
+
+        public Task HideAsync(ITransitionEvent transitionEvent = null) => BaseController.HideAsync(false, transitionEvent);
+
         protected virtual void ViewDidLoad()
         {
         }
-        
-        protected virtual void ViewWillAppear()
+
+        protected virtual void ViewDidUnload()
         {
         }
 
-        protected virtual void ViewDidAppear()
+        protected virtual void ViewWillAppear(ITransitionEvent transitionEvent)
         {
         }
 
-        protected virtual void ViewWillDisappear()
+        protected virtual void ViewDidAppear(ITransitionEvent transitionEvent)
         {
         }
 
-        protected virtual void ViewDidDisappear()
+        protected virtual void ViewWillDisappear(ITransitionEvent transitionEvent)
+        {
+        }
+
+        protected virtual void ViewDidDisappear(ITransitionEvent transitionEvent)
         {
         }
 
@@ -135,7 +141,7 @@ namespace Gameframe.GUI.PanelSystem
         }
         #endif
     }
-        
+
     /// <summary>
     /// MonoBehaviour implementing IPanelViewController interface
     /// internally this is just a humble object wrapper for PanelViewControllerBase which does the heavy lifting
@@ -144,7 +150,7 @@ namespace Gameframe.GUI.PanelSystem
     {
         public override TPanelViewBase View => (TPanelViewBase)BaseController.View;
     }
-    
+
     /// <summary>
     /// MonoBehaviour implementing IPanelViewController interface
     /// internally this is just a humble object wrapper for PanelViewControllerBase which does the heavy lifting
@@ -154,5 +160,3 @@ namespace Gameframe.GUI.PanelSystem
         public override PanelViewBase View { get; }
     }
 }
-
-

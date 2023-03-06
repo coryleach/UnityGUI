@@ -11,7 +11,7 @@ namespace Gameframe.GUI.TransitionSystem
     {
         [SerializeField]
         private UIEventManager eventManager;
-        
+
         [SerializeField]
         private SceneTransitionSystem sceneTransitionSystem;
 
@@ -20,7 +20,7 @@ namespace Gameframe.GUI.TransitionSystem
 
         private readonly ProgressEvent onProgressUpdate = new ProgressEvent();
         public ProgressEvent OnProgressUpdate => onProgressUpdate;
-        
+
         private void OnEnable()
         {
             sceneTransitionSystem.AddPresenter(this);
@@ -42,9 +42,19 @@ namespace Gameframe.GUI.TransitionSystem
             eventManager.Unlock();
         }
 
+        public virtual Task PreTransitionAsync()
+        {
+            return Task.CompletedTask;
+        }
+
         public virtual void TransitionProgress(float progress)
         {
             onProgressUpdate.Invoke(progress);
+        }
+
+        public virtual Task PostTransitionAsync()
+        {
+            return Task.CompletedTask;
         }
 
         public async Task FinishTransitionAsync()

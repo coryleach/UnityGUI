@@ -14,12 +14,18 @@ namespace Gameframe.GUI.PanelSystem
         private readonly IUIEventManager eventManager;
         private readonly IPanelStackSystem panelStackSystem;
         private readonly IPanelViewContainer container;
-        
+
         public PanelStackController(IPanelStackSystem stackSystem, IPanelViewContainer viewContainer, IUIEventManager eventManager = null)
         {
             panelStackSystem = stackSystem;
             container = viewContainer;
             this.eventManager = eventManager;
+        }
+
+        public struct TransitionEvent : ITransitionEvent
+        {
+            public IReadOnlyList<IPanelViewController> hideControllers;
+            public IReadOnlyList<IPanelViewController> showControllers;
         }
 
         public async Task TransitionAsync()
@@ -28,9 +34,9 @@ namespace Gameframe.GUI.PanelSystem
             {
                 activeControllers = ListPool<IPanelViewController>.Get();
             }
-            
+
             var showControllers = ListPool<IPanelViewController>.Get();
-            
+
             try
             {
                 PanelStackUtility.GetVisiblePanelViewControllers(panelStackSystem,showControllers);
@@ -39,7 +45,7 @@ namespace Gameframe.GUI.PanelSystem
             {
                 throw new AggregateException("Unable to get visible panel view controllers.",e);
             }
-            
+
             var hideControllers = activeControllers.Where(x => !showControllers.Contains(x));
 
             try
@@ -53,17 +59,17 @@ namespace Gameframe.GUI.PanelSystem
 
                 //Load Views
                 await LoadViews(showControllers).ConfigureAwait(true);
-                
+
                 //Sort Views so things overlay property
                 SortViews();
-                
+
                 //Simultaneous Show/Hide
                 //TODO: Support Instant, ShowThenHide, HideThenShow, etc
                 var transitionTask = TransitionDefault(hideControllers, showControllers);
-            
+
                 ListPool<IPanelViewController>.Release(activeControllers);
                 activeControllers = showControllers;
-                
+
                 await transitionTask.ConfigureAwait(true);
             }
             catch (Exception e)
@@ -77,10 +83,10 @@ namespace Gameframe.GUI.PanelSystem
                 if (null != eventManager)
                 {
                     eventManager.Unlock();
-                }    
+                }
             }
         }
-        
+
         private void SortViews()
         {
             for (int i = 0; i < panelStackSystem.Count; i++)
@@ -95,14 +101,14 @@ namespace Gameframe.GUI.PanelSystem
         private async Task LoadViews(IEnumerable<IPanelViewController> controllers)
         {
             var tasks = ListPool<Task>.Get();
-            
+
             foreach (var controller in controllers)
             {
                 if (controller.IsViewLoaded)
                 {
                     continue;
                 }
-                
+
                 controller.SetParentViewContainer(container);
                 tasks.Add(controller.LoadViewAsync());
             }
@@ -111,31 +117,46 @@ namespace Gameframe.GUI.PanelSystem
             {
                 await Task.WhenAll(tasks);
             }
-            
+
             ListPool<Task>.Release(tasks);
         }
-        
+
         private async Task TransitionDefault(IEnumerable<IPanelViewController> hideControllers, IEnumerable<IPanelViewController> showControllers)
         {
-            var hideTasks = ListPool<Task>.Get();
-            foreach (var controller in hideControllers)
+            var showList = ListPool<IPanelViewController>.Get();
+            var hideList = ListPool<IPanelViewController>.Get();
+
+            showList.AddRange(showControllers);
+            hideList.AddRange(hideControllers);
+
+            var transitionEvent = new TransitionEvent()
             {
-                hideTasks.Add(controller.HideAsync());
+                showControllers = showList,
+                hideControllers = hideList
+            };
+
+            var hideTasks = ListPool<Task>.Get();
+            foreach (var controller in hideList)
+            {
+                hideTasks.Add(controller.HideAsync(transitionEvent: transitionEvent));
             }
 
             var showTasks = ListPool<Task>.Get();
-            foreach (var controller in showControllers)
+            foreach (var controller in showList)
             {
                 controller.SetParentViewContainer(container);
-                showTasks.Add(controller.ShowAsync());
+                showTasks.Add(controller.ShowAsync(transitionEvent: transitionEvent));
             }
 
             await Task.WhenAll(hideTasks);
             await Task.WhenAll(showTasks);
-            
+
             ListPool<Task>.Release(hideTasks);
             ListPool<Task>.Release(showTasks);
+
+            ListPool<IPanelViewController>.Release(showList);
+            ListPool<IPanelViewController>.Release(hideList);
         }
     }
-    
+
 }

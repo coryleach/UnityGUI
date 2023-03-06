@@ -9,17 +9,22 @@ namespace Gameframe.GUI.PanelSystem
     /// </summary>
     public class PanelStackPopTransition : ITransitionPresenter
     {
-        private readonly PanelStackSystem _stack;
+        private readonly ScriptablePanelStackSystem _stack;
 
-        public PanelStackPopTransition(PanelStackSystem stack)
+        public PanelStackPopTransition(ScriptablePanelStackSystem stack)
         {
             _stack = stack;
         }
-    
+
         public Task StartTransitionAsync()
         {
             //Nothing to do on start transition.
             //We don't pop until the transition is ready to finish
+            return Task.CompletedTask;
+        }
+
+        public Task PreTransitionAsync()
+        {
             return Task.CompletedTask;
         }
 
@@ -28,12 +33,17 @@ namespace Gameframe.GUI.PanelSystem
             //Progress display not currently supported for this transition presenter
         }
 
+        public Task PostTransitionAsync()
+        {
+            return Task.CompletedTask;
+        }
+
         public async Task FinishTransitionAsync()
         {
             //Transition is ready to finish
             //This will pop a panel off the stack and then allow the transition to complete
             //For example we might not want to have a scene transition curtain raise till a panel is popped
-            await _stack.PopAsync(); 
+            await _stack.PopAsync();
         }
-    }    
+    }
 }

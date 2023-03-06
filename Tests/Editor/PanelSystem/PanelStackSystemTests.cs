@@ -6,9 +6,9 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
     public class PanelStackSystemTests
     {
         
-        private static PanelStackSystem CreatePanelStackSystem()
+        private static ScriptablePanelStackSystem CreatePanelStackSystem()
         {
-            return ScriptableObject.CreateInstance<PanelStackSystem>();
+            return ScriptableObject.CreateInstance<ScriptablePanelStackSystem>();
         }
 
         [Test]

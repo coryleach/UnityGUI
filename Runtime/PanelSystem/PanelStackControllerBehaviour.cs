@@ -1,62 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Gameframe.GUI.Camera.UI;
-using Gameframe.GUI.Utility;
 using UnityEngine;
 
 namespace Gameframe.GUI.PanelSystem
 {
-
     /// <summary>
     /// PanelStackControllerBehaviour is a MonoBehaviour wrapper around a PanelStackController instance
     /// </summary>
     [RequireComponent(typeof(RectTransform))]
-    public class PanelStackControllerBehaviour : MonoBehaviour, IPanelStackController, IPanelViewContainer
+    public class PanelStackControllerBehaviour : PanelSystemControllerBehaviour, IPanelStackController
     {
-        [SerializeField] 
+        [SerializeField]
         private UIEventManager eventManager;
-        
-        [SerializeField] 
-        private PanelStackSystem panelStackSystem;
 
-        public PanelStackSystem System => panelStackSystem;
-        
-        public RectTransform ParentTransform => (RectTransform)transform;
+        [SerializeField]
+        private ScriptablePanelStackSystem panelStackSystem;
 
-        private PanelStackController baseController;
+        public ScriptablePanelStackSystem System => panelStackSystem;
 
-        [SerializeField, Tooltip("If true the panel stack will be cleared when this object is destroyed. This may be desired when reloading the game for example.")] 
+        [SerializeField, Tooltip("If true the panel stack will be cleared when this object is destroyed. This may be desired when reloading the game for example.")]
         protected bool clearSystemStackOnDestroy = true;
-        
-        private PanelStackController BaseController =>
-            baseController ??
-            (baseController = new PanelStackController(panelStackSystem, this, eventManager));
 
-        private void OnEnable()
-        {
-            panelStackSystem.AddController(this);
-        }
-        
-        private void OnDisable()
-        {
-            panelStackSystem.RemoveController(this);
-        }
+        private PanelStackController _baseController;
+        protected override IPanelSystemController BaseController =>
+            _baseController ??= new PanelStackController(panelStackSystem, this, eventManager);
 
-        private void OnDestroy()
+        protected override IPanelSystem PanelSystem => panelStackSystem;
+
+        protected virtual void OnDestroy()
         {
             if (clearSystemStackOnDestroy)
             {
                 panelStackSystem.Clear();
             }
         }
-
-        public async Task TransitionAsync()
-        {
-            await BaseController.TransitionAsync();
-        }
     }
-    
-}
 
+}
