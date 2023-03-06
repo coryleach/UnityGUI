@@ -37,6 +37,7 @@ namespace Gameframe.GUI.PanelSystem
 
             var controller = new PanelViewControllerBase(panelType,panelView,
                 ViewDidLoad,
+                ViewDidUnload,
                 ViewWillAppear,
                 ViewDidAppear,
                 ViewWillDisappear,
@@ -56,6 +57,7 @@ namespace Gameframe.GUI.PanelSystem
         public abstract TPanelViewBase View { get; }
 
         public Task LoadViewAsync() => BaseController.LoadViewAsync();
+        public Task UnloadViewAsync() => BaseController.UnloadViewAsync();
 
         public bool IsViewLoaded => BaseController.IsViewLoaded;
 
@@ -106,6 +108,10 @@ namespace Gameframe.GUI.PanelSystem
         public Task HideAsync(ITransitionEvent transitionEvent = null) => BaseController.HideAsync(false, transitionEvent);
 
         protected virtual void ViewDidLoad()
+        {
+        }
+
+        protected virtual void ViewDidUnload()
         {
         }
 

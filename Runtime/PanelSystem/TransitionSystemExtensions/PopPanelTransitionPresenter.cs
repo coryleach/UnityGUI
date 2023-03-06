@@ -25,7 +25,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public Task PreTransitionAsync()
         {
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         public void TransitionProgress(float progress)
@@ -35,7 +35,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public Task PostTransitionAsync()
         {
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         public async Task FinishTransitionAsync()

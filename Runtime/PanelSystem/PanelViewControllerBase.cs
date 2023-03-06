@@ -27,26 +27,30 @@ namespace Gameframe.GUI.PanelSystem
         public IPanelViewContainer ParentViewContainer => parentPanelViewContainer;
 
         private readonly Action didLoad;
+        private readonly Action didUnload;
+
         private readonly PanelTransitionCallback willAppear;
         private readonly PanelTransitionCallback didAppear;
         private readonly PanelTransitionCallback willDisappear;
         private readonly PanelTransitionCallback didDisappear;
 
-        public PanelViewControllerBase(PanelType type, Action didLoad, PanelTransitionCallback willAppear, PanelTransitionCallback didAppear, PanelTransitionCallback willDisappear, PanelTransitionCallback didDisappear)
+        public PanelViewControllerBase(PanelType type, Action didLoad, Action didUnload, PanelTransitionCallback willAppear, PanelTransitionCallback didAppear, PanelTransitionCallback willDisappear, PanelTransitionCallback didDisappear)
         {
             panelType = type;
             this.didLoad = didLoad;
+            this.didUnload = didUnload;
             this.willAppear = willAppear;
             this.didAppear = didAppear;
             this.willDisappear = willDisappear;
             this.didDisappear = didDisappear;
         }
 
-        public PanelViewControllerBase(PanelType type, PanelViewBase view, Action didLoad, PanelTransitionCallback willAppear, PanelTransitionCallback didAppear, PanelTransitionCallback willDisappear, PanelTransitionCallback didDisappear)
+        public PanelViewControllerBase(PanelType type, PanelViewBase view, Action didLoad, Action didUnload, PanelTransitionCallback willAppear, PanelTransitionCallback didAppear, PanelTransitionCallback willDisappear, PanelTransitionCallback didDisappear)
         {
             panelType = type;
             panelView = view;
             this.didLoad = didLoad;
+            this.didUnload = didUnload;
             this.willAppear = willAppear;
             this.didAppear = didAppear;
             this.willDisappear = willDisappear;
@@ -81,6 +85,14 @@ namespace Gameframe.GUI.PanelSystem
             panelView = Object.Instantiate(prefab,ParentViewContainer?.ParentTransform);
             prefab.gameObject.SetActive(cachedState);
             didLoad?.Invoke();
+        }
+
+        public Task UnloadViewAsync()
+        {
+            Object.Destroy(panelView.gameObject);
+            panelView = null;
+            didUnload?.Invoke();
+            return Task.CompletedTask;
         }
 
         public async Task ShowAsync(bool immediate = false, ITransitionEvent transitionEvent = null)

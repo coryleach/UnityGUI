@@ -30,6 +30,14 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             return Task.CompletedTask;
         }
 
+        public Task UnloadViewAsync()
+        {
+            loaded = false;
+            Object.Destroy(View.gameObject);
+            View = null;
+            return Task.CompletedTask;
+        }
+
         public Task HideAsync(bool immediate = false, ITransitionEvent transitionEvent = null)
         {
             State = PanelViewControllerState.Disappeared;
