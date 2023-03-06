@@ -1,6 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Gameframe.GUI.PanelSystem
 {
@@ -65,7 +67,7 @@ namespace Gameframe.GUI.PanelSystem
     /// ViewWillDisappear,
     /// ViewDidDisappear
     /// </summary>
-    public class PanelViewController : PanelViewControllerBase<PanelViewBase>
+    public class PanelViewController : PanelViewControllerBase<PanelViewBase>, IDisposable
     {
         internal static SynchronizationContext MainSyncContext { get; private set; }
 
@@ -94,30 +96,57 @@ namespace Gameframe.GUI.PanelSystem
             }
         }
 
-        /// <summary>
-        /// This destructor will destroy the panel view that it may have instantiated
-        /// </summary>
+
         ~PanelViewController()
         {
-            MainSyncContext?.Post(CleanupDestroyedPanel, View);
+            Dispose();
         }
 
         public PanelViewController(PanelType type) : base(type)
         {
         }
+
+        private bool _disposed = false;
+
+        /// <summary>
+        /// Dispose will destroy the panel view that it may have instantiated
+        /// </summary>
+        public virtual void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+            MainSyncContext?.Post(CleanupDestroyedPanel, View);
+        }
     }
 
-    public class PanelViewController<TPanelView> : PanelViewControllerBase<TPanelView> where TPanelView : PanelViewBase
+    public class PanelViewController<TPanelView> : PanelViewControllerBase<TPanelView>, IDisposable where TPanelView : PanelViewBase
     {
         public PanelViewController(PanelType type) : base(type)
         {
         }
 
-        /// <summary>
-        /// This destructor will destroy the panel view that it may have instantiated
-        /// </summary>
         ~PanelViewController()
         {
+            Dispose();
+        }
+
+        private bool _disposed = false;
+
+        /// <summary>
+        /// Dispose will destroy the panel view that it may have instantiated
+        /// </summary>
+        public virtual void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
             //Using internal variable & method from PanelViewController to avoid AOT compile issues with this generic class
             PanelViewController.MainSyncContext?.Post(PanelViewController.CleanupDestroyedPanel, View);
         }
