@@ -87,11 +87,101 @@ namespace Gameframe.GUI.PanelSystem.Tests.Editor
             controllerList.Add(panelController);
         }
 
+        public void Push(params IPanelViewController[] controllers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task PushAsync(IPanelViewController controller)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Pop()
         {
             var controller = controllerList[controllerList.Count - 1];
             controllerList.RemoveAt(controllerList.Count-1);
             //return controller;
+        }
+
+        public Task PopAsync()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Pop(int count)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task PopAsync(int count)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void PopToIndex(int index)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task PopToIndexAsync(int index)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void PopAndPush(int popCount, params IPanelViewController[] controllers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void PopAndPush(int popCount, IPanelViewController controller)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task PopAndPushAsync(int popCount, IPanelViewController controller)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task PopAndPushAsync(int popCount, params IPanelViewController[] controllers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task PushAsync(params IPanelViewController[] controllers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task ClearAndPushAsync(params IPanelViewController[] controllers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task ClearAndPushAsync(IPanelViewController viewController)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ClearAndPush(params IPanelViewController[] controllers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ClearAndPush(IPanelViewController viewController)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task ClearAsync()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new System.NotImplementedException();
         }
 
         public IEnumerator<IPanelViewController> GetEnumerator()
