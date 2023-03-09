@@ -49,14 +49,28 @@ namespace Gameframe.GUI.Tween
         {
             CancelTweensForId(obj.GetInstanceID());
         }
-        
+
         public static async Task DoTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
         {
             await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType).ConfigureAwait(false);
         }
 
-        public static async Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken,
-            Action<float> action, Easing easeType = Easing.Linear)
+        public static async Task DoPunchTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
+        {
+            await DoPunchTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType).ConfigureAwait(false);
+        }
+
+        public static Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear)
+        {
+            return DoTweenAsyncWithLerp(InverseLerpFloat, id, duration, cancellationToken, action, easeType);
+        }
+
+        public static Task DoPunchTweenAsync(int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear)
+        {
+            return DoTweenAsyncWithLerp(PunchInverseLerpFloat, id, duration, cancellationToken, action, easeType);
+        }
+
+        public static async Task DoTweenAsyncWithLerp(Func<float,float,float,float> lerpMethod, int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear)
         {
             var instanceCancellationToken = StartTween(id);
 
@@ -74,7 +88,7 @@ namespace Gameframe.GUI.Tween
                 }
 
                 t += Time.deltaTime;
-                action?.Invoke(ease.Invoke(Mathf.InverseLerp(0, duration, t)));
+                action?.Invoke(ease.Invoke(lerpMethod(0, duration, t)));
             }
 
             //Just exit immediately if we've stopped playing in editor
@@ -82,10 +96,26 @@ namespace Gameframe.GUI.Tween
             {
                 return;
             }
-            
-            action?.Invoke(ease.Invoke(1));
+
+            action?.Invoke(ease.Invoke(lerpMethod(0, duration, duration)));
 
             CompleteTween(id);
+        }
+
+        private static float InverseLerpFloat(float a, float b, float t)
+        {
+            return Mathf.InverseLerp(a, b, t);
+        }
+
+        private static float PunchInverseLerpFloat(float a, float b, float t)
+        {
+            var r =  Mathf.InverseLerp(a, b, t);
+            r *= 2;
+            if (r > 1)
+            {
+                r = 2 - r;
+            }
+            return r;
         }
 
         private static CancellationToken StartTween(int id)
