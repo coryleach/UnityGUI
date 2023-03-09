@@ -83,22 +83,20 @@ namespace Gameframe.GUI.Tween
             await transform.DoLocalMoveAsync(position, duration, easing).ConfigureAwait(false);
         }
 
-        public static async Task DoPunchPosition(this Transform transform, Vector3 position, float duration, Easing easing = Easing.Linear)
+        public static async Task DoPunchPositionAsync(this Transform transform, Vector3 position, float duration, Easing easing = Easing.Linear)
         {
             var startPos = transform.position;
-            await TweenExtensions.DoTweenAsync(transform.gameObject.GetInstanceID(), duration, (t) =>
+            await TweenExtensions.DoPunchTweenAsync(transform.gameObject.GetInstanceID(), duration, (t) =>
             {
-                t *= 2;
-                if (t > 1)
-                {
-                    t = 2 - t;
-                }
-
                 var pt = Vector3.Lerp(startPos, position, t);
                 transform.localPosition = pt;
             }, easing);
         }
 
-        
+        public static async void DoPunchPosition(this Transform transform, Vector3 position, float duration, Easing easing = Easing.Linear)
+        {
+            await transform.DoPunchPositionAsync(position, duration, easing);
+        }
+
     }
 }
