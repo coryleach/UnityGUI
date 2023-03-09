@@ -23,7 +23,7 @@ Includes a SRP shader for blurring the background of UI panels.
 #### Using UnityPackageManager (for Unity 2019.3 or later)
 Open the package manager window (menu: Window > Package Manager)<br/>
 Select "Add package from git URL...", fill in the pop-up with the following link:<br/>
-https://github.com/coryleach/UnityGUI.git#3.0.3<br/>
+https://github.com/coryleach/UnityGUI.git#3.0.4<br/>
 
 #### Using UnityPackageManager (for Unity 2019.1 or later)
 
@@ -31,7 +31,7 @@ Find the manifest.json file in the Packages folder of your project and edit it t
 ```js
 {
   "dependencies": {
-    "com.gameframe.gui": "https://github.com/coryleach/UnityGUI.git#3.0.3",
+    "com.gameframe.gui": "https://github.com/coryleach/UnityGUI.git#3.0.4",
     ...
   },
 }
