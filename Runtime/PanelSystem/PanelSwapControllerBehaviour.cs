@@ -16,8 +16,6 @@ namespace Gameframe.GUI.PanelSystem
         protected override IPanelSystem PanelSystem => panelSwapSystem;
 
         private PanelSwapController _baseController;
-        protected override IPanelSystemController BaseController =>
-            _baseController ??= new PanelSwapController(panelSwapSystem, this, eventManager);
-
+        protected override IPanelSystemController BaseController => _baseController ?? (_baseController = new PanelSwapController(panelSwapSystem, this, eventManager));
     }
 }

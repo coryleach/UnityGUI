@@ -70,7 +70,7 @@ namespace Gameframe.GUI
                 return;
             }
 
-            if (eventData is not AxisEventData axisEvent)
+            if (!(eventData is AxisEventData axisEvent))
             {
                 return;
             }
