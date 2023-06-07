@@ -22,8 +22,7 @@ namespace Gameframe.GUI.PanelSystem
         protected bool clearSystemStackOnDestroy = true;
 
         private PanelStackController _baseController;
-        protected override IPanelSystemController BaseController =>
-            _baseController ??= new PanelStackController(panelStackSystem, this, eventManager);
+        protected override IPanelSystemController BaseController => _baseController ?? (_baseController = new PanelStackController(panelStackSystem, this, eventManager));
 
         protected override IPanelSystem PanelSystem => panelStackSystem;
 
