@@ -18,12 +18,12 @@ namespace Gameframe.GUI.TransitionSystem
 
             //Start Loads
             var loadOperation = SceneManager.LoadSceneAsync(SceneName, Mode);
-            
+
             if (loadOperation == null)
             {
                 return;
             }
-            
+
             //Allow them all to load till 90% complete
             loadOperation.allowSceneActivation = false;
 
@@ -34,13 +34,13 @@ namespace Gameframe.GUI.TransitionSystem
             }
 
             loadOperation.allowSceneActivation = true;
-            
+
             while (!loadOperation.isDone)
             {
                 Progress = loadOperation.progress;
                 await Task.Yield();
             }
-            
+
             ListPool<AsyncOperation>.Release(loadTasks);
 
             //Load should now be complete
@@ -50,7 +50,7 @@ namespace Gameframe.GUI.TransitionSystem
             await Task.Yield();
         }
     }
-    
+
     public class MultiSceneTransitionTask : ITransitionTask
     {
         public string[] UnloadScenes { get; set; }
@@ -62,11 +62,11 @@ namespace Gameframe.GUI.TransitionSystem
         {
             var unloadTasks = ListPool<AsyncOperation>.Get();
             var loadTasks = ListPool<AsyncOperation>.Get();
-            
+
             Progress = 0;
-            
+
             int totalScenes = UnloadScenes.Length + LoadScenes.Length;
-            
+
             //Start Unloads
             for (var index = 0; index < UnloadScenes.Length; index++)
             {
@@ -100,12 +100,14 @@ namespace Gameframe.GUI.TransitionSystem
             }
 
             var waiting = false;
-            
+
             do
             {
                 await Task.Yield();
 
                 float sumProgress = 0;
+
+                waiting = false;
 
                 for (var index = 0; index < unloadTasks.Count; index++)
                 {
@@ -147,7 +149,7 @@ namespace Gameframe.GUI.TransitionSystem
 
             //Load should now be complete
             Progress = 1f;
-            
+
             //Yielding one last time to let the 100% progress to be handled by presenter
             await Task.Yield();
         }
