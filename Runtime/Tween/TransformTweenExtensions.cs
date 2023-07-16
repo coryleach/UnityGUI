@@ -7,17 +7,17 @@ namespace Gameframe.GUI.Tween
     {
         public static async void DoPosX(this Transform transform, float position, float duration, Easing easing = Easing.Linear)
         {
-            await transform.DoPosXAsync(position, duration, easing).ConfigureAwait(false);
+            await transform.DoPosXAsync(position, duration, easing);
         }
 
         public static async void DoPosY(this Transform transform, float position, float duration, Easing easing = Easing.Linear)
         {
-            await transform.DoPosYAsync(position, duration, easing).ConfigureAwait(false);
+            await transform.DoPosYAsync(position, duration, easing);
         }
 
         public static async void DoPosZ(this Transform transform, float position, float duration, Easing easing = Easing.Linear)
         {
-            await transform.DoPosYAsync(position, duration, easing).ConfigureAwait(false);
+            await transform.DoPosYAsync(position, duration, easing);
         }
 
         public static async Task DoPosXAsync(this Transform transform, float position, float duration, Easing easing = Easing.Linear)
@@ -65,7 +65,7 @@ namespace Gameframe.GUI.Tween
 
         public static async void DoMove(this Transform transform, Vector3 position, float duration, Easing easing = Easing.Linear)
         {
-            await transform.DoMoveAsync(position, duration, easing).ConfigureAwait(false);
+            await transform.DoMoveAsync(position, duration, easing);
         }
 
         public static async Task DoLocalMoveAsync(this Transform transform, Vector3 position, float duration, Easing easing = Easing.Linear)
@@ -80,7 +80,7 @@ namespace Gameframe.GUI.Tween
 
         public static async void DoLocalMove(this Transform transform, Vector3 position, float duration, Easing easing = Easing.Linear)
         {
-            await transform.DoLocalMoveAsync(position, duration, easing).ConfigureAwait(false);
+            await transform.DoLocalMoveAsync(position, duration, easing);
         }
 
         public static async Task DoPunchPositionAsync(this Transform transform, Vector3 position, float duration, Easing easing = Easing.Linear)

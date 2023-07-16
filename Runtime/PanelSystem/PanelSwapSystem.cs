@@ -26,7 +26,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public async void Show(IPanelViewController controller)
         {
-            await ShowAsync(controller).ConfigureAwait(false);
+            await ShowAsync(controller);
         }
 
         public async Task ShowAsync(IPanelViewController panelViewController)

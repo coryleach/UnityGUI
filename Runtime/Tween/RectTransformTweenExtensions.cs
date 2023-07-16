@@ -18,9 +18,7 @@ namespace Gameframe.GUI.Tween
 
         public static async void DoAnchorPosY(this RectTransform rectTransform, float position, float duration, Easing easing = Easing.Linear)
         {
-            await rectTransform.DoAnchorPosYAsync(position, duration, easing).ConfigureAwait(false);
+            await rectTransform.DoAnchorPosYAsync(position, duration, easing);
         }
-    } 
+    }
 }
-
-

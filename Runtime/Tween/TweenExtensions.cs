@@ -52,12 +52,12 @@ namespace Gameframe.GUI.Tween
 
         public static async Task DoTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
         {
-            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType).ConfigureAwait(false);
+            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType);
         }
 
         public static async Task DoPunchTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
         {
-            await DoPunchTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType).ConfigureAwait(false);
+            await DoPunchTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType);
         }
 
         public static Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear)
