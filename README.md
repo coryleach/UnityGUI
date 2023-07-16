@@ -3,7 +3,14 @@
 </p>
 <h1 align="center">Gameframe.GUI 👋</h1>
 
-<!-- BADGE-START -<!-- BADGE-END -->
+<!-- BADGE-START -->
+<p>
+<img alt="Version" src="https://img.shields.io/badge/version-3.0.6-blue.svg?cacheSeconds=2592000" />
+  <a href="https://twitter.com/Cory Leach">
+    <img alt="Twitter: coryleach" src="https://img.shields.io/twitter/follow/coryleach.svg?style=social" target="_blank" />
+  </a>
+  </p>
+<!-- BADGE-END -->
 
 This is a library of GUI helpers for UGUI    
 Includes a panel system that implements a navigation stack.    
