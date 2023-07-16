@@ -81,17 +81,17 @@ namespace Gameframe.GUI.PanelSystem
 
         public async void Show(ITransitionEvent transitionEvent = null)
         {
-            await ShowAsync(transitionEvent).ConfigureAwait(false);
+            await ShowAsync(transitionEvent);
         }
 
         public async void Hide(ITransitionEvent transitionEvent = null)
         {
-            await HideAsync(transitionEvent).ConfigureAwait(false);
+            await HideAsync(transitionEvent);
         }
 
         public async void Show(bool immediate, ITransitionEvent transitionEvent = null)
         {
-            await ShowAsync(immediate, transitionEvent).ConfigureAwait(false);
+            await ShowAsync(immediate, transitionEvent);
         }
 
         public Task ShowAsync(bool immediate, ITransitionEvent transitionEvent = null) => BaseController.ShowAsync(immediate, transitionEvent);
@@ -100,7 +100,7 @@ namespace Gameframe.GUI.PanelSystem
 
         public async void Hide(bool immediate, ITransitionEvent transitionEvent = null)
         {
-            await HideAsync(immediate, transitionEvent).ConfigureAwait(false);
+            await HideAsync(immediate, transitionEvent);
         }
 
         public Task HideAsync(bool immediate, ITransitionEvent transitionEvent = null) => BaseController.HideAsync(immediate, transitionEvent);

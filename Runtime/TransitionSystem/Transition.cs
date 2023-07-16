@@ -35,7 +35,7 @@ namespace Gameframe.GUI.TransitionSystem
             /// </summary>
             public async void Execute()
             {
-                await ExecuteAsync().ConfigureAwait(false);
+                await ExecuteAsync();
             }
 
             /// <summary>

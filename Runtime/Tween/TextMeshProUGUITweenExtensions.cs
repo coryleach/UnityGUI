@@ -15,8 +15,7 @@ namespace Gameframe.GUI.Tween
 
         public static async void DoColor(this TextMeshProUGUI text, Color toColor, float duration, Easing easing = Easing.Linear)
         {
-            await text.DoColorAsync(toColor, duration, easing).ConfigureAwait(false);
+            await text.DoColorAsync(toColor, duration, easing);
         }
     }
 }
-

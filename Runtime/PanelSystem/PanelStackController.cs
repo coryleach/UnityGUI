@@ -58,7 +58,7 @@ namespace Gameframe.GUI.PanelSystem
                 }
 
                 //Load Views
-                await LoadViews(showControllers).ConfigureAwait(true);
+                await LoadViews(showControllers);
 
                 //Sort Views so things overlay property
                 SortViews();
@@ -70,7 +70,7 @@ namespace Gameframe.GUI.PanelSystem
                 ListPool<IPanelViewController>.Release(activeControllers);
                 activeControllers = showControllers;
 
-                await transitionTask.ConfigureAwait(true);
+                await transitionTask;
             }
             catch (Exception e)
             {

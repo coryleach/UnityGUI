@@ -39,11 +39,11 @@ namespace Gameframe.GUI.PanelSystem
                 //Load Views
                 if (showController != null)
                 {
-                    await LoadView(showController).ConfigureAwait(true);
+                    await LoadView(showController);
                 }
 
                 var transitionTask = TransitionDefault(hideController, showController);
-                await transitionTask.ConfigureAwait(true);
+                await transitionTask;
 
                 activePanelController = showController;
             }
@@ -101,12 +101,12 @@ namespace Gameframe.GUI.PanelSystem
 
             if (hideTask != null)
             {
-                await hideTask.ConfigureAwait(true);
+                await hideTask;
             }
 
             if (showTask != null)
             {
-                await showTask.ConfigureAwait(true);
+                await showTask;
             }
         }
 
