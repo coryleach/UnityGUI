@@ -1,7 +1,7 @@
 {
   "name": "com.gameframe.gui",
   "displayName": "Gameframe.GUI",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "This is a library of GUI helpers for UGUI  \r\nIncludes a panel system that implements a navigation stack.  \r\nIncludes a scene transition system.  \r\nIncludes a SRP shader for blurring the background of UI panels.",
   "keywords": [],
   "author": {
@@ -14,5 +14,6 @@
   "dependencies": {
     "com.unity.textmeshpro": "2.0.1"
   },
-  "repositoryName": "UnityGUI"
+  "repositoryName": "UnityGUI",
+  "type": "library"
 }
