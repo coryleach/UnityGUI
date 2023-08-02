@@ -142,7 +142,8 @@ namespace Gameframe.GUI
         {
             var characterCount = effectManager.Text.textInfo.characterCount;
             _progress = 0;
-            while (_progress < characterCount)
+            var duration = (delayPerCharacter * characterCount) + characterAnimationDuration;
+            while (_progress < duration)
             {
                 _progress += Time.deltaTime * speed;
                 yield return null;
