@@ -16,14 +16,14 @@ namespace Gameframe.GUI
     {
         void UpdateColorEffect(TMP_CharacterInfo charInfo, ref EffectData data);
     }
-    
+
     public interface IPlayableTextMeshEffect
     {
         bool IsPlaying { get; }
         void Play();
         void Finish();
     }
-    
+
     [Serializable]
     public struct EffectData : IEquatable<EffectData>
     {
@@ -35,42 +35,49 @@ namespace Gameframe.GUI
         [SerializeField] private Color32 color1;
         [SerializeField] private Color32 color2;
         [SerializeField] private Color32 color3;
-        
+
         public int Index
         {
             get => index;
             set => index = value;
         }
+
         public Vector3 LocalPosition
         {
             get => localPosition;
             set => localPosition = value;
         }
+
         public Quaternion LocalRotation
         {
             get => localRotation;
             set => localRotation = value;
         }
+
         public Vector3 LocalScale
         {
             get => localScale;
             set => localScale = value;
         }
+
         public Color32 Color0
         {
             get => color0;
             set => color0 = value;
         }
+
         public Color32 Color1
         {
             get => color1;
             set => color1 = value;
         }
+
         public Color32 Color2
         {
             get => color2;
             set => color2 = value;
         }
+
         public Color32 Color3
         {
             get => color3;
@@ -132,18 +139,18 @@ namespace Gameframe.GUI
             }
         }
     }
-    
+
     /// <summary>
     /// Manager for effects that modify the text mesh
     /// </summary>
     public class TextMeshEffectTMPro : UIBehaviour
     {
-        [SerializeField] 
-        protected TextMeshProUGUI text;
+        [SerializeField] protected TMP_Text text;
 
-        public TextMeshProUGUI Text => text;
-        
-        [SerializeField] private Vector2 pivot = new Vector2(0.5f,0.5f);
+        public TMP_Text Text => text;
+
+        [SerializeField] private Vector2 pivot = new Vector2(0.5f, 0.5f);
+
         public Vector2 Pivot
         {
             get => pivot;
@@ -177,7 +184,7 @@ namespace Gameframe.GUI
                 coroutine = null;
             }
         }
-        
+
         public void AddVertexEffect(ITextMeshVertexEffect vertexEffect)
         {
             vertEffects.Add(vertexEffect);
@@ -207,7 +214,7 @@ namespace Gameframe.GUI
                 TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(OnTextChanged);
                 return;
             }
-            
+
             if (!ReferenceEquals(eventText, text))
             {
                 return;
@@ -236,14 +243,14 @@ namespace Gameframe.GUI
             {
                 return;
             }
-            
+
             var old = effectDatas;
             var startIndex = 0 + (effectDatas?.Length ?? 0);
             effectDatas = new EffectData[text.textInfo.characterCount];
-            old?.CopyTo(effectDatas,0);
+            old?.CopyTo(effectDatas, 0);
             InitializeCharacterTransforms(startIndex);
         }
-        
+
         private void CheckCoroutine()
         {
             if (coroutine != null)
@@ -256,7 +263,7 @@ namespace Gameframe.GUI
                 coroutine = StartCoroutine(Run());
             }
         }
-        
+
         private IEnumerator Run()
         {
             //Early out if we have no work to do so we don't try to Apply animations when we shouldn't
@@ -273,7 +280,7 @@ namespace Gameframe.GUI
             } while (colorEffects.Count + vertEffects.Count > 0);
 
             coroutine = null;
-            
+
             //One last update when we have zero effects to reset the text mesh
             ApplyAnimations();
         }
@@ -286,23 +293,25 @@ namespace Gameframe.GUI
             {
                 meshCache = text.textInfo.CopyMeshInfoVertexData();
             }
-            
+
             ValidateTransforms();
 
             var flags = TMP_VertexDataUpdateFlags.None;
-            
+
             if (vertEffects.Count > 0)
             {
+                // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
                 flags |= TMP_VertexDataUpdateFlags.Vertices;
             }
 
             if (colorEffects.Count > 0)
             {
+                // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
                 flags |= TMP_VertexDataUpdateFlags.Colors32;
             }
 
             var characterCount = text.textInfo.characterCount;
-            
+
             for (var i = 0; i < characterCount; i++)
             {
                 var charInfo = text.textInfo.characterInfo[i];
@@ -312,17 +321,17 @@ namespace Gameframe.GUI
                 }
 
                 ResetEffectData(ref effectDatas[i]);
-                
+
                 foreach (var vertEffect in vertEffects)
                 {
-                    vertEffect.UpdateVertexEffect(charInfo,ref effectDatas[i]);
+                    vertEffect.UpdateVertexEffect(charInfo, ref effectDatas[i]);
                 }
-                
+
                 foreach (var colorEffect in colorEffects)
                 {
-                    colorEffect.UpdateColorEffect(charInfo,ref effectDatas[i]);
+                    colorEffect.UpdateColorEffect(charInfo, ref effectDatas[i]);
                 }
-                
+
                 if (vertEffects.Count > 0)
                 {
                     ApplyTransforms(charInfo, i);
@@ -333,7 +342,7 @@ namespace Gameframe.GUI
                     ApplyColors(charInfo, i);
                 }
             }
-            
+
             text.UpdateVertexData(flags);
         }
 
@@ -342,12 +351,12 @@ namespace Gameframe.GUI
             data.LocalPosition = Vector3.zero;
             data.LocalRotation = Quaternion.identity;
             data.LocalScale = Vector3.one;
-            data.Color0 = new Color32(1,1,1,1);
-            data.Color1 = new Color32(1,1,1,1);
-            data.Color2 = new Color32(1,1,1,1);
-            data.Color3 = new Color32(1,1,1,1);
+            data.Color0 = new Color32(1, 1, 1, 1);
+            data.Color1 = new Color32(1, 1, 1, 1);
+            data.Color2 = new Color32(1, 1, 1, 1);
+            data.Color3 = new Color32(1, 1, 1, 1);
         }
-        
+
         /// <summary>
         /// It turns out charInfo.index is the actual character position in the string
         /// If you have tags like <color> etc. it will be included in the index.
@@ -359,7 +368,7 @@ namespace Gameframe.GUI
         {
             var materialIndex = charInfo.materialReferenceIndex;
             var vertexIndex = charInfo.vertexIndex;
-                    
+
             //Do Vertices
             var sourceVertices = meshCache[materialIndex].vertices;
 
@@ -367,24 +376,24 @@ namespace Gameframe.GUI
             var sourceTopLeft = sourceVertices[vertexIndex + 1];
             var sourceTopRight = sourceVertices[vertexIndex + 2];
             var sourceBottomRight = sourceVertices[vertexIndex + 3];
-                    
+
             var offset = sourceBottomLeft + (sourceBottomRight - sourceBottomLeft) * pivot.x + (sourceTopLeft - sourceBottomLeft) * pivot.y;
 
             var anim = effectDatas[index];
             var matrix = Matrix4x4.TRS(anim.LocalPosition, anim.LocalRotation, anim.LocalScale);
-                    
+
             var destinationTopLeft = matrix.MultiplyPoint3x4(sourceTopLeft - offset) + offset;
             var destinationTopRight = matrix.MultiplyPoint3x4(sourceTopRight - offset) + offset;
             var destinationBottomLeft = matrix.MultiplyPoint3x4(sourceBottomLeft - offset) + offset;
             var destinationBottomRight = matrix.MultiplyPoint3x4(sourceBottomRight - offset) + offset;
-                    
+
             var destinationVertices = text.textInfo.meshInfo[materialIndex].vertices;
             destinationVertices[vertexIndex + 0] = destinationBottomLeft;
             destinationVertices[vertexIndex + 1] = destinationTopLeft;
             destinationVertices[vertexIndex + 2] = destinationTopRight;
             destinationVertices[vertexIndex + 3] = destinationBottomRight;
         }
-        
+
         /// <summary>
         /// It turns out charInfo.index is the actual character position in the string
         /// If you have tags like <color> etc. it will be included in the index.
@@ -398,9 +407,9 @@ namespace Gameframe.GUI
             var vertexIndex = charInfo.vertexIndex;
 
             var effect = effectDatas[index];
-            
+
             var sourceColors = meshCache[materialIndex].colors32;
-            
+
             var colorBottomLeft = sourceColors[vertexIndex + 0];
             var colorTopLeft = sourceColors[vertexIndex + 1];
             var colorTopRight = sourceColors[vertexIndex + 2];
@@ -410,7 +419,7 @@ namespace Gameframe.GUI
             colorTopLeft.a = effect.Color1.a;
             colorTopRight.a = effect.Color2.a;
             colorBottomRight.a = effect.Color3.a;
-            
+
             var destinationColors = text.textInfo.meshInfo[materialIndex].colors32;
             destinationColors[vertexIndex + 0] = colorBottomLeft;
             destinationColors[vertexIndex + 1] = colorTopLeft;
@@ -418,21 +427,19 @@ namespace Gameframe.GUI
             destinationColors[vertexIndex + 3] = colorBottomRight;
         }
 
-        
-        #if UNITY_EDITOR
+
+#if UNITY_EDITOR
         protected override void OnValidate()
         {
             base.OnValidate();
             if (text == null)
             {
-                text = GetComponent<TextMeshProUGUI>();
+                text = GetComponent<TMP_Text>();
             }
+
             pivot.x = Mathf.Clamp01(pivot.x);
             pivot.y = Mathf.Clamp01(pivot.y);
         }
-        #endif
-        
+#endif
     }
-
 }
-

@@ -2,6 +2,7 @@
 using Gameframe.GUI.Tween;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Gameframe.GUI
 {
@@ -9,31 +10,86 @@ namespace Gameframe.GUI
     {
         [SerializeField]
         private TextMeshEffectTMPro effectManager;
-        
+
         [SerializeField]
         protected bool playOnEnable;
 
-        [SerializeField] 
+        [SerializeField]
         protected Easing easeType = Easing.Linear;
 
-        [SerializeField] 
-        protected float charactersPerSecond = 15;
-        public float CharacterPerSecond
+        public Easing EaseType
         {
-            get => charactersPerSecond;
-            set => charactersPerSecond = value;
+            get => easeType;
+            set => easeType = value;
         }
-        
+
+        [SerializeField]
+        protected AnimationCurve customCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
+        public AnimationCurve Curve
+        {
+            get => customCurve;
+            set => customCurve = value;
+        }
+
+        [SerializeField][FormerlySerializedAs("charactersPerSecond")]
+        protected float speed = 15;
+        public float Speed
+        {
+            get => speed;
+            set => speed = value;
+        }
+
+        [SerializeField][FormerlySerializedAs("startDelayMultiplier")]
+        protected float delayPerCharacter = 1f;
+
+        public float DelayPerCharacter
+        {
+            get => delayPerCharacter;
+            set => delayPerCharacter = value;
+        }
+
+        [SerializeField]
+        protected float characterAnimationDuration = 1f;
+
+        public float CharacterAnimationDuration
+        {
+            get => characterAnimationDuration;
+            set => characterAnimationDuration = value;
+        }
+
         [SerializeField]
         protected UnityEvent onComplete = new UnityEvent();
         public UnityEvent OnComplete => onComplete;
-        
-        protected float progress;
-        
-        private Coroutine coroutine;
 
-        public bool IsPlaying => coroutine != null;
-        
+        private float _progress;
+
+        private Coroutine _coroutine;
+
+        public bool IsPlaying => _coroutine != null;
+
+        protected float GetEasedTime(ref EffectData data, float offset = 0)
+        {
+            var characterStartTime = data.Index * delayPerCharacter;
+            var rawTime = (_progress + offset - characterStartTime) / characterAnimationDuration;
+            var easeTime = Ease(Mathf.Clamp01(rawTime));
+            return easeTime;
+        }
+
+        /// <summary>
+        /// Value goes from 1 to 0 instead of 0 to 1
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        protected float GetInverseEaseTime(ref EffectData data, float offset = 0)
+        {
+            var characterStartTime = data.Index * delayPerCharacter;
+            var rawTime = (_progress + offset - characterStartTime) / characterAnimationDuration;
+            var easeTime = Ease(1 - Mathf.Clamp01(rawTime));
+            return easeTime;
+        }
+
         protected void OnEnable()
         {
             if (playOnEnable)
@@ -49,26 +105,31 @@ namespace Gameframe.GUI
 
         public void Play()
         {
-            if (coroutine != null)
+            if (_coroutine != null)
             {
                 Finish();
             }
-            coroutine = StartCoroutine(Run());
+            _coroutine = StartCoroutine(Run());
         }
 
         public void Finish()
         {
-            if (coroutine != null)
+            if (_coroutine != null)
             {
                 RemoveFromManager(effectManager);
-                StopCoroutine(coroutine);
+                StopCoroutine(_coroutine);
                 onComplete.Invoke();
             }
-            coroutine = null;
+            _coroutine = null;
         }
 
         protected abstract void AddToManager(TextMeshEffectTMPro effectManager);
         protected abstract void RemoveFromManager(TextMeshEffectTMPro effectManager);
+
+        protected float Ease(float t)
+        {
+            return easeType == Easing.CustomCurve ? customCurve.Evaluate(t) : EaseFunctions.Ease(easeType, t);
+        }
 
         private IEnumerator Run()
         {
@@ -76,30 +137,34 @@ namespace Gameframe.GUI
             yield return RunAnimation();
             Finish();
         }
-        
+
         private IEnumerator RunAnimation()
         {
-            int characterCount = effectManager.Text.textInfo.characterCount;
-            progress = 0;
-            while (progress < characterCount)
+            var characterCount = effectManager.Text.textInfo.characterCount;
+            _progress = 0;
+            while (_progress < characterCount)
             {
-                progress += Time.smoothDeltaTime * charactersPerSecond;
+                _progress += Time.deltaTime * speed;
                 yield return null;
             }
         }
-        
-        private void OnValidate()
+
+        protected virtual void OnValidate()
         {
             if (effectManager == null)
             {
                 effectManager = GetComponent<TextMeshEffectTMPro>();
             }
 
-            if (charactersPerSecond < 0)
+            if (speed < 0)
             {
-                charactersPerSecond = 1;
+                speed = 1;
+            }
+
+            if (characterAnimationDuration < 0.01f)
+            {
+                characterAnimationDuration = 0.01f;
             }
         }
     }
 }
-

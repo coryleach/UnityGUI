@@ -1,5 +1,4 @@
-﻿using Gameframe.GUI.Tween;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace Gameframe.GUI
@@ -9,18 +8,24 @@ namespace Gameframe.GUI
     {
         [SerializeField]
         private Vector3 startOffset = Vector3.zero;
-        
+
         [SerializeField]
         protected Vector3 endOffset = Vector3.one;
 
         public override void UpdateVertexEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            var t = Mathf.Clamp01(progress - data.Index);
-            t = EaseFunctions.Ease(easeType, t);
+            var easeTime = GetEasedTime(ref data);
             var delta = endOffset - startOffset;
-            data.LocalPosition = startOffset + delta * t;
+            data.LocalPosition = startOffset + delta * easeTime;
+        }
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            if (characterAnimationDuration < 0.1f)
+            {
+                characterAnimationDuration = 0.1f;
+            }
         }
     }
 }
-
-

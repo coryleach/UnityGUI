@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gameframe.GUI
 {
@@ -9,6 +10,7 @@ namespace Gameframe.GUI
   [RequireComponent(typeof(TextMeshEffectTMPro))]
   public abstract class VertexTextMeshEffect : PlayableTextMeshEffect, ITextMeshVertexEffect
   {
+
     protected override void AddToManager(TextMeshEffectTMPro effectManager)
     {
       effectManager.AddVertexEffect(this);

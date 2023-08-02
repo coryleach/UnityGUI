@@ -50,32 +50,32 @@ namespace Gameframe.GUI.Tween
             CancelTweensForId(obj.GetInstanceID());
         }
 
-        public static async Task DoTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
+        public static async Task DoTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
         {
-            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType);
+            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType, customCurve);
         }
 
-        public static async Task DoPunchTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear)
+        public static async Task DoPunchTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
         {
-            await DoPunchTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType);
+            await DoPunchTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType, customCurve);
         }
 
-        public static Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear)
+        public static Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
         {
-            return DoTweenAsyncWithLerp(InverseLerpFloat, id, duration, cancellationToken, action, easeType);
+            return DoTweenAsyncWithLerp(InverseLerpFloat, id, duration, cancellationToken, action, easeType, customCurve);
         }
 
-        public static Task DoPunchTweenAsync(int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear)
+        public static Task DoPunchTweenAsync(int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
         {
-            return DoTweenAsyncWithLerp(PunchInverseLerpFloat, id, duration, cancellationToken, action, easeType);
+            return DoTweenAsyncWithLerp(PunchInverseLerpFloat, id, duration, cancellationToken, action, easeType, customCurve);
         }
 
-        public static async Task DoTweenAsyncWithLerp(Func<float,float,float,float> lerpMethod, int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear)
+        public static async Task DoTweenAsyncWithLerp(Func<float,float,float,float> lerpMethod, int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
         {
             var instanceCancellationToken = StartTween(id);
 
             float t = 0;
-            var ease = EaseFunctions.Get(easeType);
+            var ease = easeType != Easing.CustomCurve ? EaseFunctions.Get(easeType) : customCurve.Evaluate;
             action?.Invoke(ease.Invoke(0));
 
             while (t < duration && Application.isPlaying)
