@@ -27,9 +27,10 @@ using UnityEngine;
 
 namespace Gameframe.GUI.Tween
 {
-    public enum Easing
+    public enum Easing : int
     {
-        Linear,
+        CustomCurve = -1,
+        Linear = 0,
         InQuad,
         OutQuad,
         InOutQuad,
@@ -48,7 +49,7 @@ namespace Gameframe.GUI.Tween
         InBack,
         OutBack,
         InOutBack,
-        InElastic, 
+        InElastic,
         OutElastic,
         InOutElastic,
         InBounce,
@@ -67,7 +68,7 @@ namespace Gameframe.GUI.Tween
         private readonly static Func<float, float> Cos = Mathf.Cos;
         private readonly static Func<float, float> Sqrt = Mathf.Sqrt;
         private readonly static float PI = Mathf.PI;
-        
+
         private readonly static float c1 = 1.70158f;
         private readonly static float c2 = c1 * 1.525f;
         private readonly static float c3 = c1 + 1;
@@ -78,7 +79,7 @@ namespace Gameframe.GUI.Tween
         {
             return Get(easeType).Invoke(x);
         }
-        
+
         public static Func<float,float> Get(Easing easeType)
         {
             switch (easeType)
@@ -139,7 +140,7 @@ namespace Gameframe.GUI.Tween
                     return Linear;
             }
         }
-        
+
         public static float InQuad(float x)
         {
             return x * x;
@@ -214,7 +215,7 @@ namespace Gameframe.GUI.Tween
         {
             return 1 - Sqrt(1 - Pow(x, 2));
         }
-        
+
         public static float OutCirc(float x)
         {
             return Sqrt(1 - Pow(x - 1, 2));
@@ -254,7 +255,7 @@ namespace Gameframe.GUI.Tween
                     return -Pow(2, 10 * x - 10) * Sin((x * 10 - 10.75f) * c4);
             }
         }
-        
+
         public static float OutElastic(float x)
         {
             switch (x)
@@ -267,7 +268,7 @@ namespace Gameframe.GUI.Tween
                     return -Pow(2, -10 * x) * Sin((x * 10 - 0.75f) * c4) + 1;
             }
         }
-        
+
         public static float InOutElastic(float x)
         {
             switch (x)
@@ -277,8 +278,8 @@ namespace Gameframe.GUI.Tween
                 case 1:
                     return 1;
                 default:
-                    return x < 0.5f 
-                        ? -(Pow(2, 20 * x - 10) * Sin((20 * x - 11.125f) * c5)) * 0.5f 
+                    return x < 0.5f
+                        ? -(Pow(2, 20 * x - 10) * Sin((20 * x - 11.125f) * c5)) * 0.5f
                         : (Pow(2, -20 * x + 10) * Sin((20 * x - 11.125f) * c5)) * 0.5f + 1;
             }
         }
@@ -306,23 +307,23 @@ namespace Gameframe.GUI.Tween
         {
             return (Sin(value * PI * (0.2f + 2.5f * value * value * value)) * Pow(1f - value, 2.2f) + value) * (1f + (1f - value) * 1.2f);
         }
-        
+
         private static float BounceOut(float x)
         {
             const float n1 = 7.5625f;
             const float d1 = 2.75f;
 
-            if (x < 1 / d1) 
+            if (x < 1 / d1)
             {
                 return n1 * x * x;
             }
-            
+
             if (x < 2 / d1)
             {
                 x -= 1.5f / d1;
                 return n1 * x * x + 0.75f;
             }
-            
+
             if (x < 2.5 / d1)
             {
                 x -= 2.2f / d1;
@@ -332,8 +333,7 @@ namespace Gameframe.GUI.Tween
             x -= 2.625f / d1;
             return n1 * x * x + 0.984375f;
         }
-        
+
     }
 
 }
-

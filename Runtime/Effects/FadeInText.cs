@@ -1,5 +1,4 @@
-﻿using Gameframe.GUI.Tween;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace Gameframe.GUI
@@ -7,9 +6,9 @@ namespace Gameframe.GUI
     [RequireComponent(typeof(TextMeshEffectTMPro))]
     public class FadeInText : PlayableTextMeshEffect, ITextMeshColorEffect
     {
-        [SerializeField] 
+        [SerializeField]
         private bool smooth;
-        
+
         protected override void AddToManager(TextMeshEffectTMPro effectManager)
         {
             effectManager.AddColorEffect(this);
@@ -22,14 +21,14 @@ namespace Gameframe.GUI
 
         public void UpdateColorEffect(TMP_CharacterInfo charInfo, ref EffectData data)
         {
-            var left = EaseFunctions.Ease(easeType,1 - Mathf.Clamp01(data.Index - (progress - 0.5f)));
+            var left = GetEasedTime(ref data);
             var leftAlpha = (byte) Mathf.Round(255 * left);
             data.SetAlpha(0,leftAlpha);
             data.SetAlpha(1,leftAlpha);
-            
+
             if (smooth)
             {
-                var right = EaseFunctions.Ease(easeType, 1 - Mathf.Clamp01(data.Index - (progress - 1f)));
+                var right = GetEasedTime(ref data, -delayPerCharacter);
                 var rightAlpha = (byte) Mathf.Round(255 * right);
                 data.SetAlpha(2,rightAlpha);
                 data.SetAlpha(3,rightAlpha);
@@ -42,5 +41,3 @@ namespace Gameframe.GUI
         }
     }
 }
-
-
