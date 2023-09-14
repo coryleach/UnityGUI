@@ -149,7 +149,7 @@ namespace Gameframe.GUI.Tween
             _tweenDict.Remove(id);
         }
 
-        private static void CancelTweensForId(int id)
+        public static void CancelTweensForId(int id)
         {
             if (!_tweenDict.TryGetValue(id, out var tweenData))
             {
