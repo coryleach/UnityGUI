@@ -47,6 +47,11 @@ namespace Gameframe.GUI.Tween
 
         public static void DoKillTweens(this Component obj)
         {
+            CancelTweensForId(obj.gameObject.GetInstanceID());
+        }
+
+        public static void DoKillTweens(this UnityEngine.Object obj)
+        {
             CancelTweensForId(obj.GetInstanceID());
         }
 
@@ -144,7 +149,7 @@ namespace Gameframe.GUI.Tween
             _tweenDict.Remove(id);
         }
 
-        private static void CancelTweensForId(int id)
+        public static void CancelTweensForId(int id)
         {
             if (!_tweenDict.TryGetValue(id, out var tweenData))
             {
