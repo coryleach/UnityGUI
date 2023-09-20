@@ -11,9 +11,21 @@ namespace Gameframe.GUI.Tween
         private static CancellationTokenSource _cancellationTokenSource;
         private static Dictionary<int, TweenData> _tweenDict;
 
-        private static CancellationToken CancellationToken => _cancellationTokenSource.Token;
+        private static CancellationToken CancellationToken => (_cancellationTokenSource != null) ? _cancellationTokenSource.Token : CancellationToken.None;
 
-        private static bool CanTween => Application.isPlaying && !CancellationToken.IsCancellationRequested;
+        private static bool CanTween => CanTweenPredicate.Invoke();
+
+        private static Func<bool> _canTweenPredicate = DefaultCanTweenPredicate;
+        public static Func<bool> CanTweenPredicate
+        {
+            get => _canTweenPredicate;
+            set => _canTweenPredicate = value ?? DefaultCanTweenPredicate;
+        }
+
+        private static bool DefaultCanTweenPredicate()
+        {
+            return Application.isPlaying && !CancellationToken.IsCancellationRequested;
+        }
 
         [RuntimeInitializeOnLoadMethod]
         public static void Initialize()
@@ -81,10 +93,16 @@ namespace Gameframe.GUI.Tween
 
         public static async Task DoTweenAsyncWithLerp(Func<float,float,float,float> lerpMethod, int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
         {
+            if (!CanTween)
+            {
+                return;
+            }
+
             var instanceCancellationToken = StartTween(id);
 
             float t = 0;
             var ease = easeType != Easing.CustomCurve ? EaseFunctions.Get(easeType) : customCurve.Evaluate;
+
             action?.Invoke(ease.Invoke(0));
 
             while (t < duration && CanTween)
