@@ -11,6 +11,10 @@ namespace Gameframe.GUI.Tween
         private static CancellationTokenSource _cancellationTokenSource;
         private static Dictionary<int, TweenData> _tweenDict;
 
+        private static CancellationToken CancellationToken => _cancellationTokenSource.Token;
+
+        private static bool CanTween => Application.isPlaying && !CancellationToken.IsCancellationRequested;
+
         [RuntimeInitializeOnLoadMethod]
         public static void Initialize()
         {
@@ -37,7 +41,7 @@ namespace Gameframe.GUI.Tween
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
-            _tweenDict.Clear();
+            _tweenDict?.Clear();
         }
 
         public static void DoKillTweens(this GameObject obj)
@@ -57,12 +61,12 @@ namespace Gameframe.GUI.Tween
 
         public static async Task DoTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
         {
-            await DoTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType, customCurve);
+            await DoTweenAsync(id, duration, CancellationToken, action, easeType, customCurve);
         }
 
         public static async Task DoPunchTweenAsync(int id, float duration, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
         {
-            await DoPunchTweenAsync(id, duration, _cancellationTokenSource.Token, action, easeType, customCurve);
+            await DoPunchTweenAsync(id, duration, CancellationToken, action, easeType, customCurve);
         }
 
         public static Task DoTweenAsync(int id, float duration, CancellationToken cancellationToken, Action<float> action, Easing easeType = Easing.Linear, AnimationCurve customCurve = null)
@@ -83,7 +87,7 @@ namespace Gameframe.GUI.Tween
             var ease = easeType != Easing.CustomCurve ? EaseFunctions.Get(easeType) : customCurve.Evaluate;
             action?.Invoke(ease.Invoke(0));
 
-            while (t < duration && Application.isPlaying)
+            while (t < duration && CanTween)
             {
                 await Task.Yield();
 
@@ -96,8 +100,8 @@ namespace Gameframe.GUI.Tween
                 action?.Invoke(ease.Invoke(lerpMethod(0, duration, t)));
             }
 
-            //Just exit immediately if we've stopped playing in editor
-            if (!Application.isPlaying)
+            //Just exit immediately if we've stopped
+            if (!CanTween)
             {
                 return;
             }
@@ -132,6 +136,11 @@ namespace Gameframe.GUI.Tween
 
         private static void CompleteTween(int id)
         {
+            if (_tweenDict == null)
+            {
+                return;
+            }
+
             if (!_tweenDict.TryGetValue(id, out var tweenData))
             {
                 return;
@@ -151,7 +160,7 @@ namespace Gameframe.GUI.Tween
 
         public static void CancelTweensForId(int id)
         {
-            if (!_tweenDict.TryGetValue(id, out var tweenData))
+            if (_tweenDict == null || !_tweenDict.TryGetValue(id, out var tweenData))
             {
                 return;
             }
