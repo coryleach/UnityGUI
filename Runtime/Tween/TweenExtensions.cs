@@ -13,7 +13,7 @@ namespace Gameframe.GUI.Tween
 
         private static CancellationToken CancellationToken => (_cancellationTokenSource != null) ? _cancellationTokenSource.Token : CancellationToken.None;
 
-        private static bool CanTween => CanTweenPredicate.Invoke();
+        private static bool CanTween => CanTweenPredicate.Invoke() && _tweenDict != null;
 
         private static Func<bool> _canTweenPredicate = DefaultCanTweenPredicate;
         public static Func<bool> CanTweenPredicate
